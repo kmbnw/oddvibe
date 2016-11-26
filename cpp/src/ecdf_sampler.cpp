@@ -32,13 +32,9 @@ namespace oddvibe {
     size_t EmpiricalSampler::next_sample() {
         const float unif_val = m_unif_dist(m_rand_engine);
 
-        if (unif_val <= m_ecdf[0]) {
-            return 0;
-        }
-
-        const size_t last = m_ecdf.size() - 1;
-        for (size_t k = 1; k != last; ++k) {
-            if (unif_val > m_ecdf[k - 1] && unif_val <= m_ecdf[k]) {
+        const size_t last = m_ecdf.size() - 2;
+        for (size_t k = 0; k < last; ++k) {
+            if (unif_val > m_ecdf[k] && unif_val <= m_ecdf[k + 1]) {
                 return k;
             }
         }
@@ -49,6 +45,8 @@ namespace oddvibe {
         ecdf.clear();
 
         float previous = 0;
+        ecdf.push_back(previous);
+
         for (const auto& prob: pmf) {
             float next = prob + previous;
             ecdf.push_back(next);
