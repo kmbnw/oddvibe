@@ -36,13 +36,13 @@ namespace oddvibe {
             return 0;
         }
 
-        const size_t end = m_ecdf.size() - 1;
-        for (size_t k = 1; k != end; ++k) {
+        const size_t last = m_ecdf.size() - 1;
+        for (size_t k = 1; k != last; ++k) {
             if (unif_val > m_ecdf[k - 1] && unif_val <= m_ecdf[k]) {
                 return k;
             }
         }
-        return m_ecdf.size() - 1;
+        return last;
     }
 
     void fill_ecdf(const std::vector<float>& pmf, std::vector<float>& ecdf) {
