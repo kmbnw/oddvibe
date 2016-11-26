@@ -1,0 +1,10 @@
+target
+bin/
+TestResult.xml
+*.dll
+*.so
+*.o
+*.a
+*.log
+*.exe
+.*.swp
