@@ -95,7 +95,7 @@ namespace oddvibe {
         };
         const std::vector<float> new_xs {
             2.15f, 8.19f,
-            3.54f, 3.10f,
+            5.40f, 3.10f,
             5.7f, 5.9f,
             6.77f, 8.12f,
         };
