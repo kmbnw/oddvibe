@@ -10,3 +10,6 @@ clean:
 
 tests: all
 	cd test; make tests
+
+debug_tests: all
+	cd test; make debug_tests

@@ -33,16 +33,20 @@ namespace oddvibe {
     }
 
     void RegressionTree::predict(const std::vector<float> &xs, std::vector<float> &yhats) const {
+        yhats.clear();
+
+        const size_t tree_sz = m_feature_idxs.size();
+
         for (size_t row_idx = 0; row_idx != xs.size(); row_idx += m_ncols) {
             // parent at element K, left child at element 2K, right child at element 2K + 1
             size_t k = 1;
-            size_t tree_sz = m_feature_idxs.size();
+            size_t next_k = 1;
 
             while (true) {
                 const size_t feature_idx = m_feature_idxs[k];
                 const float split_val = m_split_vals[k];
                 const bool go_left = xs[row_idx + feature_idx] <= split_val;
-                size_t next_k = go_left ? 2 * k : 2 * k + 1;
+                next_k = go_left ? 2 * k : 2 * k + 1;
 
                 if (next_k < tree_sz) {
                     k = next_k;
@@ -52,7 +56,7 @@ namespace oddvibe {
             }
 
             // at a leaf node so make the prediction
-            yhats.push_back(m_predictions.find(k)->second);
+            yhats.push_back(m_predictions.find(next_k)->second);
         }
     }
 }

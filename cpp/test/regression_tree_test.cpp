@@ -56,8 +56,19 @@ namespace oddvibe {
 
         Partitioner builder(nfeatures, depth, rmse, xs, ys);
         builder.build();
-        RegressionTree tree(builder);
+        const RegressionTree tree(builder);
 
+        std::vector<float> yhats;
+        tree.predict(xs, yhats);
+
+        // split is done on feature 0, split value 3.4
+        const float left_leaf = 5.25f;
+        const float right_leaf = -18.1f;
+
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(left_leaf, yhats[0], _tolerance);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(left_leaf, yhats[1], _tolerance);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(right_leaf, yhats[2], _tolerance);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(right_leaf, yhats[3], _tolerance);
 
 //        CPPUNIT_ASSERT_DOUBLES_EQUAL(3.4f, split_val, _tolerance);
     }

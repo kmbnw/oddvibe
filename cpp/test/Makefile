@@ -13,3 +13,6 @@ clean:
 
 tests: all
 	LD_LIBRARY_PATH=../$(LIBDIR) ./$(TARGET)
+
+debug_tests: all
+	LD_LIBRARY_PATH=../$(LIBDIR) ddd ./$(TARGET)
