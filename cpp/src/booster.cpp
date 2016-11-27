@@ -26,6 +26,13 @@
 #include "ecdf_sampler.h"
 
 namespace oddvibe {
+    void normalize(std::vector<float>& pmf) {
+        double norm = std::accumulate(pmf.begin(), pmf.end(), 0.0f);
+        for (size_t k = 0; k != pmf.size(); ++k) {
+            pmf[k] = (float) (pmf[k] / norm);
+        }
+    }
+
     Booster::Booster(
             Partitioner& builder,
             const std::function<double(const std::vector<float>&, const std::vector<float>&)> &err_fn) :
@@ -45,10 +52,30 @@ namespace oddvibe {
 
         std::vector<float> yhats;
         tree.predict(xs, yhats);
-        std::vector<float> diff(yhats.size());
+        std::vector<double> loss(yhats.size());
+
+        std::transform(yhats.begin(), yhats.end(), ys.begin(), loss.begin(),
+            [](float yhat, float y) { return pow(yhat - y, 2); });
+
+        const double max_loss = *std::max_element(loss.begin(), loss.end());
 
         // TODO use the error function
-        std::transform(yhats.begin(), yhats.end(), ys.begin(), diff.begin(),
-            [](float yhat, float y) { return pow(yhat - y, 2); });
+        double epsilon = 0.0;
+        for (size_t k = 0; k != loss.size(); ++k) {
+            epsilon += pmf[k] * loss[k];
+        }
+
+        double error_diff = 1e-6;
+        for (size_t k = 0; k != loss.size(); ++k) {
+            error_diff = std::max(error_diff, loss[k] - epsilon);
+        }
+
+        const double beta = epsilon / error_diff;
+
+        for (size_t k = 0; k != loss.size(); ++k) {
+            const double d = loss[k] / max_loss;
+            pmf[k] = (float) (pow(beta, 1 - d) * pmf[k]);
+        }
+        normalize(pmf);
     }
 }

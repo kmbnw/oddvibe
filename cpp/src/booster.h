@@ -22,6 +22,8 @@
 #define KMBNW_ODVB_BOOSTER_H
 
 namespace oddvibe {
+    void normalize(std::vector<float>& pmf);
+
     /**
      * Provides boosting capabilities to other models.
      */
