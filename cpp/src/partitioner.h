@@ -27,7 +27,6 @@ namespace oddvibe {
             Partitioner(
                 const size_t& ncols,
                 const size_t& depth,
-                const Sampler& sampler,
                 const std::function<double(const std::vector<float>&, const std::vector<float>&)> &err_fn,
                 const std::vector<float> &xs,
                 const std::vector<float> &ys);
@@ -35,7 +34,7 @@ namespace oddvibe {
             Partitioner(const Partitioner& other) = delete;
             Partitioner& operator=(const Partitioner& other) = delete;
 
-            void build();
+            void build(Sampler& sampler);
 
             const size_t m_ncols;
             std::vector<size_t> m_feature_idxs;
@@ -46,8 +45,6 @@ namespace oddvibe {
             const std::vector<float> m_xs;
             const std::vector<float> m_ys;
             const std::function<double(const std::vector<float>&, const std::vector<float>&)> m_err_fn;
-            Sampler* const m_sampler;
-
     
             void set_row_filter(
                 const std::vector<bool> &row_filter,
@@ -56,7 +53,7 @@ namespace oddvibe {
                 const float &split_value,
                 bool left) const;
 
-            void build(const size_t &node_idx, const std::vector<bool> &row_filter);
+            void build(Sampler& sampler, const size_t &node_idx, const std::vector<bool> &row_filter);
     };
 
     double rmse(const std::vector<float> &left, const std::vector<float> &right);

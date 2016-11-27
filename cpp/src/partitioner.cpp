@@ -27,11 +27,10 @@ namespace oddvibe {
     Partitioner::Partitioner(
             const size_t& ncols,
             const size_t& depth,
-            const Sampler& sampler,
             const std::function<double(const std::vector<float>&, const std::vector<float>&)> &err_fn,
             const std::vector<float> &xs,
             const std::vector<float> &ys):
-            m_ncols(ncols), m_xs(xs), m_ys(ys), m_err_fn(err_fn), m_sampler((Sampler* const) &sampler) {
+            m_ncols(ncols), m_xs(xs), m_ys(ys), m_err_fn(err_fn) {
         if (ys.size() != xs.size() / ncols) {
             throw std::invalid_argument("xs and ys do not have the same number of instance rows");
         }
@@ -44,10 +43,10 @@ namespace oddvibe {
         m_split_vals.resize(tree_sz, 0);
     }
 
-    void Partitioner::build() {
+    void Partitioner::build(Sampler& sampler) {
         const std::vector<bool> row_filter(m_ys.size(), true);
 
-        build(1, row_filter);
+        build(sampler, 1, row_filter);
     }
 
     /**
@@ -61,6 +60,7 @@ namespace oddvibe {
      * for the current branch.  A true element means 'include this row'.
      */
     void Partitioner::build(
+            Sampler& sampler,
             const size_t &node_idx,
             const std::vector<bool> &row_filter) {
         if (node_idx >= m_feature_idxs.size()) {
@@ -86,7 +86,7 @@ namespace oddvibe {
             size_t count = 0;
 
             while (count++ < nrows) {
-                row_idx = m_sampler->next_sample();
+                row_idx = sampler.next_sample();
 
                 if (!row_filter[row_idx]) {
                     continue;
@@ -143,13 +143,13 @@ namespace oddvibe {
         std::vector<bool> tmp_filter(row_filter.size(), true);
         set_row_filter(row_filter, tmp_filter, feature_idx, split_value, true);
 
-        build(left_idx, tmp_filter);
+        build(sampler, left_idx, tmp_filter);
 
         //right
         std::fill(tmp_filter.begin(), tmp_filter.end(), true);
         set_row_filter(row_filter, tmp_filter, feature_idx, split_value, false);
 
-        build(right_idx, tmp_filter);
+        build(sampler, right_idx, tmp_filter);
     }
 
     void Partitioner::set_row_filter(
