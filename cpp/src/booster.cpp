@@ -14,27 +14,22 @@
  * limitations under the License.
  */
 
+#include <iostream>
+#include <sstream>
 #include <vector>
-#include <cppunit/extensions/HelperMacros.h>
-
-#ifndef KMBNW_ODVB_TREE_TEST_H
-#define KMBNW_ODVB_TREE_TEST_H
+#include <unordered_map>
+#include <algorithm>
+#include <cmath>
+#include <functional>
+#include "booster.h"
 
 namespace oddvibe {
-    class RegressionTreeTest : public CppUnit::TestFixture {
-        CPPUNIT_TEST_SUITE(RegressionTreeTest);
-        CPPUNIT_TEST(test_predict);
-        CPPUNIT_TEST(test_predict_depth2);
-        CPPUNIT_TEST_SUITE_END();
+    Booster::Booster(
+            const std::function<double(const std::vector<float>&, const std::vector<float>&)> &err_fn) :
+            m_err_fn(err_fn) {
+    }
 
-        private:
-            const float m_tolerance = 1e-6;
+    void Booster::update_one(const std::vector<float> &xs, const std::vector<float> &ys) const {
 
-        public:
-            void setUp();
-            void tearDown();
-            void test_predict();
-            void test_predict_depth2();
-    };
+    }
 }
-#endif

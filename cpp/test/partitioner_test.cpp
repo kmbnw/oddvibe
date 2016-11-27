@@ -98,13 +98,13 @@ namespace oddvibe {
         CPPUNIT_ASSERT(1 == builder.m_feature_idxs[3]);
 
         // via hand-calculation
-        // 5.20, feature 0 for LHS split
-        // 6.01, feature 1 for LHS split
+        // top-level split on feature 0 at value 5.65
+        // LHS second level split on feature 0 at value 5.20
+        // RHS second level split on feature 1 at value 6.01
         CPPUNIT_ASSERT_DOUBLES_EQUAL(5.65f, builder.m_split_vals[1], _tolerance);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(5.20f, builder.m_split_vals[2], _tolerance);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(6.01f, builder.m_split_vals[3], _tolerance);
 
-        // 19.335
         CPPUNIT_ASSERT_DOUBLES_EQUAL(19.335f, builder.m_predictions.find(4)->second, _tolerance);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(14.59f, builder.m_predictions.find(5)->second, _tolerance);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(20.75f, builder.m_predictions.find(6)->second, _tolerance);
