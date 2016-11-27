@@ -20,6 +20,7 @@
 #include <vector>
 #include <unordered_map>
 #include "partitioner.h"
+#include "seq_sampler.h"
 #include "partitioner_test.h"
 
 #include <cppunit/extensions/TestFactoryRegistry.h>
@@ -54,7 +55,8 @@ namespace oddvibe {
         const size_t nfeatures = 2;
         const size_t depth = 1;
 
-        Partitioner builder(nfeatures, depth, rmse, xs, ys);
+        SequentialSampler sampler(0, ys.size());
+        Partitioner builder(nfeatures, depth, sampler, rmse, xs, ys);
         builder.build();
 
         size_t feature_idx = builder.m_feature_idxs[1];
@@ -90,7 +92,8 @@ namespace oddvibe {
         const size_t nfeatures = 2;
         const size_t depth = 2;
 
-        Partitioner builder(nfeatures, depth, rmse, xs, ys);
+        SequentialSampler sampler(0, ys.size());
+        Partitioner builder(nfeatures, depth, sampler, rmse, xs, ys);
         builder.build();
 
         CPPUNIT_ASSERT(0 == builder.m_feature_idxs[1]);

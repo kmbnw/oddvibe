@@ -16,6 +16,7 @@
 #include <vector>
 #include <unordered_map>
 #include <functional>
+#include "sampler.h"
 
 #ifndef KMBNW_ODVB_PRT_H
 #define KMBNW_ODVB_PRT_H
@@ -24,8 +25,9 @@ namespace oddvibe {
     class Partitioner {
         public:
             Partitioner(
-                size_t ncols,
-                size_t depth,
+                const size_t& ncols,
+                const size_t& depth,
+                const Sampler& sampler,
                 const std::function<double(const std::vector<float>&, const std::vector<float>&)> &err_fn,
                 const std::vector<float> &xs,
                 const std::vector<float> &ys);
@@ -44,6 +46,7 @@ namespace oddvibe {
             const std::vector<float> m_xs;
             const std::vector<float> m_ys;
             const std::function<double(const std::vector<float>&, const std::vector<float>&)> m_err_fn;
+            Sampler* const m_sampler;
 
     
             void set_row_filter(

@@ -20,6 +20,7 @@
 #include <vector>
 #include <unordered_map>
 #include "partitioner.h"
+#include "seq_sampler.h"
 #include "regression_tree.h"
 #include "regression_tree_test.h"
 
@@ -55,7 +56,8 @@ namespace oddvibe {
         const size_t nfeatures = 2;
         const size_t depth = 1;
 
-        Partitioner builder(nfeatures, depth, rmse, xs, ys);
+        SequentialSampler sampler(0, ys.size());
+        Partitioner builder(nfeatures, depth, sampler, rmse, xs, ys);
         builder.build();
         const RegressionTree tree(builder);
 
@@ -119,7 +121,8 @@ namespace oddvibe {
         const size_t nfeatures = 2;
         const size_t depth = 2;
 
-        Partitioner builder(nfeatures, depth, rmse, xs, ys);
+        SequentialSampler sampler(0, ys.size());
+        Partitioner builder(nfeatures, depth, sampler, rmse, xs, ys);
         builder.build();
 
         const RegressionTree tree(builder);

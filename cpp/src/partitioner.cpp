@@ -25,11 +25,13 @@
 
 namespace oddvibe {
     Partitioner::Partitioner(
-            size_t ncols,
-            size_t depth,
+            const size_t& ncols,
+            const size_t& depth,
+            const Sampler& sampler,
             const std::function<double(const std::vector<float>&, const std::vector<float>&)> &err_fn,
             const std::vector<float> &xs,
-            const std::vector<float> &ys): m_ncols(ncols), m_xs(xs), m_ys(ys), m_err_fn(err_fn) {
+            const std::vector<float> &ys):
+            m_ncols(ncols), m_xs(xs), m_ys(ys), m_err_fn(err_fn), m_sampler((Sampler* const) &sampler) {
         if (ys.size() != xs.size() / ncols) {
             throw std::invalid_argument("xs and ys do not have the same number of instance rows");
         }
@@ -76,21 +78,16 @@ namespace oddvibe {
         std::vector<float> left;
         std::vector<float> right;
 
-        // generate row indexes
-        auto idx_gen_fn = [] () {
-            size_t idx = 0;
-            return [=]() mutable {
-                return idx++;
-            };
-        };
-
         // for each feature
         for (size_t col_idx = 0; col_idx != m_ncols; ++col_idx) {
 
             // for each split point candidate of the feature
             size_t row_idx = 0;
-            auto idx_gen = idx_gen_fn();
-            while ((row_idx = idx_gen()) < nrows) {
+            size_t count = 0;
+
+            while (count++ < nrows) {
+                row_idx = m_sampler->next_sample();
+
                 if (!row_filter[row_idx]) {
                     continue;
                 }

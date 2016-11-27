@@ -36,10 +36,8 @@ namespace oddvibe {
         std::vector<float> pmf(len, 100.0 / len);
 
         EmpiricalSampler sampler(m_seed, pmf);
-        std::unordered_map<size_t, unsigned int> indexes;
 
         for (size_t k = 0; k < len; ++k) {
-            indexes[k]++;
         }
     }
 }

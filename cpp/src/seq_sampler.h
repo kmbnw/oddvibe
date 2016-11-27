@@ -17,24 +17,23 @@
 #include <random>
 #include "sampler.h"
 
-#ifndef KMBNW_ODVB_ECDF_SAMPLER_H
-#define KMBNW_ODVB_ECDF_SAMPLER_H
+#ifndef KMBNW_ODVB_SEQ_SAMPLER_H
+#define KMBNW_ODVB_SEQ_SAMPLER_H
 
 namespace oddvibe {
-    class EmpiricalSampler: public Sampler {
+    /**
+     * Return sequential samples from start to end (inclusive).
+     * This will loop around back to zero when it reaches the end.
+     */
+    class SequentialSampler: public Sampler {
         public:
-            // pmf == probability mass function
-            EmpiricalSampler(const size_t& seed, const std::vector<float>& pmf);
+            SequentialSampler(const size_t& start, const size_t& end);
             virtual size_t next_sample() override;
 
         private:
-            std::uniform_real_distribution<float> m_unif_dist;
-            std::mt19937 m_rand_engine;
-            // empirical CDF
-            std::vector<float> m_ecdf;
-            //std::default_random_engine m_rand_engine;
+            const size_t m_start;
+            const size_t m_end;
+            size_t m_current = 0;
     };
-
-    void fill_ecdf(const std::vector<float>& pmf, std::vector<float>& ecdf);
 }
-#endif //KMBNW_ODVB_ECDF_SAMPLER_H
+#endif //KMBNW_ODVB_SEQ_SAMPLER_H
