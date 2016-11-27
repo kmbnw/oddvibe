@@ -22,6 +22,7 @@
 #include <cmath>
 #include <functional>
 #include "booster.h"
+#include "ecdf_sampler.h"
 
 namespace oddvibe {
     Booster::Booster(
@@ -30,6 +31,15 @@ namespace oddvibe {
     }
 
     void Booster::update_one(const std::vector<float> &xs, const std::vector<float> &ys) const {
+        // set up initial uniform distribution
+        const size_t len = ys.size();
+        std::vector<float> pmf(len, 100.0 / len);
 
+        EmpiricalSampler sampler(pmf);
+        std::unordered_map<size_t, unsigned int> indexes;
+
+        for (size_t k = 0; k < len; ++k) {
+            indexes[k]++;
+        }
     }
 }

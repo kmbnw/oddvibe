@@ -44,7 +44,19 @@ namespace oddvibe {
         build(1, row_filter);
     }
 
-    void Partitioner::build(const size_t &node_idx, const std::vector<bool> &row_filter) {
+    /**
+     * Build internal data structures for constructing a decision tree.
+     *
+     * @param[in] node_idx The index into the tree array for the current level.
+     * 2 * K for left child, 2 * K + 1 for right child, with the root at 1 (not zero).
+     *
+     * @param[in] row_filter A mask for skipping input rows.  Used for parent node
+     * splits to 'deactivate' a row when its feature and split value are not valid
+     * for the current branch.  A true element means 'include this row'.
+     */
+    void Partitioner::build(
+            const size_t &node_idx,
+            const std::vector<bool> &row_filter) {
         if (node_idx >= m_feature_idxs.size()) {
             m_predictions[node_idx] = filtered_mean(m_ys, row_filter);
             return;

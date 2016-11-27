@@ -63,6 +63,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="annotated.html"><span>Class&#160;List</span></a></li>
       <li><a href="classes.html"><span>Class&#160;Index</span></a></li>
       <li><a href="inherits.html"><span>Class&#160;Hierarchy</span></a></li>
+      <li><a href="functions.html"><span>Class&#160;Members</span></a></li>
     </ul>
   </div>
 <!-- window showing the filter options -->
@@ -70,7 +71,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -99,8 +100,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 Collaboration diagram for oddvibe::Partitioner:</div>
 <div class="dyncontent">
 <div class="center"><img src="classoddvibe_1_1Partitioner__coll__graph.png" border="0" usemap="#oddvibe_1_1Partitioner_coll__map" alt="Collaboration graph"/></div>
-<map name="oddvibe_1_1Partitioner_coll__map" id="oddvibe_1_1Partitioner_coll__map">
-</map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
@@ -138,8 +137,7 @@ Private Member Functions</h2></td></tr>
 <tr class="memitem:ae57d7bf9795edc482c4c7baf8559f708"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae57d7bf9795edc482c4c7baf8559f708"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>set_row_filter</b> (const std::vector&lt; bool &gt; &amp;row_filter, std::vector&lt; bool &gt; &amp;tmp_filter, size_t feature_idx, const float &amp;split_value, bool left) const </td></tr>
 <tr class="separator:ae57d7bf9795edc482c4c7baf8559f708"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0c36efddb98c042a3ca617357dde0700"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0c36efddb98c042a3ca617357dde0700"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>build</b> (const size_t &amp;node_idx, const std::vector&lt; bool &gt; &amp;row_filter)</td></tr>
+<tr class="memitem:a0c36efddb98c042a3ca617357dde0700"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classoddvibe_1_1Partitioner.html#a0c36efddb98c042a3ca617357dde0700">build</a> (const size_t &amp;node_idx, const std::vector&lt; bool &gt; &amp;row_filter)</td></tr>
 <tr class="separator:a0c36efddb98c042a3ca617357dde0700"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
@@ -156,6 +154,49 @@ std::vector&lt; float &gt; &amp;, const <br class="typebreak" />
 std::vector&lt; float &gt; &amp;)&gt;&#160;</td><td class="memItemRight" valign="bottom"><b>m_err_fn</b></td></tr>
 <tr class="separator:a3df909474baff25140022f7a5f6f52e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="a0c36efddb98c042a3ca617357dde0700"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void oddvibe::Partitioner::build </td>
+          <td>(</td>
+          <td class="paramtype">const size_t &amp;&#160;</td>
+          <td class="paramname"><em>node_idx</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::vector&lt; bool &gt; &amp;&#160;</td>
+          <td class="paramname"><em>row_filter</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Build structures for a decision tree.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">node_idx</td><td>The index into the tree array for the current level. 2 * K for left child, 2 * K + 1 for right child, with the root at 1 (not zero).</td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">row_filter</td><td>A mask for skipping input rows. Used for parent node splits to 'deactivate' a row when its feature and split value are not valid for the current branch. A true element means 'include this row'. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>cpp/src/<a class="el" href="partitioner_8h_source.html">partitioner.h</a></li>
 <li>cpp/src/partitioner.cpp</li>
@@ -163,7 +204,7 @@ std::vector&lt; float &gt; &amp;)&gt;&#160;</td><td class="memItemRight" valign=
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat Nov 26 2016 13:11:59 for oddvibe by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Nov 26 2016 19:36:15 for oddvibe by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.7
 </small></address>

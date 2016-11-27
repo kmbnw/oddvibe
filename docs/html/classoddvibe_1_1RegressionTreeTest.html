@@ -63,6 +63,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="annotated.html"><span>Class&#160;List</span></a></li>
       <li><a href="classes.html"><span>Class&#160;Index</span></a></li>
       <li><a href="inherits.html"><span>Class&#160;Hierarchy</span></a></li>
+      <li><a href="functions.html"><span>Class&#160;Members</span></a></li>
     </ul>
   </div>
 <!-- window showing the filter options -->
@@ -70,7 +71,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -98,15 +99,11 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 Inheritance diagram for oddvibe::RegressionTreeTest:</div>
 <div class="dyncontent">
 <div class="center"><img src="classoddvibe_1_1RegressionTreeTest__inherit__graph.png" border="0" usemap="#oddvibe_1_1RegressionTreeTest_inherit__map" alt="Inheritance graph"/></div>
-<map name="oddvibe_1_1RegressionTreeTest_inherit__map" id="oddvibe_1_1RegressionTreeTest_inherit__map">
-</map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <div class="dynheader">
 Collaboration diagram for oddvibe::RegressionTreeTest:</div>
 <div class="dyncontent">
 <div class="center"><img src="classoddvibe_1_1RegressionTreeTest__coll__graph.png" border="0" usemap="#oddvibe_1_1RegressionTreeTest_coll__map" alt="Collaboration graph"/></div>
-<map name="oddvibe_1_1RegressionTreeTest_coll__map" id="oddvibe_1_1RegressionTreeTest_coll__map">
-</map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
@@ -141,9 +138,9 @@ Private Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
-<tr class="memitem:af5d90526ef9e6343683f7e4aea9b620d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af5d90526ef9e6343683f7e4aea9b620d"></a>
-const float&#160;</td><td class="memItemRight" valign="bottom"><b>_tolerance</b> = 1e-6</td></tr>
-<tr class="separator:af5d90526ef9e6343683f7e4aea9b620d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af5a40fd0e0be98974c31482c6aac5353"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af5a40fd0e0be98974c31482c6aac5353"></a>
+const float&#160;</td><td class="memItemRight" valign="bottom"><b>m_tolerance</b> = 1e-6</td></tr>
+<tr class="separator:af5a40fd0e0be98974c31482c6aac5353"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>cpp/test/<a class="el" href="regression__tree__test_8h_source.html">regression_tree_test.h</a></li>
@@ -152,7 +149,7 @@ const float&#160;</td><td class="memItemRight" valign="bottom"><b>_tolerance</b>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat Nov 26 2016 13:11:59 for oddvibe by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Nov 26 2016 19:36:15 for oddvibe by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.7
 </small></address>

@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['regressiontree',['RegressionTree',['../classoddvibe_1_1RegressionTree.html',1,'oddvibe']]],
-  ['regressiontreetest',['RegressionTreeTest',['../classoddvibe_1_1RegressionTreeTest.html',1,'oddvibe']]]
+  ['partitioner',['Partitioner',['../classoddvibe_1_1Partitioner.html',1,'oddvibe']]],
+  ['partitionertest',['PartitionerTest',['../classoddvibe_1_1PartitionerTest.html',1,'oddvibe']]]
 ];
