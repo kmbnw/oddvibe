@@ -30,6 +30,10 @@ namespace oddvibe {
             const std::function<double(const std::vector<float>&, const std::vector<float>&)> &err_fn,
             const std::vector<float> &xs,
             const std::vector<float> &ys): m_ncols(ncols), m_xs(xs), m_ys(ys), m_err_fn(err_fn) {
+        if (ys.size() != xs.size() / ncols) {
+            throw std::invalid_argument("xs and ys do not have the same number of instance rows");
+        }
+
         const size_t tree_sz = pow(2, depth);
 
         m_feature_idxs.clear();
@@ -62,6 +66,8 @@ namespace oddvibe {
             return;
         }
 
+        const size_t nrows = m_ys.size();
+
         // init in the case of one element
         size_t feature_idx = 0;
         float split_value = nan("");
@@ -69,22 +75,29 @@ namespace oddvibe {
 
         std::vector<float> left;
         std::vector<float> right;
-        size_t xs_len = m_xs.size();
+
+        // generate row indexes
+        auto idx_gen_fn = [] () {
+            size_t idx = 0;
+            return [=]() mutable {
+                return idx++;
+            };
+        };
 
         // for each feature
         for (size_t col_idx = 0; col_idx != m_ncols; ++col_idx) {
 
             // for each split point candidate of the feature
-            for (size_t i = 0; i != xs_len; i += m_ncols) {
-                const size_t filter_idx = i / m_ncols;
-
-                if (!row_filter[filter_idx]) {
+            size_t row_idx = 0;
+            auto idx_gen = idx_gen_fn();
+            while ((row_idx = idx_gen()) < nrows) {
+                if (!row_filter[row_idx]) {
                     continue;
                 }
 
                 // look at the parent node to see if we already split
                 // on this value
-                float x = m_xs[i + col_idx];
+                float x = m_xs[(row_idx * m_ncols) + col_idx];
                 if (node_idx > 1 &&
                     col_idx == m_feature_idxs[node_idx / 2] &&
                     x == m_split_vals[node_idx / 2])
@@ -95,18 +108,17 @@ namespace oddvibe {
                 left.clear();
                 right.clear();
 
-                float y = m_ys[i / m_ncols];
+                float y = m_ys[row_idx];
                 left.push_back(y);
 
                 // divide the data and calc error
-                for (size_t k = 0; k != xs_len; k += m_ncols) {
-                    const size_t filter_idx_k = k / m_ncols;
-                    if (k == i || !row_filter[filter_idx_k]) {
+                for (size_t row_idx_k = 0; row_idx_k != nrows; ++row_idx_k) {
+                    if (row_idx_k == row_idx || !row_filter[row_idx_k]) {
                         continue;
                     }
 
-                    float other_x = m_xs[k + col_idx];
-                    float other_y = m_ys[k / m_ncols];
+                    float other_x = m_xs[(row_idx_k * m_ncols) + col_idx];
+                    float other_y = m_ys[row_idx_k];
 
                     if (other_x <= x) {
                         left.push_back(other_y);
@@ -150,14 +162,13 @@ namespace oddvibe {
             const float &split_value,
             bool left) const {
 
-        for (size_t row_idx = 0; row_idx < m_xs.size(); row_idx += m_ncols) {
-            const size_t filter_idx = row_idx / m_ncols;
-            const float x = m_xs[row_idx + feature_idx];
+        for(size_t row_idx = 0; row_idx != m_ys.size(); ++row_idx) {
+            const float x = m_xs[(row_idx * m_ncols) + feature_idx];
 
             if (left) {
-                tmp_filter[filter_idx] = row_filter[filter_idx] && (x <= split_value);
+                tmp_filter[row_idx] = row_filter[row_idx] && (x <= split_value);
             } else {
-                tmp_filter[filter_idx] = row_filter[filter_idx] && (x > split_value);
+                tmp_filter[row_idx] = row_filter[row_idx] && (x > split_value);
             }
 
         }

@@ -27,7 +27,7 @@
 namespace oddvibe {
     Booster::Booster(
             const std::function<double(const std::vector<float>&, const std::vector<float>&)> &err_fn) :
-            m_err_fn(err_fn) {
+            m_seed(time(0)), m_err_fn(err_fn) {
     }
 
     void Booster::update_one(const std::vector<float> &xs, const std::vector<float> &ys) const {

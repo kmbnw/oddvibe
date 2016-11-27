@@ -39,6 +39,7 @@ namespace oddvibe {
             void update_one(const std::vector<float> &xs, const std::vector<float> &ys) const;
 
         private:
+            const size_t m_seed;
             const std::function<double(const std::vector<float>&, const std::vector<float>&)> m_err_fn;
     };
 }
