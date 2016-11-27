@@ -22,9 +22,9 @@
 
 namespace oddvibe {
 
-    EmpiricalSampler::EmpiricalSampler(const std::vector<float>& pmf) :
+    EmpiricalSampler::EmpiricalSampler(const size_t& seed, const std::vector<float>& pmf) :
             m_unif_dist(std::uniform_real_distribution<float>(0, 1)),
-            m_rand_engine(std::mt19937(time(0))) {
+            m_rand_engine(std::mt19937(seed)) {
 
         fill_ecdf(pmf, m_ecdf);
     }

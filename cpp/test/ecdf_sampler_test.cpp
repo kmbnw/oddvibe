@@ -35,8 +35,9 @@ namespace oddvibe {
 
     void EmpiricalSamplerTest::test_next_sample() {
         const std::vector<float> pmf { 0.4f, 0.25f, 0.15f, 0.20f };
-        EmpiricalSampler sampler(pmf);
+        EmpiricalSampler sampler(time(0), pmf);
         std::array<size_t, 4> indexes;
+        std::fill(indexes.begin(), indexes.end(), 0);
 
         const size_t sample_sz = 100000;
         for (size_t k = 0; k < sample_sz; ++k) {

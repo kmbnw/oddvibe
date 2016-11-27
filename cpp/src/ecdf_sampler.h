@@ -23,7 +23,7 @@ namespace oddvibe {
     class EmpiricalSampler {
         public:
             // pmf == probability mass function
-            EmpiricalSampler(const std::vector<float>& pmf);
+            EmpiricalSampler(const size_t& seed, const std::vector<float>& pmf);
             size_t next_sample();
 
         private:
