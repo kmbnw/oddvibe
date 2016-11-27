@@ -56,7 +56,7 @@ namespace oddvibe {
         const size_t depth = 1;
 
         SequentialSampler sampler(0, ys.size());
-        Partitioner builder(nfeatures, depth, rmse, xs, ys);
+        Partitioner builder(nfeatures, depth, xs, ys);
         builder.build(sampler);
 
         size_t feature_idx = builder.m_feature_idxs[1];
@@ -93,7 +93,7 @@ namespace oddvibe {
         const size_t depth = 2;
 
         SequentialSampler sampler(0, ys.size());
-        Partitioner builder(nfeatures, depth, rmse, xs, ys);
+        Partitioner builder(nfeatures, depth, xs, ys);
         builder.build(sampler);
 
         CPPUNIT_ASSERT(0 == builder.m_feature_idxs[1]);

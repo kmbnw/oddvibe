@@ -27,25 +27,26 @@ namespace oddvibe {
     Partitioner::Partitioner(
             const size_t& ncols,
             const size_t& depth,
-            const std::function<double(const std::vector<float>&, const std::vector<float>&)> &err_fn,
             const std::vector<float> &xs,
-            const std::vector<float> &ys):
-            m_ncols(ncols), m_xs(xs), m_ys(ys), m_err_fn(err_fn) {
+            const std::vector<float> &ys,
+            const std::function<double(const std::vector<float>&, const std::vector<float>&)> &err_fn):
+            m_ncols(ncols), m_tree_sz(pow(2, depth)), m_xs(xs), m_ys(ys), m_err_fn(err_fn) {
         if (ys.size() != xs.size() / ncols) {
             throw std::invalid_argument("xs and ys do not have the same number of instance rows");
         }
+    }
 
-        const size_t tree_sz = pow(2, depth);
-
+    void Partitioner::reset() {
         m_feature_idxs.clear();
-        m_feature_idxs.resize(tree_sz, 0);
+        m_feature_idxs.resize(m_tree_sz, 0);
         m_split_vals.clear();
-        m_split_vals.resize(tree_sz, 0);
+        m_split_vals.resize(m_tree_sz, 0);
     }
 
     void Partitioner::build(Sampler& sampler) {
         const std::vector<bool> row_filter(m_ys.size(), true);
 
+        reset();
         build(sampler, 1, row_filter);
     }
 

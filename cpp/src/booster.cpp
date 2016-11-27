@@ -27,10 +27,9 @@
 
 namespace oddvibe {
     Booster::Booster(
-            const size_t& ncols,
-            const size_t& depth,
+            Partitioner& builder,
             const std::function<double(const std::vector<float>&, const std::vector<float>&)> &err_fn) :
-            m_ncols(ncols), m_depth(depth), m_seed(time(0)), m_err_fn(err_fn) {
+            m_builder((Partitioner* const) &builder), m_seed(time(0)), m_err_fn(err_fn) {
     }
 
     void Booster::update_one(const std::vector<float> &xs, const std::vector<float> &ys) const {
@@ -40,15 +39,16 @@ namespace oddvibe {
 
         EmpiricalSampler sampler(m_seed, pmf);
 
-        Partitioner builder(m_ncols, m_depth, m_err_fn, xs, ys);
-        builder.build(sampler);
+        m_builder->build(sampler);
 
-        const RegressionTree tree(builder);
+        const RegressionTree tree((*m_builder));
 
         std::vector<float> yhats;
         tree.predict(xs, yhats);
+        std::vector<float> diff(yhats.size());
 
-        for (size_t k = 0; k < len; ++k) {
-        }
+        // TODO use the error function
+        std::transform(yhats.begin(), yhats.end(), ys.begin(), diff.begin(),
+            [](float yhat, float y) { return pow(yhat - y, 2); });
     }
 }

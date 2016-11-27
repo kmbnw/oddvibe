@@ -57,7 +57,7 @@ namespace oddvibe {
         const size_t depth = 1;
 
         SequentialSampler sampler(0, ys.size());
-        Partitioner builder(nfeatures, depth, rmse, xs, ys);
+        Partitioner builder(nfeatures, depth, xs, ys);
         builder.build(sampler);
 
         const RegressionTree tree(builder);
@@ -123,7 +123,7 @@ namespace oddvibe {
         const size_t depth = 2;
 
         SequentialSampler sampler(0, ys.size());
-        Partitioner builder(nfeatures, depth, rmse, xs, ys);
+        Partitioner builder(nfeatures, depth, xs, ys);
         builder.build(sampler);
 
         const RegressionTree tree(builder);

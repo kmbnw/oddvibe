@@ -28,8 +28,7 @@ namespace oddvibe {
     class Booster {
         public:
             Booster(
-                const size_t& ncols,
-                const size_t& depth,
+                Partitioner& builder,
                 const std::function<double(const std::vector<float>&, const std::vector<float>&)> &err_fn);
 
             Booster(const Booster& other) = delete;
@@ -41,8 +40,7 @@ namespace oddvibe {
             void update_one(const std::vector<float> &xs, const std::vector<float> &ys) const;
 
         private:
-            const size_t m_ncols;
-            const size_t m_depth;
+            Partitioner* const m_builder;
             const size_t m_seed;
             const std::function<double(const std::vector<float>&, const std::vector<float>&)> m_err_fn;
     };
