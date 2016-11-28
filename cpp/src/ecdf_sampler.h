@@ -32,7 +32,6 @@ namespace oddvibe {
             std::mt19937 m_rand_engine;
             // empirical CDF
             std::vector<float> m_ecdf;
-            //std::default_random_engine m_rand_engine;
     };
 
     void fill_ecdf(const std::vector<float>& pmf, std::vector<float>& ecdf);

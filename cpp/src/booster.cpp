@@ -24,6 +24,7 @@
 #include "booster.h"
 #include "regression_tree.h"
 #include "ecdf_sampler.h"
+#include "cached_sampler.h"
 
 namespace oddvibe {
     void normalize(std::vector<float>& pmf) {
@@ -41,12 +42,16 @@ namespace oddvibe {
 
     void Booster::update_one(const std::vector<float> &xs, const std::vector<float> &ys) const {
         // set up initial uniform distribution
-        const size_t len = ys.size();
-        std::vector<float> pmf(len, 100.0 / len);
+        const size_t nrows = ys.size();
+        std::vector<float> pmf(nrows, 100.0 / nrows);
 
         EmpiricalSampler sampler(m_seed, pmf);
+        CachedSampler cache(sampler, nrows);
 
-        m_builder->build(sampler);
+        std::vector<unsigned int> counts(nrows, 0);
+        cache.add_counts(counts);
+
+        m_builder->build(cache);
 
         const RegressionTree tree((*m_builder));
 
