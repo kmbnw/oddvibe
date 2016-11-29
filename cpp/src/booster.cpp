@@ -46,54 +46,55 @@ namespace oddvibe {
             m_builder(builder), m_seed(time(0)), m_err_fn(err_fn) {
     }
 
-    void Booster::fit(
-            const size_t& num_rounds,
+    void Booster::update_one(
+            std::vector<float>& pmf,
+            std::vector<unsigned int>& counts,
             const std::vector<float> &xs,
             const std::vector<float> &ys) const {
         // set up initial uniform distribution over all instances
         const size_t nrows = ys.size();
-        std::vector<float> pmf(nrows, 100.0 / nrows);
-        std::vector<unsigned int> counts(nrows, 0);
-        std::vector<float> yhats;
-        std::vector<double> loss;
-
-        for (size_t round = 0; round < num_rounds; ++round) {
-            loss.clear();
-            yhats.clear();
-
-            EmpiricalSampler sampler(m_seed, pmf);
-            CachedSampler cache(sampler);
-            add_counts(cache, counts);
-
-            m_builder->build(cache);
-            const RegressionTree tree((*m_builder));
-
-            tree.predict(xs, yhats);
-            loss.resize(yhats.size());
-
-            std::transform(yhats.begin(), yhats.end(), ys.begin(), loss.begin(),
-                [](float yhat, float y) { return pow(yhat - y, 2); });
-
-            const double max_loss = *std::max_element(loss.begin(), loss.end());
-
-            // TODO use the error function
-            double epsilon = 0.0;
-            for (size_t k = 0; k != loss.size(); ++k) {
-                epsilon += pmf[k] * loss[k];
-            }
-
-            double error_diff = 1e-6;
-            for (size_t k = 0; k != loss.size(); ++k) {
-                error_diff = std::max(error_diff, loss[k] - epsilon);
-            }
-
-            const double beta = epsilon / error_diff;
-
-            for (size_t k = 0; k != loss.size(); ++k) {
-                const double d = loss[k] / max_loss;
-                pmf[k] = (float) (pow(beta, 1 - d) * pmf[k]);
-            }
-            normalize(pmf);
+        if (pmf.size() != nrows) {
+            pmf.clear();
+            pmf.resize(nrows, 100.0 / nrows);
         }
+        if (counts.size() != nrows) {
+            counts.clear();
+            counts.resize(nrows, 0);
+        }
+
+        EmpiricalSampler sampler(m_seed, pmf);
+        CachedSampler cache(sampler);
+        add_counts(cache, counts);
+
+        m_builder->build(cache);
+        const RegressionTree tree((*m_builder));
+
+        std::vector<float> yhats;
+        tree.predict(xs, yhats);
+
+        std::vector<double> loss(yhats.size(), 0);
+        std::transform(yhats.begin(), yhats.end(), ys.begin(), loss.begin(),
+            [](float yhat, float y) { return pow(yhat - y, 2); });
+
+        const double max_loss = *std::max_element(loss.begin(), loss.end());
+
+        // TODO use the error function
+        double epsilon = 0.0;
+        for (size_t k = 0; k != loss.size(); ++k) {
+            epsilon += pmf[k] * loss[k];
+        }
+
+        double error_diff = 1e-6;
+        for (size_t k = 0; k != loss.size(); ++k) {
+            error_diff = std::max(error_diff, loss[k] - epsilon);
+        }
+
+        const double beta = epsilon / error_diff;
+
+        for (size_t k = 0; k != loss.size(); ++k) {
+            const double d = loss[k] / max_loss;
+            pmf[k] = (float) (pow(beta, 1 - d) * pmf[k]);
+        }
+        normalize(pmf);
     }
 }

@@ -54,8 +54,9 @@ namespace oddvibe {
             Booster(const Booster& other) = delete;
             Booster& operator=(const Booster& other) = delete;
 
-            void fit(
-                const size_t& num_rounds,
+            void update_one(
+                std::vector<float>& pmf,
+                std::vector<unsigned int>& counts,
                 const std::vector<float> &xs,
                 const std::vector<float> &ys) const;
 

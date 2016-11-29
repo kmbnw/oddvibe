@@ -149,12 +149,19 @@ namespace oddvibe {
         };
         const size_t nfeatures = 2;
         const size_t depth = 1;
-        const size_t num_rounds = 500;
 
         Partitioner builder(nfeatures, depth, xs, ys);
         const Booster fitter((Partitioner* const) &builder, rmse);
+        std::vector<float> pmf;
+        std::vector<unsigned int> counts;
 
-        //fitter.fit(num_rounds, xs, ys);
+        for (size_t k = 0; k < num_rounds; k++) {
+            fitter.update_one(pmf, counts, xs, ys);
+        }
+
+        for (size_t k = 0; k < pmf.size(); k++) {
+            std::cout << pmf[k] << ", " << counts[k] << std::endl;
+        }
 /*
         std::vector<float> yhats;
         tree.predict(xs, yhats);
