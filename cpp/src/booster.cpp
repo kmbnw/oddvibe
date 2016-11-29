@@ -36,11 +36,8 @@ namespace oddvibe {
         }
     }
 
-    Booster::Booster(
-            Partitioner* const builder,
-            const size_t& seed,
-            const std::function<double(const std::vector<float>&, const std::vector<float>&)> &err_fn) :
-        m_builder(builder), m_seed(seed), m_err_fn(err_fn) {
+    Booster::Booster(Partitioner& builder, const size_t& seed) :
+        m_builder(builder), m_seed(seed) {
     }
 
     void Booster::update_one(
@@ -61,15 +58,15 @@ namespace oddvibe {
 
             SequentialSampler sampler(0, nrows);
             add_counts(sampler, counts);
-            m_builder->build(sampler);
+            m_builder.build(sampler);
         } else {
             EmpiricalSampler sampler(m_seed, pmf);
             CachedSampler cache(sampler);
             add_counts(cache, counts);
-            m_builder->build(cache);
+            m_builder.build(cache);
         }
 
-        const RegressionTree tree((*m_builder));
+        const RegressionTree tree(m_builder);
 
         std::vector<float> yhats;
         tree.predict(xs, yhats);
@@ -80,18 +77,12 @@ namespace oddvibe {
 
         const double max_loss = *std::max_element(loss.begin(), loss.end());
 
-        // TODO use the error function
         double epsilon = 0.0;
         for (size_t k = 0; k != loss.size(); ++k) {
             epsilon += pmf[k] * loss[k];
         }
 
-        double error_diff = 1e-6;
-        for (size_t k = 0; k != loss.size(); ++k) {
-            error_diff = std::max(error_diff, loss[k] - epsilon);
-        }
-
-        const double beta = epsilon / error_diff;
+        const double beta = epsilon / (max_loss - epsilon);
 
         for (size_t k = 0; k != loss.size(); ++k) {
             const double d = loss[k] / max_loss;

@@ -9,3 +9,4 @@ TestResult.xml
 *.exe
 .*.swp
 core
+*.bak
