@@ -23,6 +23,7 @@
 namespace oddvibe {
 
     EmpiricalSampler::EmpiricalSampler(const size_t& seed, const std::vector<float>& pmf) :
+            m_size(pmf.size()),
             m_unif_dist(std::uniform_real_distribution<float>(0, 1)),
             m_rand_engine(std::mt19937(seed)) {
 
@@ -39,6 +40,10 @@ namespace oddvibe {
             }
         }
         return last;
+    }
+
+    size_t EmpiricalSampler::size() {
+        return m_size;
     }
 
     void fill_ecdf(const std::vector<float>& pmf, std::vector<float>& ecdf) {

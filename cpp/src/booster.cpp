@@ -34,6 +34,12 @@ namespace oddvibe {
         }
     }
 
+    void add_counts(Sampler& sampler, std::vector<unsigned int>& counts) {
+        for (size_t k = 0; k != counts.size(); ++k) {
+            counts[sampler.next_sample()]++;
+        }
+    }
+
     Booster::Booster(
             Partitioner& builder,
             const std::function<double(const std::vector<float>&, const std::vector<float>&)> &err_fn) :
@@ -41,15 +47,15 @@ namespace oddvibe {
     }
 
     void Booster::update_one(const std::vector<float> &xs, const std::vector<float> &ys) const {
-        // set up initial uniform distribution
+        // set up initial uniform distribution over all instances
         const size_t nrows = ys.size();
         std::vector<float> pmf(nrows, 100.0 / nrows);
 
         EmpiricalSampler sampler(m_seed, pmf);
-        CachedSampler cache(sampler, nrows);
+        CachedSampler cache(sampler);
 
         std::vector<unsigned int> counts(nrows, 0);
-        cache.add_counts(counts);
+        add_counts(cache, counts);
 
         m_builder->build(cache);
 

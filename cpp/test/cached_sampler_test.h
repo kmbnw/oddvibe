@@ -13,27 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#include <vector>
-#include <random>
-#include "sampler.h"
 
-#ifndef KMBNW_ODVB_CACHED_SAMPLER_H
-#define KMBNW_ODVB_CACHED_SAMPLER_H
+#include <vector>
+#include <cppunit/extensions/HelperMacros.h>
+
+#ifndef KMBNW_ODVB_CACHED_SAMPLER_TEST_H
+#define KMBNW_ODVB_CACHED_SAMPLER_TEST_H
 
 namespace oddvibe {
-    /**
-     * Cache samples from another Sampler.
-     * This will loop around back to the beginning when it reaches the end.
-     */
-    class CachedSampler: public Sampler {
-        public:
-            CachedSampler(Sampler& sampler);
-            virtual size_t next_sample() override;
-            virtual size_t size() override;
+    class CachedSamplerTest : public CppUnit::TestFixture {
+        CPPUNIT_TEST_SUITE(CachedSamplerTest);
+        CPPUNIT_TEST(test_caching);
+        CPPUNIT_TEST_SUITE_END();
 
-        private:
-            std::vector<size_t> m_samples;
-            size_t m_current = 0;
+        public:
+            void setUp();
+            void tearDown();
+            void test_caching();
     };
 }
-#endif //KMBNW_ODVB_CACHED_SAMPLER_H
+#endif

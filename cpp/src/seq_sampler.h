@@ -29,6 +29,7 @@ namespace oddvibe {
         public:
             SequentialSampler(const size_t& start, const size_t& end);
             virtual size_t next_sample() override;
+            virtual size_t size() override;
 
         private:
             const size_t m_start;

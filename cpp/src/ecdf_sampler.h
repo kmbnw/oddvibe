@@ -26,8 +26,10 @@ namespace oddvibe {
             // pmf == probability mass function
             EmpiricalSampler(const size_t& seed, const std::vector<float>& pmf);
             virtual size_t next_sample() override;
+            virtual size_t size() override;
 
         private:
+            const size_t m_size;
             std::uniform_real_distribution<float> m_unif_dist;
             std::mt19937 m_rand_engine;
             // empirical CDF

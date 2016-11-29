@@ -28,4 +28,8 @@ namespace oddvibe {
         m_current = (m_current + 1) % m_end;
         return idx;
     }
+
+    size_t SequentialSampler::size() {
+        return m_end - m_start;
+    }
 }

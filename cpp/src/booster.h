@@ -22,7 +22,25 @@
 #define KMBNW_ODVB_BOOSTER_H
 
 namespace oddvibe {
+    /**
+     * Normalize a vector to sum to 1 (e.g. proper probability mass function).
+     * @param[inout] pmf The vector to normalize; overwritten in-place.
+     */
     void normalize(std::vector<float>& pmf);
+
+    /**
+     * Add 1 to each index of counts for active sample indexes.
+     * Does so by repeatedly calling sampler.next_sample().
+     * E.g. if this Sampler holds [1, 10, 10, 11] as its indexes,
+     * this is equivalent to counts[1]++; counts[10]++;
+     * counts[10]++; counts[11]++;
+     *
+     * @param[in] sampler The sampler to get sample indexes from.
+     * @param[inout] counts A sample index count accumulator.  Must be the
+     * same size as Sampler.nrows.
+     * from.
+     */
+    void add_counts(Sampler& sampler, std::vector<unsigned int>& counts);
 
     /**
      * Provides boosting capabilities to other models.

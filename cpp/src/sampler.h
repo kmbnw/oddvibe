@@ -25,6 +25,7 @@ namespace oddvibe {
         public:
             virtual ~Sampler() {};
             virtual size_t next_sample()=0;
+            virtual size_t size()=0;
     };
 }
 #endif //KMBNW_ODVB_BASE_SAMPLER_H

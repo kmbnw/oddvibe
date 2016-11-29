@@ -19,9 +19,9 @@
 
 namespace oddvibe {
 
-    CachedSampler::CachedSampler(Sampler& sampler, const size_t& nrows) {
+    CachedSampler::CachedSampler(Sampler& sampler) {
         m_samples.clear();
-        for (size_t k = 0; k < nrows; ++k) {
+        for (size_t k = 0; k != sampler.size(); ++k) {
             m_samples.push_back(sampler.next_sample());
         }
     }
@@ -32,13 +32,7 @@ namespace oddvibe {
         return m_samples[idx];
     }
 
-    void CachedSampler::add_counts(std::vector<unsigned int>& counts) {
-        if (counts.size() != m_samples.size()) {
-            throw std::logic_error("counts.size() != m_samples.size()");
-        }
-
-        for (const auto& sample_idx: m_samples) {
-            counts[sample_idx]++;
-        }
+    size_t CachedSampler::size() {
+        return m_samples.size();
     }
 }
