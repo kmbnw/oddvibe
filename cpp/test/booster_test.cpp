@@ -149,6 +149,7 @@ namespace oddvibe {
         };
         const size_t nfeatures = 2;
         const size_t depth = 1;
+        const size_t num_rounds = 5000;
 
         Partitioner builder(nfeatures, depth, xs, ys);
         const Booster fitter((Partitioner* const) &builder, rmse);
