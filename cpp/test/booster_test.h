@@ -23,7 +23,7 @@
 namespace oddvibe {
     class BoosterTest : public CppUnit::TestFixture {
         CPPUNIT_TEST_SUITE(BoosterTest);
-        CPPUNIT_TEST(test_predict);
+        CPPUNIT_TEST(test_fit);
         CPPUNIT_TEST(test_predict_depth2);
         CPPUNIT_TEST(test_normalize);
         CPPUNIT_TEST(test_normalize_gt_one);
@@ -38,7 +38,7 @@ namespace oddvibe {
         public:
             void setUp();
             void tearDown();
-            void test_predict();
+            void test_fit();
             void test_predict_depth2();
             void test_normalize();
             void test_normalize_gt_one();

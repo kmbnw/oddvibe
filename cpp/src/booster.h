@@ -48,16 +48,16 @@ namespace oddvibe {
     class Booster {
         public:
             Booster(
-                Partitioner& builder,
+                Partitioner* const builder,
                 const std::function<double(const std::vector<float>&, const std::vector<float>&)> &err_fn);
 
             Booster(const Booster& other) = delete;
             Booster& operator=(const Booster& other) = delete;
 
-            /**
-             * Run one round of the boosting algorithm.
-             */
-            void update_one(const std::vector<float> &xs, const std::vector<float> &ys) const;
+            void fit(
+                const size_t& num_rounds,
+                const std::vector<float> &xs,
+                const std::vector<float> &ys) const;
 
         private:
             Partitioner* const m_builder;

@@ -52,9 +52,42 @@ namespace oddvibe {
         }
     }
 
+    void EmpiricalSamplerTest::test_next_sample_zero_prob() {
+        const std::vector<float> pmf { 0.35f, 0.0f, 0.4f, 0.25f };
+        EmpiricalSampler sampler(time(0), pmf);
+        std::array<size_t, 4> indexes;
+        std::fill(indexes.begin(), indexes.end(), 0);
+
+        const size_t sample_sz = 100000;
+        for (size_t k = 0; k < sample_sz; ++k) {
+            size_t idx = sampler.next_sample();
+            indexes[idx] = indexes[idx] + 1;
+        }
+
+        // should have no values here for a zero probability event
+        CPPUNIT_ASSERT(indexes[1] == 0);
+
+        for (size_t k = 0; k != indexes.size(); ++k) {
+            float pct = (float) (((double) indexes[k]) / sample_sz);
+            //std::cout << "X == " << k << ": " << pct << std::endl;
+            CPPUNIT_ASSERT_DOUBLES_EQUAL(pmf[k], pct, 1e-2);
+        }
+    }
+
     void EmpiricalSamplerTest::test_fill_ecdf() {
         const std::vector<float> expected { 0.0f, 0.4f, 0.65f, 0.8f, 1.0f };
         const std::vector<float> pmf { 0.4f, 0.25f, 0.15f, 0.20f };
+        std::vector<float> ecdf;
+        fill_ecdf(pmf, ecdf);
+
+        for (size_t k = 0; k != expected.size(); ++k) {
+            CPPUNIT_ASSERT_DOUBLES_EQUAL(expected[k], ecdf[k], 1e-6);
+        }
+    }
+
+    void EmpiricalSamplerTest::test_fill_ecdf_zero_prob() {
+        const std::vector<float> expected { 0.0f, 0.4f, 0.65f, 0.65f, 1.0f };
+        const std::vector<float> pmf { 0.4f, 0.25f, 0.0f, 0.35f };
         std::vector<float> ecdf;
         fill_ecdf(pmf, ecdf);
 

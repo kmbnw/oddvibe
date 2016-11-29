@@ -133,9 +133,9 @@ namespace oddvibe {
     }
 
     // see PartitionerTest for the values predicted
-    void BoosterTest::test_predict() {
+    void BoosterTest::test_fit() {
         // odd numbers are feature 1, even are feature 2
-/*        const std::vector<float> xs {
+        const std::vector<float> xs {
             1.2f, 12.2f,
             3.4f, 2.6f,
             7.1f, 8.8f,
@@ -149,13 +149,13 @@ namespace oddvibe {
         };
         const size_t nfeatures = 2;
         const size_t depth = 1;
+        const size_t num_rounds = 500;
 
-        SequentialSampler sampler(0, ys.size());
         Partitioner builder(nfeatures, depth, xs, ys);
-        builder.build(sampler);
+        const Booster fitter((Partitioner* const) &builder, rmse);
 
-        const RegressionTree tree(builder);
-
+        //fitter.fit(num_rounds, xs, ys);
+/*
         std::vector<float> yhats;
         tree.predict(xs, yhats);
 

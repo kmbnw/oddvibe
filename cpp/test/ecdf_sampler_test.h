@@ -24,14 +24,18 @@ namespace oddvibe {
     class EmpiricalSamplerTest : public CppUnit::TestFixture {
         CPPUNIT_TEST_SUITE(EmpiricalSamplerTest);
         CPPUNIT_TEST(test_next_sample);
+        CPPUNIT_TEST(test_next_sample_zero_prob);
         CPPUNIT_TEST(test_fill_ecdf);
+        CPPUNIT_TEST(test_fill_ecdf_zero_prob);
         CPPUNIT_TEST_SUITE_END();
 
         public:
             void setUp();
             void tearDown();
             void test_next_sample();
+            void test_next_sample_zero_prob();
             void test_fill_ecdf();
+            void test_fill_ecdf_zero_prob();
     };
 }
 #endif
