@@ -55,16 +55,12 @@ namespace oddvibe {
         if (pmf.size() != nrows) {
             pmf.clear();
             pmf.resize(nrows, 1.0 / nrows);
-
-            SequentialSampler sampler(0, nrows);
-            add_counts(sampler, counts);
-            m_builder.build(sampler);
-        } else {
-            EmpiricalSampler sampler(m_seed, pmf);
-            CachedSampler cache(sampler);
-            add_counts(cache, counts);
-            m_builder.build(cache);
         }
+
+        EmpiricalSampler sampler(m_seed, pmf);
+        CachedSampler cache(sampler);
+        add_counts(cache, counts);
+        m_builder.build(cache);
 
         const RegressionTree tree(m_builder);
 
@@ -84,9 +80,14 @@ namespace oddvibe {
 
         const double beta = epsilon / (max_loss - epsilon);
 
-        for (size_t k = 0; k != loss.size(); ++k) {
-            const double d = loss[k] / max_loss;
-            pmf[k] = (float) (pow(beta, 1 - d) * pmf[k]);
+        if (epsilon < 0.5 * max_loss) {
+            for (size_t k = 0; k != loss.size(); ++k) {
+                const double d = loss[k] / max_loss;
+                pmf[k] = (float) (pow(beta, 1 - d) * pmf[k]);
+            }
+        } else {
+            // reset to uniform distribution
+            std::fill(pmf.begin(), pmf.end(), 1.0 / nrows);
         }
         normalize(pmf);
     }
