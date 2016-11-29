@@ -13,28 +13,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#include <vector>
-#include <random>
-#include "sampler.h"
 
-#ifndef KMBNW_ODVB_SEQ_SAMPLER_H
-#define KMBNW_ODVB_SEQ_SAMPLER_H
+#include <vector>
+#include <cppunit/extensions/HelperMacros.h>
+
+#ifndef KMBNW_ODVB_MATHX_TEST_H
+#define KMBNW_ODVB_MATHX_TEST_H
 
 namespace oddvibe {
-    /**
-     * Return sequential samples from start (inclusive) to end (exclusive).
-     * This will loop around back to zero when it reaches the end.
-     */
-    class SequentialSampler: public Sampler {
-        public:
-            SequentialSampler(const size_t& start, const size_t& end);
-            virtual size_t next_sample() override;
-            virtual size_t size() override;
+    class MathXTest : public CppUnit::TestFixture {
+        CPPUNIT_TEST_SUITE(MathXTest);
+        CPPUNIT_TEST(test_normalize);
+        CPPUNIT_TEST(test_normalize_gt_one);
+        CPPUNIT_TEST(test_normalize_lt_one);
+        CPPUNIT_TEST_SUITE_END();
 
         private:
-            const size_t m_start;
-            const size_t m_end;
-            size_t m_current = 0;
+            const float m_tolerance = 1e-6;
+
+        public:
+            void setUp();
+            void tearDown();
+            void test_fit();
+            void test_normalize();
+            void test_normalize_gt_one();
+            void test_normalize_lt_one();
     };
 }
-#endif //KMBNW_ODVB_SEQ_SAMPLER_H
+#endif

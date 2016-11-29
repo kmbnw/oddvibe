@@ -17,17 +17,12 @@
 #include <unordered_map>
 #include <functional>
 #include "partitioner.h"
+#include "sampler.h"
 
 #ifndef KMBNW_ODVB_BOOSTER_H
 #define KMBNW_ODVB_BOOSTER_H
 
 namespace oddvibe {
-    /**
-     * Normalize a vector to sum to 1 (e.g. proper probability mass function).
-     * @param[inout] pmf The vector to normalize; overwritten in-place.
-     */
-    void normalize(std::vector<float>& pmf);
-
     /**
      * Add 1 to each index of counts for active sample indexes.
      * Does so by repeatedly calling sampler.next_sample().
@@ -49,6 +44,7 @@ namespace oddvibe {
         public:
             Booster(
                 Partitioner* const builder,
+                const size_t& seed,
                 const std::function<double(const std::vector<float>&, const std::vector<float>&)> &err_fn);
 
             Booster(const Booster& other) = delete;

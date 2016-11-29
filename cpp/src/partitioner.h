@@ -33,7 +33,7 @@ namespace oddvibe {
         public:
             Partitioner(
                 const size_t& ncols,
-                const size_t& depth,
+                const size_t& max_depth,
                 const std::vector<float> &xs,
                 const std::vector<float> &ys,
                 const std::function<double(const std::vector<float>&, const std::vector<float>&)> &err_fn = rmse);
@@ -49,6 +49,7 @@ namespace oddvibe {
 
             const size_t m_ncols;
 
+
         private:
             const size_t m_tree_sz;
             const std::vector<float> m_xs;
@@ -63,11 +64,6 @@ namespace oddvibe {
                 bool left) const;
 
             void build(Sampler& sampler, const size_t &node_idx, const std::vector<bool> &row_filter);
-
-            /**
-             * Clear the internal state of this builder.
-             */
-            void reset();
     };
 }
 #endif //KMBNW_ODVB_PRT_H

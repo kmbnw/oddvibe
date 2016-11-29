@@ -14,27 +14,18 @@
  * limitations under the License.
  */
 #include <vector>
-#include <random>
-#include "sampler.h"
+#include <unordered_map>
+#include <functional>
+#include "partitioner.h"
 
-#ifndef KMBNW_ODVB_SEQ_SAMPLER_H
-#define KMBNW_ODVB_SEQ_SAMPLER_H
+#ifndef KMBNW_ODVB_MATHX_H
+#define KMBNW_ODVB_MATHX_H
 
 namespace oddvibe {
     /**
-     * Return sequential samples from start (inclusive) to end (exclusive).
-     * This will loop around back to zero when it reaches the end.
+     * Normalize a vector to sum to 1 (e.g. proper probability mass function).
+     * @param[inout] pmf The vector to normalize; overwritten in-place.
      */
-    class SequentialSampler: public Sampler {
-        public:
-            SequentialSampler(const size_t& start, const size_t& end);
-            virtual size_t next_sample() override;
-            virtual size_t size() override;
-
-        private:
-            const size_t m_start;
-            const size_t m_end;
-            size_t m_current = 0;
-    };
+    void normalize(std::vector<float>& pmf);
 }
-#endif //KMBNW_ODVB_SEQ_SAMPLER_H
+#endif //KMBNW_ODVB_MATHX_H

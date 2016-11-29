@@ -26,27 +26,25 @@
 namespace oddvibe {
     Partitioner::Partitioner(
             const size_t& ncols,
-            const size_t& depth,
+            const size_t& max_depth,
             const std::vector<float> &xs,
             const std::vector<float> &ys,
             const std::function<double(const std::vector<float>&, const std::vector<float>&)> &err_fn):
-            m_ncols(ncols), m_tree_sz(pow(2, depth)), m_xs(xs), m_ys(ys), m_err_fn(err_fn) {
+            m_ncols(ncols), m_tree_sz(pow(2, max_depth)), m_xs(xs), m_ys(ys), m_err_fn(err_fn) {
         if (ys.size() != xs.size() / ncols) {
             throw std::invalid_argument("xs and ys do not have the same number of instance rows");
         }
     }
 
-    void Partitioner::reset() {
+    void Partitioner::build(Sampler& sampler) {
         m_feature_idxs.clear();
         m_feature_idxs.resize(m_tree_sz, 0);
         m_split_vals.clear();
         m_split_vals.resize(m_tree_sz, 0);
-    }
+        std::fill(m_split_vals.begin(), m_split_vals.end(), nan(""));
+        m_predictions.clear();
 
-    void Partitioner::build(Sampler& sampler) {
         const std::vector<bool> row_filter(m_ys.size(), true);
-
-        reset();
         build(sampler, 1, row_filter);
     }
 
@@ -124,16 +122,25 @@ namespace oddvibe {
                         right.push_back(other_y);
                     }
                 }
-                float err = m_err_fn(left, right);
 
-                if (isnan(error) || err < error) {
-                    error = err;
-                    split_value = x;
-                    feature_idx = col_idx;
+                if (left.size() > 0 && right.size() > 0) {
+                    float err = m_err_fn(left, right);
+
+                    if (isnan(error) || (!isnan(err) && (err < error))) {
+                        error = err;
+                        split_value = x;
+                        feature_idx = col_idx;
+                    }
                 }
             }
         }
 
+        // depth is a max depth, not a guarantee.  if no way to split,
+        // then stop branching and predict at this level
+        if (isnan(split_value)) {
+            m_predictions[node_idx] = filtered_mean(m_ys, row_filter);
+            return;
+        }
         m_feature_idxs[node_idx] = feature_idx;
         m_split_vals[node_idx] = split_value;
 

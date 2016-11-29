@@ -32,6 +32,7 @@ namespace oddvibe {
             virtual size_t size() override;
 
         private:
+            const size_t m_size = 0;
             std::vector<size_t> m_samples;
             size_t m_current = 0;
     };

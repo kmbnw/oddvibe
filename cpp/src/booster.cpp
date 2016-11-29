@@ -24,26 +24,23 @@
 #include "booster.h"
 #include "regression_tree.h"
 #include "ecdf_sampler.h"
+#include "seq_sampler.h"
 #include "cached_sampler.h"
+#include "math_x.h"
 
 namespace oddvibe {
-    void normalize(std::vector<float>& pmf) {
-        double norm = std::accumulate(pmf.begin(), pmf.end(), 0.0f);
-        for (size_t k = 0; k != pmf.size(); ++k) {
-            pmf[k] = (float) (pmf[k] / norm);
-        }
-    }
-
     void add_counts(Sampler& sampler, std::vector<unsigned int>& counts) {
         for (size_t k = 0; k != counts.size(); ++k) {
-            counts[sampler.next_sample()]++;
+            const size_t s = sampler.next_sample();
+            counts[s]++;
         }
     }
 
     Booster::Booster(
             Partitioner* const builder,
+            const size_t& seed,
             const std::function<double(const std::vector<float>&, const std::vector<float>&)> &err_fn) :
-            m_builder(builder), m_seed(time(0)), m_err_fn(err_fn) {
+        m_builder(builder), m_seed(seed), m_err_fn(err_fn) {
     }
 
     void Booster::update_one(
@@ -53,20 +50,25 @@ namespace oddvibe {
             const std::vector<float> &ys) const {
         // set up initial uniform distribution over all instances
         const size_t nrows = ys.size();
-        if (pmf.size() != nrows) {
-            pmf.clear();
-            pmf.resize(nrows, 100.0 / nrows);
-        }
         if (counts.size() != nrows) {
             counts.clear();
             counts.resize(nrows, 0);
         }
 
-        EmpiricalSampler sampler(m_seed, pmf);
-        CachedSampler cache(sampler);
-        add_counts(cache, counts);
+        if (pmf.size() != nrows) {
+            pmf.clear();
+            pmf.resize(nrows, 1.0 / nrows);
 
-        m_builder->build(cache);
+            SequentialSampler sampler(0, nrows);
+            add_counts(sampler, counts);
+            m_builder->build(sampler);
+        } else {
+            EmpiricalSampler sampler(m_seed, pmf);
+            CachedSampler cache(sampler);
+            add_counts(cache, counts);
+            m_builder->build(cache);
+        }
+
         const RegressionTree tree((*m_builder));
 
         std::vector<float> yhats;

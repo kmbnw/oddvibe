@@ -18,7 +18,6 @@
 #include <unordered_map>
 #include <cmath>
 #include <vector>
-#include <unordered_map>
 #include "partitioner.h"
 #include "seq_sampler.h"
 #include "cached_sampler.h"
@@ -39,37 +38,6 @@ namespace oddvibe {
     }
 
     void BoosterTest::tearDown() {
-    }
-
-    void BoosterTest::test_normalize() {
-        const std::vector<float> expected { 0.4, 0.4, 0.2 };
-        std::vector<float> pmf { 0.4, 0.4, 0.2 };
-        normalize(pmf);
-
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(expected[0], pmf[0], m_tolerance);
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(expected[1], pmf[1], m_tolerance);
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(expected[2], pmf[2], m_tolerance);
-    }
-
-    void BoosterTest::test_normalize_gt_one() {
-        const std::vector<float> expected { 0.2, 0.64, 0.16 };
-        std::vector<float> pmf { 0.25, 0.8, 0.2 };
-        normalize(pmf);
-
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(expected[0], pmf[0], m_tolerance);
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(expected[1], pmf[1], m_tolerance);
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(expected[2], pmf[2], m_tolerance);
-    }
-
-    void BoosterTest::test_normalize_lt_one() {
-        const std::vector<float> expected { 0.125, 0.5, 0.125, 0.25 };
-        std::vector<float> pmf { 0.1, 0.4, 0.1, 0.2 };
-        normalize(pmf);
-
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(expected[0], pmf[0], m_tolerance);
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(expected[1], pmf[1], m_tolerance);
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(expected[2], pmf[2], m_tolerance);
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(expected[3], pmf[3], m_tolerance);
     }
 
     void BoosterTest::test_add_counts_cached() {
@@ -132,37 +100,51 @@ namespace oddvibe {
         }
     }
 
-    // see PartitionerTest for the values predicted
     void BoosterTest::test_fit() {
-        // odd numbers are feature 1, even are feature 2
+        // very simple linear regression, y = B0 + B1 * x
+        // where Y = 2.4 + 1.5 * (X + noise)
+        // fitting without an intercept using R's lm()
+        // function gives a coefficent of 1.738
+        // fitting with the intercept gives 2.457 + 1.5 * X
+
         const std::vector<float> xs {
-            1.2f, 12.2f,
-            3.4f, 2.6f,
-            7.1f, 8.8f,
-            5.2f, 8.8f
+            4.859846f,
+            5.808777f,
+            7.241938f,
+            7.988773f,
+            8.910130f,
+            10.241526f,
+            10.773271f,
+            11.897482f,
+            13.120511f,
+            13.778213f
         };
+
         const std::vector<float> ys {
-            8.0f,
-            2.5f,
-            0.0f,
-            -36.2f
+            9.9f,
+            11.4f,
+            12.9f,
+            14.4f,
+            15.9f,
+            17.4f,
+            18.9f,
+            20.4f,
+            21.9f,
+            23.4f
         };
-        const size_t nfeatures = 2;
+        const size_t nfeatures = 1;
         const size_t depth = 1;
-        const size_t num_rounds = 5000;
+        const size_t num_rounds = 500;
 
         Partitioner builder(nfeatures, depth, xs, ys);
-        const Booster fitter((Partitioner* const) &builder, rmse);
+        const Booster fitter((Partitioner* const) &builder, time(0), rmse);
         std::vector<float> pmf;
         std::vector<unsigned int> counts;
 
-        for (size_t k = 0; k < num_rounds; k++) {
+        for (size_t k = 0; k < num_rounds; ++k) {
             fitter.update_one(pmf, counts, xs, ys);
         }
 
-        for (size_t k = 0; k < pmf.size(); k++) {
-            std::cout << pmf[k] << ", " << counts[k] << std::endl;
-        }
 /*
         std::vector<float> yhats;
         tree.predict(xs, yhats);

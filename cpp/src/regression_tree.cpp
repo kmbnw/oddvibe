@@ -43,8 +43,12 @@ namespace oddvibe {
             size_t next_k = 1;
 
             while (true) {
-                const size_t feature_idx = m_feature_idxs[k];
+                // check the case of max_depth not being reached
+                if (m_predictions.find(k) != m_predictions.end()) {
+                    break;
+                }
                 const float split_val = m_split_vals[k];
+                const size_t feature_idx = m_feature_idxs[k];
                 const bool go_left = xs[row_idx + feature_idx] <= split_val;
                 next_k = go_left ? 2 * k : 2 * k + 1;
 

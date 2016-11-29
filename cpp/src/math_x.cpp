@@ -14,25 +14,16 @@
  * limitations under the License.
  */
 
-#include <stdexcept>
-#include "cached_sampler.h"
+#include <vector>
+#include <algorithm>
+#include <functional>
+#include "math_x.h"
 
 namespace oddvibe {
-
-    CachedSampler::CachedSampler(Sampler& sampler): m_size(sampler.size()) {
-        m_samples.clear();
-        for (size_t k = 0; k != sampler.size(); ++k) {
-            m_samples.push_back(sampler.next_sample());
+    void normalize(std::vector<float>& pmf) {
+        double norm = std::accumulate(pmf.begin(), pmf.end(), 0.0f);
+        for (size_t k = 0; k != pmf.size(); ++k) {
+            pmf[k] = (float) (pmf[k] / norm);
         }
-    }
-
-    size_t CachedSampler::next_sample() {
-        size_t idx = m_current;
-        m_current = (m_current + 1) % m_size;
-        return m_samples[idx];
-    }
-
-    size_t CachedSampler::size() {
-        return m_size;
     }
 }
