@@ -33,9 +33,9 @@ namespace oddvibe {
 
         private:
             const size_t m_ncols;
-            const std::vector<size_t> m_feature_idxs;
-            const std::vector<float> m_split_vals;
-            const std::unordered_map<size_t, float> m_predictions;
+            const std::vector<size_t>& m_feature_idxs;
+            const std::vector<float>& m_split_vals;
+            const std::unordered_map<size_t, float>& m_predictions;
     };
 }
 #endif //KMBNW_ODVB_DECISIONTREE_H

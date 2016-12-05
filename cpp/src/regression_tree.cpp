@@ -26,7 +26,7 @@
 
 namespace oddvibe {
     RegressionTree::RegressionTree(const Partitioner &builder) :
-        m_ncols(builder.m_ncols),
+        m_ncols(builder.ncols()),
         m_feature_idxs(builder.m_feature_idxs),
         m_split_vals(builder.m_split_vals),
         m_predictions(builder.m_predictions) {

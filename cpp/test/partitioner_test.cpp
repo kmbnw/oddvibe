@@ -19,6 +19,7 @@
 #include <cmath>
 #include <vector>
 #include <unordered_map>
+#include "train_data.h"
 #include "partitioner.h"
 #include "seq_sampler.h"
 #include "partitioner_test.h"
@@ -55,8 +56,9 @@ namespace oddvibe {
         const size_t nfeatures = 2;
         const size_t depth = 1;
 
+        const TrainingData train_data(nfeatures, xs, ys);
         SequentialSampler sampler(0, ys.size());
-        Partitioner builder(nfeatures, depth, xs, ys);
+        Partitioner builder(train_data, depth);
         builder.build(sampler);
 
         size_t feature_idx = builder.m_feature_idxs[1];
@@ -92,8 +94,9 @@ namespace oddvibe {
         const size_t nfeatures = 2;
         const size_t depth = 2;
 
+        const TrainingData train_data(nfeatures, xs, ys);
         SequentialSampler sampler(0, ys.size());
-        Partitioner builder(nfeatures, depth, xs, ys);
+        Partitioner builder(train_data, depth);
         builder.build(sampler);
 
         CPPUNIT_ASSERT(0 == builder.m_feature_idxs[1]);

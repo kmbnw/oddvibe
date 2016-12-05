@@ -22,6 +22,7 @@
 #include <algorithm>
 #include <iterator>
 #include <functional>
+#include "train_data.h"
 #include "partitioner.h"
 #include "seq_sampler.h"
 #include "cached_sampler.h"
@@ -146,7 +147,6 @@ namespace oddvibe {
             ys[k] = intercept + beta_1 * xs[row_idx] + beta_2 * xs[row_idx + 1];
             if (k < threshold) {
                 if (k % 5 == 0) {
-                    std::cout << ": " <<  k << " ==============================89999999999999" << std::endl;
                     ys[k] = ys[k] * 1000 * row_idx;
                 }
             }
@@ -157,26 +157,27 @@ namespace oddvibe {
         const size_t depth = 3;
         const size_t num_rounds = 5000;
 
-        Partitioner builder(nfeatures, depth, xs, ys);
+        const TrainingData train_data(nfeatures, xs, ys);
+        Partitioner builder(train_data, depth);
         const Booster fitter(builder, seed);
         std::vector<float> pmf;
         std::vector<unsigned int> counts;
 
         for (size_t k = 0; k < num_rounds; ++k) {
-            std::cout << "========================" << std::endl;
+            //std::cout << "========================" << std::endl;
             fitter.update_one(pmf, counts, xs, ys);
             for (size_t j = 0; j != pmf.size(); ++j) {
-                std::cout << std::fixed << std::setprecision(2);
-                std::cout << "P(x1 = " << std::setw(7) << std::left << xs[j * nfeatures] << ", x2 = ";
-                std::cout << std::setw(7) << std::left << xs[j * nfeatures + 1] << ") = ";
-                std::cout << std::setw(7) << std::left << pmf[j] << "count[x] = ";
-                std::cout << std::fixed << std::setprecision(0);
-                std::cout << std::setw(7) << std::left << counts[j] << "Y = " << ys[j] << std::endl;
+                //std::cout << std::fixed << std::setprecision(2);
+                //std::cout << "P(x1 = " << std::setw(7) << std::left << xs[j * nfeatures] << ", x2 = ";
+                //std::cout << std::setw(7) << std::left << xs[j * nfeatures + 1] << ") = ";
+                //std::cout << std::setw(7) << std::left << pmf[j] << "count[x] = ";
+                //std::cout << std::fixed << std::setprecision(0);
+                //std::cout << std::setw(7) << std::left << counts[j] << "Y = " << ys[j] << std::endl;
             }
         }
-        std::cout << "Seed: " << seed << std::endl;
+        //std::cout << "Seed: " << seed << std::endl;
 
-        std::cout << std::max_element(counts.begin(), counts.end()) - counts.begin() << std::endl;
+        //std::cout << std::max_element(counts.begin(), counts.end()) - counts.begin() << std::endl;
 
 /*
         std::vector<float> yhats;

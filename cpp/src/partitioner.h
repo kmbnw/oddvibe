@@ -17,6 +17,7 @@
 #include <unordered_map>
 #include <functional>
 #include "sampler.h"
+#include "train_data.h"
 
 #ifndef KMBNW_ODVB_PRT_H
 #define KMBNW_ODVB_PRT_H
@@ -24,7 +25,6 @@
 namespace oddvibe {
 
     double rmse(const std::vector<float> &left, const std::vector<float> &right);
-    float filtered_mean(const std::vector<float> &ys, const std::vector<bool> &row_filter);
 
     /**
      * Builder class for decision trees.
@@ -32,30 +32,35 @@ namespace oddvibe {
     class Partitioner {
         public:
             Partitioner(
-                const size_t& ncols,
+                const TrainingData& train_data,
                 const size_t& max_depth,
-                const std::vector<float> &xs,
-                const std::vector<float> &ys,
                 const std::function<double(const std::vector<float>&, const std::vector<float>&)> &err_fn = rmse);
 
             Partitioner(const Partitioner& other) = delete;
             Partitioner& operator=(const Partitioner& other) = delete;
 
             void build(Sampler& sampler);
+            /**
+             * Number of rows.
+             */
+            size_t nrows() const;
+
+            /**
+             * Number of columns (features).
+             */
+            size_t ncols() const;
 
             std::vector<size_t> m_feature_idxs;
             std::vector<float> m_split_vals;
             std::unordered_map<size_t, float> m_predictions;
 
-            const size_t m_ncols;
-
-
         private:
+            const TrainingData& m_train_data;
+            const size_t m_ncols;
+            const size_t m_nrows;
             const size_t m_tree_sz;
-            const std::vector<float> m_xs;
-            const std::vector<float> m_ys;
             const std::function<double(const std::vector<float>&, const std::vector<float>&)> m_err_fn;
-    
+
             void set_row_filter(
                 const std::vector<bool> &row_filter,
                 std::vector<bool> &tmp_filter,

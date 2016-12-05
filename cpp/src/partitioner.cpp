@@ -22,19 +22,26 @@
 #include <cmath>
 #include <functional>
 #include "partitioner.h"
+#include "train_data.h"
 
 namespace oddvibe {
     Partitioner::Partitioner(
-            const size_t& ncols,
+            const TrainingData& train_data,
             const size_t& max_depth,
-            const std::vector<float> &xs,
-            const std::vector<float> &ys,
             const std::function<double(const std::vector<float>&, const std::vector<float>&)> &err_fn):
-            m_ncols(ncols), m_tree_sz(pow(2, max_depth)), m_xs(xs), m_ys(ys), m_err_fn(err_fn) {
-        if (ys.size() != xs.size() / ncols) {
-            throw std::invalid_argument("xs and ys do not have the same number of instance rows");
-        }
+            m_train_data(train_data),
+            m_ncols(train_data.ncols()),
+            m_nrows(train_data.nrows()),
+            m_tree_sz(pow(2, max_depth)),
+            m_err_fn(err_fn) {
+
     }
+
+    /*Partitioner::Partitioner(const Partitioner& other):
+            m_train_data(other.m_train_data),
+            m_tree_sz(other.m_tree_sz),
+            m_err_fn(other.m_err_fn) {
+    }*/
 
     void Partitioner::build(Sampler& sampler) {
         m_feature_idxs.clear();
@@ -44,7 +51,7 @@ namespace oddvibe {
         std::fill(m_split_vals.begin(), m_split_vals.end(), nan(""));
         m_predictions.clear();
 
-        const std::vector<bool> row_filter(m_ys.size(), true);
+        const std::vector<bool> row_filter(m_nrows, true);
         build(sampler, 1, row_filter);
     }
 
@@ -63,11 +70,9 @@ namespace oddvibe {
             const size_t &node_idx,
             const std::vector<bool> &row_filter) {
         if (node_idx >= m_feature_idxs.size()) {
-            m_predictions[node_idx] = filtered_mean(m_ys, row_filter);
+            m_predictions[node_idx] = m_train_data.filtered_mean(row_filter);
             return;
         }
-
-        const size_t nrows = m_ys.size();
 
         // init in the case of one element
         size_t feature_idx = 0;
@@ -84,7 +89,7 @@ namespace oddvibe {
             size_t row_idx = 0;
             size_t count = 0;
 
-            while (count++ < nrows) {
+            while (count++ < m_nrows) {
                 row_idx = sampler.next_sample();
 
                 if (!row_filter[row_idx]) {
@@ -93,7 +98,7 @@ namespace oddvibe {
 
                 // look at the parent node to see if we already split
                 // on this value
-                float x = m_xs[(row_idx * m_ncols) + col_idx];
+                float x = m_train_data.x_at(row_idx, col_idx);
                 if (node_idx > 1 &&
                     col_idx == m_feature_idxs[node_idx / 2] &&
                     x == m_split_vals[node_idx / 2])
@@ -104,17 +109,17 @@ namespace oddvibe {
                 left.clear();
                 right.clear();
 
-                float y = m_ys[row_idx];
+                float y = m_train_data.y_at(row_idx);
                 left.push_back(y);
 
                 // divide the data and calc error
-                for (size_t row_idx_k = 0; row_idx_k != nrows; ++row_idx_k) {
+                for (size_t row_idx_k = 0; row_idx_k != m_nrows; ++row_idx_k) {
                     if (row_idx_k == row_idx || !row_filter[row_idx_k]) {
                         continue;
                     }
 
-                    float other_x = m_xs[(row_idx_k * m_ncols) + col_idx];
-                    float other_y = m_ys[row_idx_k];
+                    float other_x = m_train_data.x_at(row_idx_k, col_idx);
+                    float other_y = m_train_data.y_at(row_idx_k);
 
                     if (other_x <= x) {
                         left.push_back(other_y);
@@ -138,7 +143,7 @@ namespace oddvibe {
         // depth is a max depth, not a guarantee.  if no way to split,
         // then stop branching and predict at this level
         if (isnan(split_value)) {
-            m_predictions[node_idx] = filtered_mean(m_ys, row_filter);
+            m_predictions[node_idx] = m_train_data.filtered_mean(row_filter);
             return;
         }
         m_feature_idxs[node_idx] = feature_idx;
@@ -167,8 +172,8 @@ namespace oddvibe {
             const float &split_value,
             bool left) const {
 
-        for(size_t row_idx = 0; row_idx != m_ys.size(); ++row_idx) {
-            const float x = m_xs[(row_idx * m_ncols) + feature_idx];
+        for(size_t row_idx = 0; row_idx != m_nrows; ++row_idx) {
+            const float x = m_train_data.x_at(row_idx, feature_idx);
 
             if (left) {
                 tmp_filter[row_idx] = row_filter[row_idx] && (x <= split_value);
@@ -177,6 +182,14 @@ namespace oddvibe {
             }
 
         }
+    }
+
+    size_t Partitioner::nrows() const {
+        return m_nrows;
+    }
+
+    size_t Partitioner::ncols() const {
+        return m_ncols;
     }
 
     double rmse(const std::vector<float> &left, const std::vector<float> &right) {
@@ -196,19 +209,5 @@ namespace oddvibe {
                          std::accumulate(rdiff.begin(), rdiff.end(), 0.0f));
 
         return err;
-    }
-
-    float filtered_mean(const std::vector<float> &ys, const std::vector<bool> &row_filter) {
-        double sum = 0;
-        size_t count = 0;
-        for (size_t i = 0; i != ys.size(); ++i) {
-            if (row_filter[i]) {
-                sum += ys[i];
-                ++count;
-            }
-        }
-
-        // predict mean
-        return (float) (sum / count);
     }
 }
