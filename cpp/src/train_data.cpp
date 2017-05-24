@@ -17,6 +17,7 @@
 #include <vector>
 #include <stdexcept>
 #include <cmath>
+#include <unordered_map>
 #include "train_data.h"
 
 namespace oddvibe {
@@ -79,26 +80,34 @@ namespace oddvibe {
         size_t size_r = 0;
                         
         for (auto col = 0; col != m_ncols; ++col) {
+            unordered_map<float, bool> uniques;
+
             for (auto row = 0; row != m_nrows; ++row) {
-                auto current_split = m_xs[(row * m_ncols) + col];
+                uniques[m_xs[(row * m_ncols) + col]] = true;
+            }
+
+            for (auto const & kv : uniques) {
+                auto current_split = kv.first;
 
                 // calculate yhat for left and right side of split
-                for (auto other = 0; other != m_nrows; ++other) {
-                    auto val = m_xs[(other * m_ncols) + col];
-                    if (val <= current_split) {
-                        yhat_l = yhat_l + ((val - yhat_l) / size_l);
+                for (auto row_j = 0; row_j != m_nrows; ++row_j) {
+                    auto x_j = m_xs[(row_j * m_ncols) + col];
+                    auto y_j = m_ys[row_j];
+                    if (x_j <= current_split) {
+                        yhat_l = yhat_l + ((y_j - yhat_l) / size_l);
                     } else {
-                        yhat_r = yhat_r + ((val - yhat_r) / size_r);
+                        yhat_r = yhat_r + ((y_j - yhat_r) / size_r);
                     }
                 }
 
                 // calculate total squared error for left and right side of split
                 double err = 0;
-                for (auto other = 0; other != m_nrows; ++other) {
-                    auto val = m_xs[(other * m_ncols) + col];
-                    auto yhat = val <= current_split ? yhat_l : yhat_r;
+                for (auto row_j = 0; row_j != m_nrows; ++row_j) {
+                    auto x_j = m_xs[(row_j * m_ncols) + col];
+                    auto y_j = m_ys[row_j];
+                    auto yhat = x_j <= current_split ? yhat_l : yhat_r;
 
-                    err += (val - yhat) ^ 2;
+                    err += (y_j - yhat) ^ 2;
                 }
                 if (isnan(best_err) || err < best_err) {
                     best_err = err;
