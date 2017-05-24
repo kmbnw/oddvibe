@@ -22,9 +22,11 @@
 
 namespace oddvibe {
     void normalize(std::vector<float>& pmf) {
-        double norm = std::accumulate(pmf.begin(), pmf.end(), 0.0f);
-        for (size_t k = 0; k != pmf.size(); ++k) {
-            pmf[k] = (float) (pmf[k] / norm);
-        }
+        double norm = std::accumulate(std::begin(pmf), std::end(pmf), 0.0f);
+        std::transform(
+                std::begin(pmf),
+                std::end(pmf),
+                std::begin(pmf),
+                [=](float f) { return f / norm; });
     }
 }
