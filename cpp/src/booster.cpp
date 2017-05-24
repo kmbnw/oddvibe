@@ -24,7 +24,6 @@
 #include "booster.h"
 #include "regression_tree.h"
 #include "ecdf_sampler.h"
-#include "seq_sampler.h"
 #include "cached_sampler.h"
 #include "math_x.h"
 
