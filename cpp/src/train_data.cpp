@@ -16,27 +16,28 @@
 
 #include <vector>
 #include <stdexcept>
+#include <cmath>
 #include "train_data.h"
 
 namespace oddvibe {
      TrainingData::TrainingData(
-            const size_t& ncols,
-            const std::vector<float> &xs,
-            const std::vector<float> &ys):
+            const size_t ncols,
+            const std::vector<float>& xs,
+            const std::vector<float>& ys):
             m_nrows(ys.size()), m_ncols(ncols), m_xs(xs), m_ys(ys) {
         if (ys.size() != xs.size() / ncols) {
             throw std::invalid_argument("xs and ys must have same number of rows");
         }
     }
 
-    float TrainingData::y_at(const size_t& row_idx) const {
+    float TrainingData::y_at(const size_t row_idx) const {
         if (row_idx < m_nrows) {
             return m_ys[row_idx];
         }
         throw std::out_of_range("row_idx out of range");
     }
 
-    float TrainingData::x_at(const size_t& row_idx, const size_t& col_idx) const {
+    float TrainingData::x_at(const size_t row_idx, const size_t col_idx) const {
         if (row_idx >= m_nrows) {
             throw std::out_of_range("row_idx out of range");
         }
@@ -66,5 +67,45 @@ namespace oddvibe {
         }
 
         return (float) (sum / count);
+    }
+
+    double TrainingData::best_split() const {
+        double best_err = nan();
+        size_t best_feature = -1;
+        double best_split = nan();
+        float yhat_l = 0;
+        size_t size_l = 0;
+        float yhat_r = 0;
+        size_t size_r = 0;
+                        
+        for (auto col = 0; col != m_ncols; ++col) {
+            for (auto row = 0; row != m_nrows; ++row) {
+                auto current_split = m_xs[(row * m_ncols) + col];
+
+                // calculate yhat for left and right side of split
+                for (auto other = 0; other != m_nrows; ++other) {
+                    auto val = m_xs[(other * m_ncols) + col];
+                    if (val <= current_split) {
+                        yhat_l = yhat_l + ((val - yhat_l) / size_l);
+                    } else {
+                        yhat_r = yhat_r + ((val - yhat_r) / size_r);
+                    }
+                }
+
+                // calculate total squared error for left and right side of split
+                double err = 0;
+                for (auto other = 0; other != m_nrows; ++other) {
+                    auto val = m_xs[(other * m_ncols) + col];
+                    auto yhat = val <= current_split ? yhat_l : yhat_r;
+
+                    err += (val - yhat) ^ 2;
+                }
+                if (isnan(best_err) || err < best_err) {
+                    best_err = err;
+                    best_split = current_split;
+                    best_feature = col;
+                }
+            }
+        }
     }
 }
