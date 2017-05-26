@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 #include <vector>
+#include <unordered_set>
+#include <utility>
 
 #ifndef KMBNW_TRAIN_DATA_H
 #define KMBNW_TRAIN_DATA_H
@@ -33,7 +35,7 @@ namespace oddvibe {
              * @param[in] ys: Response (independent variable).
              */
             TrainingData(
-                const size_t& ncols,
+                const size_t ncols,
                 const std::vector<float> &xs,
                 const std::vector<float> &ys);
 
@@ -49,11 +51,11 @@ namespace oddvibe {
             /**
              * Get the Y-value (response) at the given row.
              */
-            float y_at(const size_t& row_idx) const;
+            float y_at(const size_t row_idx) const;
             /**
              * Get the X-value (feature and value) at the given column and row.
              */
-            float x_at(const size_t& row_idx, const size_t& col_idx) const;
+            float x_at(const size_t row_idx, const size_t col_idx) const;
 
             /**
              * Number of rows.
@@ -70,11 +72,25 @@ namespace oddvibe {
              */
             float filtered_mean(const std::vector<bool> &row_filter) const;
 
+            std::pair<size_t, float> best_split() const;
+
         private:
-            const size_t m_nrows;
-            const size_t m_ncols;
-            const std::vector<float>& m_xs;
-            const std::vector<float>& m_ys;
+            size_t m_nrows;
+            size_t m_ncols;
+            std::vector<float> m_xs;
+            std::vector<float> m_ys;
+
+            std::unordered_set<float>
+            unique_values(const size_t col) const;
+
+            double calc_total_err(
+                const size_t col,
+                const float split,
+                const float yhat_l,
+                const float yhat_r) const;
+
+            std::pair<float, float>
+            calc_yhat(const size_t col, const float split) const;
     };
 }
 #endif //KMBNW_TRAIN_DATA_H

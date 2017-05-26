@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-#include <vector>
+#include <utility>
+#include <limits>
 #include <stdexcept>
 #include <cmath>
-#include <unordered_map>
 #include "train_data.h"
 
 namespace oddvibe {
@@ -57,7 +57,8 @@ namespace oddvibe {
         return m_ncols;
     }
 
-    float TrainingData::filtered_mean(const std::vector<bool> &row_filter) const {
+    float TrainingData::filtered_mean(
+            const std::vector<bool> &row_filter) const {
         double sum = 0;
         size_t count = 0;
         for (size_t i = 0; i != m_ys.size(); ++i) {
@@ -70,51 +71,76 @@ namespace oddvibe {
         return (float) (sum / count);
     }
 
-    double TrainingData::best_split() const {
-        double best_err = nan();
-        size_t best_feature = -1;
-        double best_split = nan();
-        float yhat_l = 0;
-        size_t size_l = 0;
+    std::unordered_set<float>
+    TrainingData::unique_values(const size_t col) const {
+        std::unordered_set<float> uniques;
+
+        for (size_t row = 0; row != m_nrows; ++row) {
+            uniques.insert(m_xs[(row * m_ncols) + col]);
+        }
+        return uniques;
+    }
+
+    double TrainingData::calc_total_err(
+            const size_t col,
+            const float split,
+            const float yhat_l,
+            const float yhat_r) const {
+        double err = 0;
+
+        for (size_t row_j = 0; row_j != m_nrows; ++row_j) {
+            auto x_j = m_xs[(row_j * m_ncols) + col];
+            auto y_j = m_ys[row_j];
+            auto yhat = x_j <= split ? yhat_l : yhat_r;
+
+            err += pow((y_j - yhat), 2.0);
+        }
+        return err;
+    }
+
+    std::pair<float, float>
+    TrainingData::calc_yhat(const size_t col, const float split) const {
+        float yhat_l = 0;;
         float yhat_r = 0;
+        size_t size_l = 0;
         size_t size_r = 0;
-                        
-        for (auto col = 0; col != m_ncols; ++col) {
-            unordered_map<float, bool> uniques;
 
-            for (auto row = 0; row != m_nrows; ++row) {
-                uniques[m_xs[(row * m_ncols) + col]] = true;
+        for (size_t row_j = 0; row_j != m_nrows; ++row_j) {
+            auto x_j = m_xs[(row_j * m_ncols) + col];
+            auto y_j = m_ys[row_j];
+            if (x_j <= split) {
+                ++size_l;
+                yhat_l = yhat_l + ((y_j - yhat_l) / size_l);
+            } else {
+                ++size_r;
+                yhat_r = yhat_r + ((y_j - yhat_r) / size_r);
             }
+        }
+        return std::make_pair(yhat_l, yhat_r);
+    }
 
-            for (auto const & kv : uniques) {
-                auto current_split = kv.first;
+    std::pair<size_t, float> TrainingData::best_split() const {
+        double best_err = std::numeric_limits<double>::quiet_NaN();
+        size_t best_feature = -1;
+        float best_split = std::numeric_limits<float>::quiet_NaN();
+                        
+        for (size_t col = 0; col != m_ncols; ++col) {
+            auto uniques = unique_values(col);
 
+            for (auto const & split : uniques) {
                 // calculate yhat for left and right side of split
-                for (auto row_j = 0; row_j != m_nrows; ++row_j) {
-                    auto x_j = m_xs[(row_j * m_ncols) + col];
-                    auto y_j = m_ys[row_j];
-                    if (x_j <= current_split) {
-                        yhat_l = yhat_l + ((y_j - yhat_l) / size_l);
-                    } else {
-                        yhat_r = yhat_r + ((y_j - yhat_r) / size_r);
-                    }
-                }
+                auto yhat = calc_yhat(col, split);
 
-                // calculate total squared error for left and right side of split
-                double err = 0;
-                for (auto row_j = 0; row_j != m_nrows; ++row_j) {
-                    auto x_j = m_xs[(row_j * m_ncols) + col];
-                    auto y_j = m_ys[row_j];
-                    auto yhat = x_j <= current_split ? yhat_l : yhat_r;
+                // total squared error for left and right side of split
+                auto err = calc_total_err(col, split, yhat.first, yhat.second);
 
-                    err += (y_j - yhat) ^ 2;
-                }
-                if (isnan(best_err) || err < best_err) {
+                if (std::isnan(best_err) || err < best_err) {
                     best_err = err;
-                    best_split = current_split;
+                    best_split = split;
                     best_feature = col;
                 }
             }
         }
+        return std::make_pair(best_feature, best_split);
     }
 }
