@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Krysta M Bouzek
+ * Copyright 2016-2017 Krysta M Bouzek
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -53,9 +53,8 @@ namespace oddvibe {
 
         const RTree tree(nfeatures, xs, ys);
         auto split = tree.best_split();
-        auto value = split.second;
 
-        CPPUNIT_ASSERT(std::isnan(value));
+        CPPUNIT_ASSERT_EQUAL(false, split.is_valid());
     }
 
     // perfect split on second feature; first is uninformative
@@ -78,11 +77,12 @@ namespace oddvibe {
 
         const RTree tree(nfeatures, xs, ys);
         auto split = tree.best_split();
-        auto col = split.first;
-        auto value = split.second;
+        auto col = split.col_idx();
+        auto value = split.value();
 
         size_t expected_feature = 1;
 
+        CPPUNIT_ASSERT_EQUAL(true, split.is_valid());
         CPPUNIT_ASSERT_EQUAL(expected_feature, col);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(split_val, value, m_tolerance);
     }
@@ -107,11 +107,12 @@ namespace oddvibe {
 
         const RTree tree(nfeatures, xs, ys);
         const auto split = tree.best_split();
-        const auto col = split.first;
-        const auto value = split.second;
+        const auto col = split.col_idx();
+        const auto value = split.value();
 
         const size_t expected_feature = 1;
 
+        CPPUNIT_ASSERT_EQUAL(true, split.is_valid());
         CPPUNIT_ASSERT_EQUAL(expected_feature, col);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(split_val, value, m_tolerance);
     }
@@ -143,12 +144,13 @@ namespace oddvibe {
 
         const RTree tree(nfeatures, xs, ys);
         auto split = tree.best_split();
-        auto col = split.first;
-        auto value = split.second;
+        auto col = split.col_idx();
+        auto value = split.value();
 
         size_t expected_feature = 2;
         float expected_val = 3.436f; // TODO hand-calc this
 
+        CPPUNIT_ASSERT_EQUAL(true, split.is_valid());
         CPPUNIT_ASSERT_EQUAL(expected_feature, col);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(expected_val, value, m_tolerance);
     }

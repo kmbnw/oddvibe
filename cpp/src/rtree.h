@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Krysta M Bouzek
+ * Copyright 2016-2017 Krysta M Bouzek
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,12 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+#ifndef KMBNW_RTREE_H
+#define KMBNW_RTREE_H
+
 #include <vector>
 #include <unordered_set>
-#include <utility>
-
-#ifndef KMBNW_TRAIN_DATA_H
-#define KMBNW_TRAIN_DATA_H
+#include "split_data.h"
 
 namespace oddvibe {
     /**
@@ -66,10 +67,10 @@ namespace oddvibe {
              */
             size_t ncols() const;
 
-            std::pair<size_t, float>
+            SplitData
             best_split() const;
 
-            std::pair<size_t, float>
+            SplitData
             best_split(const std::vector<bool>& active) const;
 
         private:
@@ -98,4 +99,4 @@ namespace oddvibe {
                 const std::vector<bool>& active) const;
     };
 }
-#endif //KMBNW_TRAIN_DATA_H
+#endif //KMBNW_RTREE_H

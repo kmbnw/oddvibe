@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Krysta M Bouzek
+ * Copyright 2016-2017 Krysta M Bouzek
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,14 +14,13 @@
  * limitations under the License.
  */
 
-#include <utility>
+#include "rtree.h"
 #include <limits>
 #include <stdexcept>
 #include <cmath>
-#include "rtree.h"
 
 namespace oddvibe {
-     RTree::RTree(
+    RTree::RTree(
             const size_t ncols,
             const std::vector<float>& xs,
             const std::vector<float>& ys):
@@ -111,17 +110,17 @@ namespace oddvibe {
         return std::make_pair(yhat_l, yhat_r);
     }
 
-    std::pair<size_t, float>
+    SplitData
     RTree::best_split() const {
         std::vector<bool> active(m_ys.size(), true);
         return best_split(active);
     }
 
-    std::pair<size_t, float>
+    SplitData
     RTree::best_split(const std::vector<bool>& active) const {
         double best_err = std::numeric_limits<double>::quiet_NaN();
         size_t best_feature = -1;
-        float best_split = std::numeric_limits<float>::quiet_NaN();
+        float best_value = std::numeric_limits<float>::quiet_NaN();
                         
         for (size_t col = 0; col != m_ncols; ++col) {
             auto uniques = unique_values(col, active);
@@ -133,19 +132,20 @@ namespace oddvibe {
             for (auto const & split : uniques) {
                 // calculate yhat for left and right side of split
                 auto yhat = calc_yhat(col, split, active);
-                auto yhat1 = yhat.first;
-                auto yhat2 = yhat.second;
+                auto yhat_l = yhat.first;
+                auto yhat_r = yhat.second;
 
                 // total squared error for left and right side of split
-                auto err = calc_total_err(col, split, active, yhat1, yhat2);
+                auto err = calc_total_err(col, split, active, yhat_l, yhat_r);
 
+                // TODO randomly allow the same error as best to 'win'
                 if (std::isnan(best_err) || err < best_err) {
                     best_err = err;
-                    best_split = split;
+                    best_value = split;
                     best_feature = col;
                 }
             }
         }
-        return std::make_pair(best_feature, best_split);
+        return SplitData(best_value, best_feature, best_err);
     }
 }
