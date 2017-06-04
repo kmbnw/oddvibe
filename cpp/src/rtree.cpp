@@ -112,6 +112,12 @@ namespace oddvibe {
     }
 
     std::pair<size_t, float>
+    RTree::best_split() const {
+        std::vector<bool> active(m_ys.size(), true);
+        return best_split(active);
+    }
+
+    std::pair<size_t, float>
     RTree::best_split(const std::vector<bool>& active) const {
         double best_err = std::numeric_limits<double>::quiet_NaN();
         size_t best_feature = -1;

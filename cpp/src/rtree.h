@@ -67,6 +67,9 @@ namespace oddvibe {
             size_t ncols() const;
 
             std::pair<size_t, float>
+            best_split() const;
+
+            std::pair<size_t, float>
             best_split(const std::vector<bool>& active) const;
 
         private:
