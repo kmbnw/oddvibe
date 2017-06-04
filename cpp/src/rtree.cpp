@@ -113,6 +113,10 @@ namespace oddvibe {
         for (size_t col = 0; col != m_ncols; ++col) {
             auto uniques = unique_values(col);
 
+            if (uniques.size() < 2) {
+                continue;
+            }
+
             for (auto const & split : uniques) {
                 // calculate yhat for left and right side of split
                 auto yhat = calc_yhat(col, split);

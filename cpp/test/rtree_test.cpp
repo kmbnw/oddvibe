@@ -35,6 +35,29 @@ namespace oddvibe {
     void RTreeTest::tearDown() {
     }
 
+    void RTreeTest::test_best_split_none() {
+        // odd numbers are feature 1, even are feature 2
+        const std::vector<float> xs {
+            1.2f, 12.2f,
+            1.2f, 12.2f,
+            1.2f, 12.2f,
+            1.2f, 12.2f
+        };
+        const std::vector<float> ys {
+            8.0f,
+            2.5f,
+            8.0f,
+            2.5f
+        };
+        const size_t nfeatures = 2;
+
+        const RTree tree(nfeatures, xs, ys);
+        auto split = tree.best_split();
+        auto value = split.second;
+
+        CPPUNIT_ASSERT(std::isnan(value));
+    }
+
     // perfect split on second feature; first is uninformative
     void RTreeTest::test_best_split_perfect() {
         // odd numbers are feature 1, even are feature 2

@@ -23,6 +23,7 @@
 namespace oddvibe {
     class RTreeTest : public CppUnit::TestFixture {
         CPPUNIT_TEST_SUITE(RTreeTest);
+        CPPUNIT_TEST(test_best_split_none);
         CPPUNIT_TEST(test_best_split_perfect);
         CPPUNIT_TEST(test_best_split_near_perfect);
         CPPUNIT_TEST(test_best_split_formula);
@@ -34,6 +35,7 @@ namespace oddvibe {
         public:
             void setUp();
             void tearDown();
+            void test_best_split_none();
             void test_best_split_perfect();
             void test_best_split_near_perfect();
             void test_best_split_formula();
