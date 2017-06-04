@@ -35,14 +35,14 @@ namespace oddvibe {
     void RTreeTest::tearDown() {
     }
 
-    // perfect split on feature 2
+    // perfect split on second feature; first is uninformative
     void RTreeTest::test_best_split_perfect() {
         // odd numbers are feature 1, even are feature 2
         const std::vector<float> xs {
             1.2f, 12.2f,
-            6.4f, 2.6f,
-            1.9f, 12.2f,
-            6.2f, 2.6f
+            1.2f, 2.6f,
+            1.2f, 12.2f,
+            1.2f, 2.6f
         };
         const std::vector<float> ys {
             8.0f,
@@ -59,7 +59,7 @@ namespace oddvibe {
 
         size_t expected_feature = 1;
 
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(value, 2.6f, m_tolerance);
-        CPPUNIT_ASSERT_EQUAL(col, expected_feature);
+        CPPUNIT_ASSERT_EQUAL(expected_feature, col);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(2.6f, value, m_tolerance);
     }
 }
