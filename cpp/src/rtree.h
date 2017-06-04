@@ -22,10 +22,9 @@
 
 namespace oddvibe {
     /**
-     * Abstraction over training data (features and response).
-     * Immutable.
+     * Regression tree.
      */
-    class TrainingData {
+    class RTree {
         public:
             /**
              * Create new training data from flattened features and responses.
@@ -34,7 +33,7 @@ namespace oddvibe {
              * row1, etc.
              * @param[in] ys: Response (independent variable).
              */
-            TrainingData(
+            RTree(
                 const size_t ncols,
                 const std::vector<float> &xs,
                 const std::vector<float> &ys);
@@ -42,11 +41,11 @@ namespace oddvibe {
             /**
              * No copy.
              */
-            TrainingData(const TrainingData& other) = delete;
+            RTree(const RTree& other) = delete;
             /**
              * No copy.
              */
-            TrainingData& operator=(const TrainingData& other) = delete;
+            RTree& operator=(const RTree& other) = delete;
 
             /**
              * Get the Y-value (response) at the given row.
@@ -67,11 +66,6 @@ namespace oddvibe {
              */
             size_t ncols() const;
 
-            /**
-             * Compute mean of subset of response.
-             */
-            float filtered_mean(const std::vector<bool> &row_filter) const;
-
             std::pair<size_t, float> best_split() const;
 
         private:
@@ -79,6 +73,18 @@ namespace oddvibe {
             size_t m_ncols;
             std::vector<float> m_xs;
             std::vector<float> m_ys;
+
+            std::unordered_set<float>
+            unique_values(const size_t col) const;
+
+            double calc_total_err(
+                const size_t col,
+                const float split,
+                const float yhat_l,
+                const float yhat_r) const;
+
+            std::pair<float, float>
+            calc_yhat(const size_t col, const float split) const;
     };
 }
 #endif //KMBNW_TRAIN_DATA_H
