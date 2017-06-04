@@ -24,15 +24,19 @@ namespace oddvibe {
     class RTreeTest : public CppUnit::TestFixture {
         CPPUNIT_TEST_SUITE(RTreeTest);
         CPPUNIT_TEST(test_best_split_perfect);
+        CPPUNIT_TEST(test_best_split_near_perfect);
+        CPPUNIT_TEST(test_best_split_formula);
         CPPUNIT_TEST_SUITE_END();
 
         private:
-            const float m_tolerance = 1e-6;
+            const float m_tolerance = 1e-3;
 
         public:
             void setUp();
             void tearDown();
             void test_best_split_perfect();
+            void test_best_split_near_perfect();
+            void test_best_split_formula();
     };
 }
 #endif

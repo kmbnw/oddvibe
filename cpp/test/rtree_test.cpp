@@ -15,7 +15,7 @@
  */
 
 #include <iostream>
-#include <unordered_map>
+#include <random>
 #include <cmath>
 #include <vector>
 #include "rtree.h"
@@ -38,11 +38,12 @@ namespace oddvibe {
     // perfect split on second feature; first is uninformative
     void RTreeTest::test_best_split_perfect() {
         // odd numbers are feature 1, even are feature 2
+        const float split_val = 2.6f;
         const std::vector<float> xs {
             1.2f, 12.2f,
-            1.2f, 2.6f,
+            1.2f, split_val,
             1.2f, 12.2f,
-            1.2f, 2.6f
+            1.2f, split_val
         };
         const std::vector<float> ys {
             8.0f,
@@ -60,6 +61,72 @@ namespace oddvibe {
         size_t expected_feature = 1;
 
         CPPUNIT_ASSERT_EQUAL(expected_feature, col);
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(2.6f, value, m_tolerance);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(split_val, value, m_tolerance);
+    }
+
+    // perfect split on second feature; first is less informative
+    void RTreeTest::test_best_split_near_perfect() {
+        // odd numbers are feature 1, even are feature 2
+        const float split_val = 2.6f;
+        const std::vector<float> xs {
+            1.2f, 12.2f,
+            3.4f, split_val,
+            1.2f, 12.2f,
+            1.2f, split_val
+        };
+        const std::vector<float> ys {
+            8.0f,
+            2.5f,
+            8.0f,
+            2.5f
+        };
+        const size_t nfeatures = 2;
+
+        const RTree tree(nfeatures, xs, ys);
+        const auto split = tree.best_split();
+        const auto col = split.first;
+        const auto value = split.second;
+
+        const size_t expected_feature = 1;
+
+        CPPUNIT_ASSERT_EQUAL(expected_feature, col);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(split_val, value, m_tolerance);
+    }
+
+    // 3rd feature provides best split
+    void RTreeTest::test_best_split_formula() {
+        std::default_random_engine generator;
+        std::uniform_real_distribution<float> dist(0.0f, 10.0f);
+        const size_t nrolls = 1000;
+        std::vector<float> xs(nrolls * 3); 
+        std::vector<float> ys(nrolls);
+
+        const float beta1 = 0;
+        const float beta2 = 2.5;
+        const float beta3 = 35;
+        const float intercept = 1.2;
+
+        for (size_t j = 0; j != nrolls; ++j) {
+            auto x1 = dist(generator);
+            auto x2 = dist(generator);
+            auto x3 = dist(generator);
+            xs.push_back(x1);
+            xs.push_back(x2);
+            xs.push_back(x3);
+            ys.push_back(intercept + beta1 * x1 + beta2 * x2 + beta3 * x3);
+        }
+
+        const size_t nfeatures = 3;
+
+        const RTree tree(nfeatures, xs, ys);
+        auto split = tree.best_split();
+        auto col = split.first;
+        auto value = split.second;
+
+        size_t expected_feature = 2;
+        float expected_val = 3.436f; // TODO hand-calc this
+
+        CPPUNIT_ASSERT_EQUAL(expected_feature, col);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(expected_val, value, m_tolerance);
     }
 }
