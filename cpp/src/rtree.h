@@ -66,7 +66,8 @@ namespace oddvibe {
              */
             size_t ncols() const;
 
-            std::pair<size_t, float> best_split() const;
+            std::pair<size_t, float>
+            best_split(const std::vector<bool>& active) const;
 
         private:
             size_t m_nrows;
@@ -75,16 +76,23 @@ namespace oddvibe {
             std::vector<float> m_ys;
 
             std::unordered_set<float>
-            unique_values(const size_t col) const;
+            unique_values(
+                const size_t col,
+                const std::vector<bool>& active) const;
 
-            double calc_total_err(
+            double
+            calc_total_err(
                 const size_t col,
                 const float split,
+                const std::vector<bool>& active,
                 const float yhat_l,
                 const float yhat_r) const;
 
             std::pair<float, float>
-            calc_yhat(const size_t col, const float split) const;
+            calc_yhat(
+                const size_t col,
+                const float split,
+                const std::vector<bool>& active) const;
     };
 }
 #endif //KMBNW_TRAIN_DATA_H

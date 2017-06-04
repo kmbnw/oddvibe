@@ -58,7 +58,9 @@ namespace oddvibe {
     }
 
     std::unordered_set<float>
-    RTree::unique_values(const size_t col) const {
+    RTree::unique_values(
+            const size_t col,
+            const std::vector<bool>& active) const {
         std::unordered_set<float> uniques;
 
         for (size_t row = 0; row != m_nrows; ++row) {
@@ -70,6 +72,7 @@ namespace oddvibe {
     double RTree::calc_total_err(
             const size_t col,
             const float split,
+            const std::vector<bool>& active,
             const float yhat_l,
             const float yhat_r) const {
         double err = 0;
@@ -85,7 +88,10 @@ namespace oddvibe {
     }
 
     std::pair<float, float>
-    RTree::calc_yhat(const size_t col, const float split) const {
+    RTree::calc_yhat(
+            const size_t col,
+            const float split,
+            const std::vector<bool>& active) const {
         float yhat_l = 0;;
         float yhat_r = 0;
         size_t size_l = 0;
@@ -105,13 +111,14 @@ namespace oddvibe {
         return std::make_pair(yhat_l, yhat_r);
     }
 
-    std::pair<size_t, float> RTree::best_split() const {
+    std::pair<size_t, float>
+    RTree::best_split(const std::vector<bool>& active) const {
         double best_err = std::numeric_limits<double>::quiet_NaN();
         size_t best_feature = -1;
         float best_split = std::numeric_limits<float>::quiet_NaN();
                         
         for (size_t col = 0; col != m_ncols; ++col) {
-            auto uniques = unique_values(col);
+            auto uniques = unique_values(col, active);
 
             if (uniques.size() < 2) {
                 continue;
@@ -119,10 +126,12 @@ namespace oddvibe {
 
             for (auto const & split : uniques) {
                 // calculate yhat for left and right side of split
-                auto yhat = calc_yhat(col, split);
+                auto yhat = calc_yhat(col, split, active);
+                auto yhat1 = yhat.first;
+                auto yhat2 = yhat.second;
 
                 // total squared error for left and right side of split
-                auto err = calc_total_err(col, split, yhat.first, yhat.second);
+                auto err = calc_total_err(col, split, active, yhat1, yhat2);
 
                 if (std::isnan(best_err) || err < best_err) {
                     best_err = err;
