@@ -26,7 +26,7 @@
 
 namespace oddvibe {
     Partitioner::Partitioner(
-            const TrainingData& train_data,
+            const DataSet& train_data,
             const size_t& max_depth,
             const std::function<double(const std::vector<float>&, const std::vector<float>&)> &err_fn):
             m_train_data(train_data),

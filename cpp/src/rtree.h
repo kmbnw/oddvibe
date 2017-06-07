@@ -20,6 +20,7 @@
 #include <vector>
 #include <unordered_set>
 #include "split_data.h"
+#include "train_data.h"
 
 namespace oddvibe {
     /**
@@ -27,17 +28,7 @@ namespace oddvibe {
      */
     class RTree {
         public:
-            /**
-             * Create new training data from flattened features and responses.
-             * @param[in] ncols: Number of columns/features.
-             * @param[in] xs: Flattened matrix of features: row0 followed by
-             * row1, etc.
-             * @param[in] ys: Response (independent variable).
-             */
-            RTree(
-                const size_t ncols,
-                const std::vector<float> &xs,
-                const std::vector<float> &ys);
+            RTree(const DataSet& data);
 
             /**
              * No copy.
@@ -48,55 +39,32 @@ namespace oddvibe {
              */
             RTree& operator=(const RTree& other) = delete;
 
-            /**
-             * Get the Y-value (response) at the given row.
-             */
-            float y_at(const size_t row_idx) const;
-            /**
-             * Get the X-value (feature and value) at the given column and row.
-             */
-            float x_at(const size_t row_idx, const size_t col_idx) const;
-
-            /**
-             * Number of rows.
-             */
-            size_t nrows() const;
-
-            /**
-             * Number of columns (features).
-             */
-            size_t ncols() const;
-
             SplitData
-            best_split() const;
-
-            SplitData
-            best_split(const std::vector<bool>& active) const;
+            best_split(const DataSet& data) const;
 
         private:
-            size_t m_nrows;
-            size_t m_ncols;
-            std::vector<float> m_xs;
-            std::vector<float> m_ys;
+            RTree(const DataSet& data, const std::vector<bool>& active);
+
+            std::vector<bool> m_active;
 
             std::unordered_set<float>
             unique_values(
-                const size_t col,
-                const std::vector<bool>& active) const;
+                const DataSet& data,
+                const size_t col) const;
 
             double
             calc_total_err(
+                const DataSet& data,
                 const size_t col,
                 const float split,
-                const std::vector<bool>& active,
                 const float yhat_l,
                 const float yhat_r) const;
 
             std::pair<float, float>
             calc_yhat(
+                const DataSet& data,
                 const size_t col,
-                const float split,
-                const std::vector<bool>& active) const;
+                const float split) const;
     };
 }
 #endif //KMBNW_RTREE_H

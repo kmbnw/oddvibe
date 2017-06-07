@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Krysta M Bouzek
+ * Copyright 2016-2017 Krysta M Bouzek
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@
 #include "train_data.h"
 
 namespace oddvibe {
-     TrainingData::TrainingData(
+     DataSet::DataSet(
             const size_t ncols,
             const std::vector<float>& xs,
             const std::vector<float>& ys):
@@ -31,14 +31,14 @@ namespace oddvibe {
         }
     }
 
-    float TrainingData::y_at(const size_t row_idx) const {
+    float DataSet::y_at(const size_t row_idx) const {
         if (row_idx < m_nrows) {
             return m_ys[row_idx];
         }
         throw std::out_of_range("row_idx out of range");
     }
 
-    float TrainingData::x_at(const size_t row_idx, const size_t col_idx) const {
+    float DataSet::x_at(const size_t row_idx, const size_t col_idx) const {
         if (row_idx >= m_nrows) {
             throw std::out_of_range("row_idx out of range");
         }
@@ -49,15 +49,15 @@ namespace oddvibe {
         return m_xs[(row_idx * m_ncols) + col_idx];
     }
 
-    size_t TrainingData::nrows() const {
+    size_t DataSet::nrows() const {
         return m_nrows;
     }
 
-    size_t TrainingData::ncols() const {
+    size_t DataSet::ncols() const {
         return m_ncols;
     }
 
-    float TrainingData::filtered_mean(
+    float DataSet::filtered_mean(
             const std::vector<bool> &row_filter) const {
         double sum = 0;
         size_t count = 0;

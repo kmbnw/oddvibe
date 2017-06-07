@@ -157,7 +157,7 @@ namespace oddvibe {
         const size_t depth = 3;
         const size_t num_rounds = 5000;
 
-        const TrainingData train_data(nfeatures, xs, ys);
+        const DataSet train_data(nfeatures, xs, ys);
         Partitioner builder(train_data, depth);
         const Booster fitter(builder, seed);
         std::vector<float> pmf;

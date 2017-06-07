@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Krysta M Bouzek
+ * Copyright 2016-2017 Krysta M Bouzek
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ namespace oddvibe {
      * Abstraction over training data (features and response).
      * Immutable.
      */
-    class TrainingData {
+    class DataSet {
         public:
             /**
              * Create new training data from flattened features and responses.
@@ -34,7 +34,7 @@ namespace oddvibe {
              * row1, etc.
              * @param[in] ys: Response (independent variable).
              */
-            TrainingData(
+            DataSet(
                 const size_t ncols,
                 const std::vector<float> &xs,
                 const std::vector<float> &ys);
@@ -42,11 +42,11 @@ namespace oddvibe {
             /**
              * No copy.
              */
-            TrainingData(const TrainingData& other) = delete;
+            DataSet(const DataSet& other) = delete;
             /**
              * No copy.
              */
-            TrainingData& operator=(const TrainingData& other) = delete;
+            DataSet& operator=(const DataSet& other) = delete;
 
             /**
              * Get the Y-value (response) at the given row.

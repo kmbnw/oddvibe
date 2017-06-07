@@ -20,85 +20,69 @@
 #include <cmath>
 
 namespace oddvibe {
-    RTree::RTree(
-            const size_t ncols,
-            const std::vector<float>& xs,
-            const std::vector<float>& ys):
-            m_nrows(ys.size()), m_ncols(ncols), m_xs(xs), m_ys(ys) {
-        if (ys.size() != xs.size() / ncols) {
-            throw std::invalid_argument("xs and ys must have same number of rows");
-        }
+    RTree::RTree(const DataSet& data, const std::vector<bool>& active) : m_active(active) {
+        //auto split = best_split(data);
+        // TODO left child, right child
     }
 
-    float RTree::y_at(const size_t row_idx) const {
-        if (row_idx < m_nrows) {
-            return m_ys[row_idx];
-        }
-        throw std::out_of_range("row_idx out of range");
-    }
-
-    float RTree::x_at(const size_t row_idx, const size_t col_idx) const {
-        if (row_idx >= m_nrows) {
-            throw std::out_of_range("row_idx out of range");
-        }
-        if (col_idx >= m_ncols) {
-            throw std::out_of_range("col_idx out of range");
-        }
-
-        return m_xs[(row_idx * m_ncols) + col_idx];
-    }
-
-    size_t RTree::nrows() const {
-        return m_nrows;
-    }
-
-    size_t RTree::ncols() const {
-        return m_ncols;
+    RTree::RTree(const DataSet& data) : m_active(std::vector<bool>(true, data.nrows())) {
+        //auto split = best_split(data);
+        // TODO left child, right child
     }
 
     std::unordered_set<float>
     RTree::unique_values(
-            const size_t col,
-            const std::vector<bool>& active) const {
+            const DataSet& data,
+            const size_t col) const {
         std::unordered_set<float> uniques;
+        const auto nrows = data.nrows();
 
-        for (size_t row = 0; row != m_nrows; ++row) {
-            uniques.insert(m_xs[(row * m_ncols) + col]);
+        for (size_t row = 0; row != nrows; ++row) {
+            uniques.insert(data.x_at(row, col));
         }
         return uniques;
     }
 
     double RTree::calc_total_err(
+            const DataSet& data,
             const size_t col,
             const float split,
-            const std::vector<bool>& active,
             const float yhat_l,
             const float yhat_r) const {
-        double err = 0;
+        double err = std::numeric_limits<double>::quiet_NaN();
+        const auto nrows = data.nrows();
+        bool init = false;
 
-        for (size_t row_j = 0; row_j != m_nrows; ++row_j) {
-            auto x_j = m_xs[(row_j * m_ncols) + col];
-            auto y_j = m_ys[row_j];
-            auto yhat = x_j <= split ? yhat_l : yhat_r;
+        for (size_t row_j = 0; row_j != nrows; ++row_j) {
+            if (m_active[row_j]) {
+                auto x_j = data.x_at(row_j, col);
+                auto y_j = data.y_at(row_j);
+                auto yhat = x_j <= split ? yhat_l : yhat_r;
 
-            err += pow((y_j - yhat), 2.0);
+                if (!init) {
+                    init = true;
+                    err = 0;
+                }
+                err += pow((y_j - yhat), 2.0);
+            }
         }
         return err;
     }
 
     std::pair<float, float>
     RTree::calc_yhat(
+            const DataSet& data,
             const size_t col,
-            const float split,
-            const std::vector<bool>& active) const {
+            const float split) const {
         float yhat_l = 0;;
         float yhat_r = 0;
         size_t size_l = 0;
         size_t size_r = 0;
+        const auto nrows = data.nrows();
 
-        for (size_t row_j = 0; row_j != m_nrows; ++row_j) {
-            auto x_j = m_xs[(row_j * m_ncols) + col];
-            auto y_j = m_ys[row_j];
+        for (size_t row_j = 0; row_j != nrows; ++row_j) {
+            auto x_j = data.x_at(row_j, col);
+            auto y_j = data.y_at(row_j);
             if (x_j <= split) {
                 ++size_l;
                 yhat_l = yhat_l + ((y_j - yhat_l) / size_l);
@@ -111,35 +95,38 @@ namespace oddvibe {
     }
 
     SplitData
-    RTree::best_split() const {
-        std::vector<bool> active(m_ys.size(), true);
-        return best_split(active);
-    }
-
-    SplitData
-    RTree::best_split(const std::vector<bool>& active) const {
+    RTree::best_split(const DataSet& data) const {
         double best_err = std::numeric_limits<double>::quiet_NaN();
         size_t best_feature = -1;
         float best_value = std::numeric_limits<float>::quiet_NaN();
-                        
-        for (size_t col = 0; col != m_ncols; ++col) {
-            auto uniques = unique_values(col, active);
+        bool init = false;
+
+        const auto ncols = data.ncols();
+        for (size_t col = 0; col != ncols; ++col) {
+            auto uniques = unique_values(data, col);
 
             if (uniques.size() < 2) {
                 continue;
             }
 
-            for (auto const & split : uniques) {
+            // TODO check for zero variance
+
+            for (const auto & split : uniques) {
                 // calculate yhat for left and right side of split
-                auto yhat = calc_yhat(col, split, active);
-                auto yhat_l = yhat.first;
-                auto yhat_r = yhat.second;
+                const auto yhat = calc_yhat(data, col, split);
+                const auto yhat_l = yhat.first;
+                const auto yhat_r = yhat.second;
+
+                if (std::isnan(yhat_l) || std::isnan(yhat_r)) {
+                    continue;
+                }
 
                 // total squared error for left and right side of split
-                auto err = calc_total_err(col, split, active, yhat_l, yhat_r);
+                const auto err = calc_total_err(data, col, split, yhat_l, yhat_r);
 
                 // TODO randomly allow the same error as best to 'win'
-                if (std::isnan(best_err) || err < best_err) {
+                if (!init || (!std::isnan(err) && err < best_err)) {
+                    init = true;
                     best_err = err;
                     best_value = split;
                     best_feature = col;

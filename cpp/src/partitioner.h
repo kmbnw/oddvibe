@@ -32,7 +32,7 @@ namespace oddvibe {
     class Partitioner {
         public:
             Partitioner(
-                const TrainingData& train_data,
+                const DataSet& train_data,
                 const size_t& max_depth,
                 const std::function<double(const std::vector<float>&, const std::vector<float>&)> &err_fn = rmse);
 
@@ -55,7 +55,7 @@ namespace oddvibe {
             std::unordered_map<size_t, float> m_predictions;
 
         private:
-            const TrainingData& m_train_data;
+            const DataSet& m_train_data;
             const size_t m_ncols;
             const size_t m_nrows;
             const size_t m_tree_sz;

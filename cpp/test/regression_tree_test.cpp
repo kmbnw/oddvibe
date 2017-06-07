@@ -57,7 +57,7 @@ namespace oddvibe {
         const size_t nfeatures = 2;
         const size_t depth = 1;
 
-        const TrainingData train_data(nfeatures, xs, ys);
+        const DataSet train_data(nfeatures, xs, ys);
         SequentialSampler sampler(0, ys.size());
         Partitioner builder(train_data, depth);
         builder.build(sampler);
@@ -124,7 +124,7 @@ namespace oddvibe {
         const size_t nfeatures = 2;
         const size_t depth = 2;
 
-        const TrainingData train_data(nfeatures, xs, ys);
+        const DataSet train_data(nfeatures, xs, ys);
         SequentialSampler sampler(0, ys.size());
         Partitioner builder(train_data, depth);
         builder.build(sampler);

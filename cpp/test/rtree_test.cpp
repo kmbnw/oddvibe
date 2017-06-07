@@ -51,8 +51,9 @@ namespace oddvibe {
         };
         const size_t nfeatures = 2;
 
-        const RTree tree(nfeatures, xs, ys);
-        auto split = tree.best_split();
+        const DataSet data(nfeatures, xs, ys);
+        const RTree tree(data);
+        auto split = tree.best_split(data);
 
         CPPUNIT_ASSERT_EQUAL(false, split.is_valid());
     }
@@ -75,8 +76,9 @@ namespace oddvibe {
         };
         const size_t nfeatures = 2;
 
-        const RTree tree(nfeatures, xs, ys);
-        auto split = tree.best_split();
+        const DataSet data(nfeatures, xs, ys);
+        const RTree tree(data);
+        auto split = tree.best_split(data);
         auto col = split.col_idx();
         auto value = split.value();
 
@@ -105,8 +107,9 @@ namespace oddvibe {
         };
         const size_t nfeatures = 2;
 
-        const RTree tree(nfeatures, xs, ys);
-        const auto split = tree.best_split();
+        const DataSet data(nfeatures, xs, ys);
+        const RTree tree(data);
+        const auto split = tree.best_split(data);
         const auto col = split.col_idx();
         const auto value = split.value();
 
@@ -122,7 +125,7 @@ namespace oddvibe {
         std::default_random_engine generator;
         std::uniform_real_distribution<float> dist(0.0f, 10.0f);
         const size_t nrolls = 1000;
-        std::vector<float> xs(nrolls * 3); 
+        std::vector<float> xs(nrolls * 3);
         std::vector<float> ys(nrolls);
 
         const float beta1 = 0;
@@ -142,8 +145,9 @@ namespace oddvibe {
 
         const size_t nfeatures = 3;
 
-        const RTree tree(nfeatures, xs, ys);
-        auto split = tree.best_split();
+        const DataSet data(nfeatures, xs, ys);
+        const RTree tree(data);
+        auto split = tree.best_split(data);
         auto col = split.col_idx();
         auto value = split.value();
 
