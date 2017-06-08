@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 #include <vector>
-#include <unordered_map>
-#include <functional>
 #include "partitioner.h"
 
 #ifndef KMBNW_ODVB_MATHX_H
@@ -27,5 +25,7 @@ namespace oddvibe {
      * @param[inout] pmf The vector to normalize; overwritten in-place.
      */
     void normalize(std::vector<float>& pmf);
+
+    double variance(const std::vector<float>& seq);
 }
 #endif //KMBNW_ODVB_MATHX_H

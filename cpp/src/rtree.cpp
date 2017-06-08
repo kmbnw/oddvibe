@@ -20,25 +20,49 @@
 #include <cmath>
 
 namespace oddvibe {
-    RTree::RTree(const DataSet& data, const std::vector<bool>& active) : m_active(active) {
-        //auto split = best_split(data);
-        // TODO left child, right child
+    RTree::RTree(const DataSet& data, const std::vector<bool>& active) :
+        m_active(active) {
+        auto split = best_split(data);
+
+        if (split.is_valid()) {
+            const auto nrows = data.nrows();
+            std::vector<bool> left_filter(false, nrows);
+            std::vector<bool> right_filter(false, nrows);
+
+            auto split_col = split.col_idx();
+            auto split_val = split.value();
+
+            for (size_t row_j = 0; row_j != nrows; ++row_j) {
+                if (active[row_j]) {
+                    const auto x_j = data.x_at(row_j, split_col);
+                    if (x_j <= split_val) {
+                        left_filter[row_j] = true;
+                    } else {
+                        right_filter[row_j] = true;
+                    }
+                }
+            }
+
+            m_left_child = std::make_unique<RTree>(data, left_filter);
+            m_right_child = std::make_unique<RTree>(data, right_filter);
+        }
     }
 
-    RTree::RTree(const DataSet& data) : m_active(std::vector<bool>(true, data.nrows())) {
+    RTree::RTree(const DataSet& data) :
+        RTree(data, std::vector<bool>(true, data.nrows())) {
         //auto split = best_split(data);
         // TODO left child, right child
     }
 
     std::unordered_set<float>
-    RTree::unique_values(
-            const DataSet& data,
-            const size_t col) const {
+    RTree::unique_values(const DataSet& data, const size_t col) const {
         std::unordered_set<float> uniques;
         const auto nrows = data.nrows();
 
         for (size_t row = 0; row != nrows; ++row) {
-            uniques.insert(data.x_at(row, col));
+            if (m_active[row]) {
+                uniques.insert(data.x_at(row, col));
+            }
         }
         return uniques;
     }
@@ -81,14 +105,16 @@ namespace oddvibe {
         const auto nrows = data.nrows();
 
         for (size_t row_j = 0; row_j != nrows; ++row_j) {
-            auto x_j = data.x_at(row_j, col);
-            auto y_j = data.y_at(row_j);
-            if (x_j <= split) {
-                ++size_l;
-                yhat_l = yhat_l + ((y_j - yhat_l) / size_l);
-            } else {
-                ++size_r;
-                yhat_r = yhat_r + ((y_j - yhat_r) / size_r);
+            if (m_active[row_j]) {
+                auto x_j = data.x_at(row_j, col);
+                auto y_j = data.y_at(row_j);
+                if (x_j <= split) {
+                    ++size_l;
+                    yhat_l = yhat_l + ((y_j - yhat_l) / size_l);
+                } else {
+                    ++size_r;
+                    yhat_r = yhat_r + ((y_j - yhat_r) / size_r);
+                }
             }
         }
         return std::make_pair(yhat_l, yhat_r);

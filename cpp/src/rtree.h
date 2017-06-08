@@ -19,16 +19,19 @@
 
 #include <vector>
 #include <unordered_set>
+#include <memory>
 #include "split_data.h"
 #include "train_data.h"
 
 namespace oddvibe {
+
     /**
      * Regression tree.
      */
     class RTree {
         public:
             RTree(const DataSet& data);
+            RTree(const DataSet& data, const std::vector<bool>& active);
 
             /**
              * No copy.
@@ -43,9 +46,9 @@ namespace oddvibe {
             best_split(const DataSet& data) const;
 
         private:
-            RTree(const DataSet& data, const std::vector<bool>& active);
-
             std::vector<bool> m_active;
+            std::unique_ptr<RTree> m_left_child;
+            std::unique_ptr<RTree> m_right_child;
 
             std::unordered_set<float>
             unique_values(

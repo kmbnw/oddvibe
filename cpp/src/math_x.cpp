@@ -14,19 +14,32 @@
  * limitations under the License.
  */
 
-#include <iostream>
-#include <vector>
 #include <algorithm>
-#include <functional>
 #include "math_x.h"
 
 namespace oddvibe {
     void normalize(std::vector<float>& pmf) {
-        double norm = std::accumulate(std::begin(pmf), std::end(pmf), 0.0f);
+        const auto norm = std::accumulate(std::begin(pmf), std::end(pmf), 0.0);
         std::transform(
-                std::begin(pmf),
-                std::end(pmf),
-                std::begin(pmf),
-                [=](float f) { return f / norm; });
+            std::begin(pmf),
+            std::end(pmf),
+            std::begin(pmf),
+            [norm = norm](float f) { return f / norm; });
+    }
+
+    double variance(const std::vector<float>& seq) {
+        if (seq.empty()) {
+            return 0;
+        }
+        const auto mean = std::accumulate(
+            std::begin(seq),
+            std::end(seq),
+            0.0) / seq.size();
+
+        double variance = 0;
+        for (const auto & elem : seq) {
+            variance += pow(elem - mean, 2);
+        }
+        return variance / seq.size();
     }
 }
