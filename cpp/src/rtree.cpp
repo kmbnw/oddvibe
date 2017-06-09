@@ -24,7 +24,7 @@ namespace oddvibe {
     RTree::RTree(const DataSet& data, const std::vector<bool>& active) :
         m_active(active) {
 
-        if (std::find(active.begin(), active.end(), true) != active.end()) {
+        if (std::find(active.begin(), active.end(), true) == active.end()) {
             throw std::invalid_argument("Must have at least one active row");
         }
         if (data.variance_y(active) > 1e-6) {
@@ -45,7 +45,7 @@ namespace oddvibe {
     }
 
     RTree::RTree(const DataSet& data) :
-        RTree(data, std::vector<bool>(true, data.nrows())) {
+        RTree(data, std::vector<bool>(data.nrows(), true)) {
     }
 
     void RTree::populate_filter(
