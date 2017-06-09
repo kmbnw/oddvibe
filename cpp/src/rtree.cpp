@@ -19,6 +19,7 @@
 #include <stdexcept>
 #include <algorithm>
 #include <cmath>
+#include <iostream>
 
 namespace oddvibe {
     RTree::RTree(const DataSet& data, const std::vector<bool>& active) :
@@ -37,6 +38,17 @@ namespace oddvibe {
                 std::vector<bool> left_filter(nrows, false);
                 std::vector<bool> right_filter(nrows, false);
                 populate_filter(data, split_col, split_val, left_filter, right_filter);
+
+                /*std::cout
+                    << " ============ "
+                    << std::accumulate(left_filter.begin(), left_filter.end(), 0.0)
+                    << " ============ "
+                    << std::accumulate(right_filter.begin(), right_filter.end(), 0.0)
+                    << " ============ "
+                    << split_col
+                    << " ============ "
+                    << split_val
+                    << std::endl;*/
 
                 m_left_child = std::make_unique<RTree>(data, left_filter);
                 m_right_child = std::make_unique<RTree>(data, right_filter);

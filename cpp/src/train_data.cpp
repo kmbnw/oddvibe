@@ -67,7 +67,7 @@ namespace oddvibe {
 
         for (size_t row = 0; row != m_nrows; ++row) {
             if (active[row]) {
-                uniques.insert(m_xs[x_at(row, col)]);
+                uniques.insert(m_xs[x_index(row, col)]);
             }
         }
         return uniques;
