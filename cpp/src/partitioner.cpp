@@ -70,7 +70,7 @@ namespace oddvibe {
             const size_t &node_idx,
             const std::vector<bool> &row_filter) {
         if (node_idx >= m_feature_idxs.size()) {
-            m_predictions[node_idx] = m_train_data.filtered_mean(row_filter);
+            m_predictions[node_idx] = m_train_data.mean_y(row_filter);
             return;
         }
 
@@ -143,7 +143,7 @@ namespace oddvibe {
         // depth is a max depth, not a guarantee.  if no way to split,
         // then stop branching and predict at this level
         if (isnan(split_value)) {
-            m_predictions[node_idx] = m_train_data.filtered_mean(row_filter);
+            m_predictions[node_idx] = m_train_data.mean_y(row_filter);
             return;
         }
         m_feature_idxs[node_idx] = feature_idx;

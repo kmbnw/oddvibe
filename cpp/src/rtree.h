@@ -44,7 +44,7 @@ namespace oddvibe {
             SplitData
             best_split(const DataSet& data) const;
 
-            float RTree::predict(const DataSet& data) const;
+            float predict(const DataSet& data) const;
 
         private:
             std::vector<bool> m_active;

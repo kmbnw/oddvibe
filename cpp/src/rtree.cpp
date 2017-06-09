@@ -17,24 +17,25 @@
 #include "rtree.h"
 #include <limits>
 #include <stdexcept>
+#include <algorithm>
 #include <cmath>
 
 namespace oddvibe {
     RTree::RTree(const DataSet& data, const std::vector<bool>& active) :
         m_active(active) {
 
-        if (!std::any(active)) {
+        if (std::find(active.begin(), active.end(), true) != active.end()) {
             throw std::invalid_argument("Must have at least one active row");
         }
-        if (data.variance(active) > 1e-6) {
+        if (data.variance_y(active) > 1e-6) {
             auto split = best_split(data);
 
             if (split.is_valid()) {
-                auto split_col = split.col_idx();
-                auto split_val = split.value();
-
-                std::vector<bool> left_filter(false, nrows);
-                std::vector<bool> right_filter(false, nrows);
+                const auto split_col = split.col_idx();
+                const auto split_val = split.value();
+                const auto nrows = data.nrows();
+                std::vector<bool> left_filter(nrows, false);
+                std::vector<bool> right_filter(nrows, false);
                 populate_filter(data, split_col, split_val, left_filter, right_filter);
 
                 m_left_child = std::make_unique<RTree>(data, left_filter);
@@ -47,15 +48,13 @@ namespace oddvibe {
         RTree(data, std::vector<bool>(true, data.nrows())) {
     }
 
-    void populate_filter(
+    void RTree::populate_filter(
             const DataSet& data,
             const size_t col,
             const float split_val,
             std::vector<bool> left_filter,
-            std::vector<bool> right_filter) {
+            std::vector<bool> right_filter) const {
         const auto nrows = data.nrows();
-        left_filter(false, nrows);
-        right_filter(false, nrows);
 
         for (size_t row = 0; row != nrows; ++row) {
             if (m_active[row]) {
@@ -90,21 +89,21 @@ namespace oddvibe {
     }
 
     float RTree::predict(const DataSet& data) const {
-        return data.mean(m_active);
+        return data.mean_y(m_active);
     }
 
     std::pair<float, float>
     RTree::predict_split(
             const DataSet& data,
             const size_t col,
-            const float split) const {
+            const float split_val) const {
         const auto nrows = data.nrows();
 
-        std::vector<bool> left_filter(false, nrows);
-        std::vector<bool> right_filter(false, nrows);
-        populate_filter(data, split_col, split_val, left_filter, right_filter);
-        const float yhat_l = data.mean(left_filter);
-        const float yhat_r = data.mean(right_filter);
+        std::vector<bool> left_filter(nrows, false);
+        std::vector<bool> right_filter(nrows, false);
+        populate_filter(data, col, split_val, left_filter, right_filter);
+        const float yhat_l = data.mean_y(left_filter);
+        const float yhat_r = data.mean_y(right_filter);
 
         return std::make_pair(yhat_l, yhat_r);
     }
