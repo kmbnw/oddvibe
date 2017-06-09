@@ -52,8 +52,8 @@ namespace oddvibe {
             const DataSet& data,
             const size_t col,
             const float split_val,
-            std::vector<bool> left_filter,
-            std::vector<bool> right_filter) const {
+            std::vector<bool>& left_filter,
+            std::vector<bool>& right_filter) const {
         const auto nrows = data.nrows();
 
         for (size_t row = 0; row != nrows; ++row) {
@@ -117,7 +117,7 @@ namespace oddvibe {
 
         const auto ncols = data.ncols();
         for (size_t col = 0; col != ncols; ++col) {
-            auto uniques = data.unique_values(data, col);
+            auto uniques = data.unique_x(col, m_active);
 
             if (uniques.size() < 2) {
                 continue;

@@ -46,7 +46,7 @@ namespace oddvibe {
             throw std::out_of_range("col_idx out of range");
         }
 
-        return m_xs[(row_idx * m_ncols) + col_idx];
+        return m_xs[x_index(row_idx, col_idx)];
     }
 
     size_t DataSet::nrows() const {
@@ -62,7 +62,7 @@ namespace oddvibe {
     }
 
     std::unordered_set<float>
-    DataSet::unique_values(const size_t col, std::vector<bool>& active) const {
+    DataSet::unique_x(const size_t col, const std::vector<bool>& active) const {
         std::unordered_set<float> uniques;
 
         for (size_t row = 0; row != m_nrows; ++row) {
@@ -104,7 +104,7 @@ namespace oddvibe {
 
         size_t count = 0;
         double total = 0;
-        const auto mean = mean(active);
+        const auto mean = mean_y(active);
 
         for (size_t idx = 0; idx != m_nrows; ++idx) {
             if (active[idx]) {

@@ -68,7 +68,11 @@ namespace oddvibe {
             size_t ncols() const;
 
             double mean_y(const std::vector<bool>& active) const;
+
             double variance_y(const std::vector<bool>& active) const;
+
+            std::unordered_set<float>
+            unique_x(const size_t col, const std::vector<bool>& active) const;
 
             std::pair<size_t, float> best_split() const;
 
@@ -78,8 +82,7 @@ namespace oddvibe {
             std::vector<float> m_xs;
             std::vector<float> m_ys;
 
-            std::unordered_set<float>
-            unique_values(const size_t col, std::vector<bool>& active) const;
+            size_t x_index(const size_t row, const size_t col) const;
     };
 }
 #endif //KMBNW_TRAIN_DATA_H

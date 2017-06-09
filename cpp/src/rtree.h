@@ -69,8 +69,8 @@ namespace oddvibe {
                     const DataSet& data,
                     const size_t col,
                     const float split_val,
-                    std::vector<bool> left_filter,
-                    std::vector<bool> right_filter);
+                    std::vector<bool>& left_filter,
+                    std::vector<bool>& right_filter) const;
     };
 }
 #endif //KMBNW_RTREE_H
