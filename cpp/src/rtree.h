@@ -18,7 +18,6 @@
 #define KMBNW_RTREE_H
 
 #include <vector>
-#include <unordered_set>
 #include <memory>
 #include "split_data.h"
 #include "train_data.h"
@@ -45,15 +44,12 @@ namespace oddvibe {
             SplitData
             best_split(const DataSet& data) const;
 
+            float RTree::predict(const DataSet& data) const;
+
         private:
             std::vector<bool> m_active;
             std::unique_ptr<RTree> m_left_child;
             std::unique_ptr<RTree> m_right_child;
-
-            std::unordered_set<float>
-            unique_values(
-                const DataSet& data,
-                const size_t col) const;
 
             double
             calc_total_err(
@@ -64,10 +60,17 @@ namespace oddvibe {
                 const float yhat_r) const;
 
             std::pair<float, float>
-            calc_yhat(
+            predict_split(
                 const DataSet& data,
                 const size_t col,
                 const float split) const;
+
+            void populate_filter(
+                    const DataSet& data,
+                    const size_t col,
+                    const float split_val,
+                    std::vector<bool> left_filter,
+                    std::vector<bool> right_filter);
     };
 }
 #endif //KMBNW_RTREE_H

@@ -22,49 +22,51 @@
 namespace oddvibe {
     RTree::RTree(const DataSet& data, const std::vector<bool>& active) :
         m_active(active) {
-        auto split = best_split(data);
 
-        if (split.is_valid()) {
-            const auto nrows = data.nrows();
-            std::vector<bool> left_filter(false, nrows);
-            std::vector<bool> right_filter(false, nrows);
+        if (!std::any(active)) {
+            throw std::invalid_argument("Must have at least one active row");
+        }
+        if (data.variance(active) > 1e-6) {
+            auto split = best_split(data);
 
-            auto split_col = split.col_idx();
-            auto split_val = split.value();
+            if (split.is_valid()) {
+                auto split_col = split.col_idx();
+                auto split_val = split.value();
 
-            for (size_t row_j = 0; row_j != nrows; ++row_j) {
-                if (active[row_j]) {
-                    const auto x_j = data.x_at(row_j, split_col);
-                    if (x_j <= split_val) {
-                        left_filter[row_j] = true;
-                    } else {
-                        right_filter[row_j] = true;
-                    }
-                }
+                std::vector<bool> left_filter(false, nrows);
+                std::vector<bool> right_filter(false, nrows);
+                populate_filter(data, split_col, split_val, left_filter, right_filter);
+
+                m_left_child = std::make_unique<RTree>(data, left_filter);
+                m_right_child = std::make_unique<RTree>(data, right_filter);
             }
-
-            m_left_child = std::make_unique<RTree>(data, left_filter);
-            m_right_child = std::make_unique<RTree>(data, right_filter);
         }
     }
 
     RTree::RTree(const DataSet& data) :
         RTree(data, std::vector<bool>(true, data.nrows())) {
-        //auto split = best_split(data);
-        // TODO left child, right child
     }
 
-    std::unordered_set<float>
-    RTree::unique_values(const DataSet& data, const size_t col) const {
-        std::unordered_set<float> uniques;
+    void populate_filter(
+            const DataSet& data,
+            const size_t col,
+            const float split_val,
+            std::vector<bool> left_filter,
+            std::vector<bool> right_filter) {
         const auto nrows = data.nrows();
+        left_filter(false, nrows);
+        right_filter(false, nrows);
 
         for (size_t row = 0; row != nrows; ++row) {
             if (m_active[row]) {
-                uniques.insert(data.x_at(row, col));
+                const auto x = data.x_at(row, col);
+                if (x <= split_val) {
+                    left_filter[row] = true;
+                } else {
+                    right_filter[row] = true;
+                }
             }
         }
-        return uniques;
     }
 
     double RTree::calc_total_err(
@@ -73,50 +75,37 @@ namespace oddvibe {
             const float split,
             const float yhat_l,
             const float yhat_r) const {
-        double err = std::numeric_limits<double>::quiet_NaN();
+        double err = 0;
         const auto nrows = data.nrows();
-        bool init = false;
 
         for (size_t row_j = 0; row_j != nrows; ++row_j) {
             if (m_active[row_j]) {
                 auto x_j = data.x_at(row_j, col);
                 auto y_j = data.y_at(row_j);
                 auto yhat = x_j <= split ? yhat_l : yhat_r;
-
-                if (!init) {
-                    init = true;
-                    err = 0;
-                }
                 err += pow((y_j - yhat), 2.0);
             }
         }
         return err;
     }
 
+    float RTree::predict(const DataSet& data) const {
+        return data.mean(m_active);
+    }
+
     std::pair<float, float>
-    RTree::calc_yhat(
+    RTree::predict_split(
             const DataSet& data,
             const size_t col,
             const float split) const {
-        float yhat_l = 0;;
-        float yhat_r = 0;
-        size_t size_l = 0;
-        size_t size_r = 0;
         const auto nrows = data.nrows();
 
-        for (size_t row_j = 0; row_j != nrows; ++row_j) {
-            if (m_active[row_j]) {
-                auto x_j = data.x_at(row_j, col);
-                auto y_j = data.y_at(row_j);
-                if (x_j <= split) {
-                    ++size_l;
-                    yhat_l = yhat_l + ((y_j - yhat_l) / size_l);
-                } else {
-                    ++size_r;
-                    yhat_r = yhat_r + ((y_j - yhat_r) / size_r);
-                }
-            }
-        }
+        std::vector<bool> left_filter(false, nrows);
+        std::vector<bool> right_filter(false, nrows);
+        populate_filter(data, split_col, split_val, left_filter, right_filter);
+        const float yhat_l = data.mean(left_filter);
+        const float yhat_r = data.mean(right_filter);
+
         return std::make_pair(yhat_l, yhat_r);
     }
 
@@ -129,17 +118,15 @@ namespace oddvibe {
 
         const auto ncols = data.ncols();
         for (size_t col = 0; col != ncols; ++col) {
-            auto uniques = unique_values(data, col);
+            auto uniques = data.unique_values(data, col);
 
             if (uniques.size() < 2) {
                 continue;
             }
 
-            // TODO check for zero variance
-
             for (const auto & split : uniques) {
                 // calculate yhat for left and right side of split
-                const auto yhat = calc_yhat(data, col, split);
+                const auto yhat = predict_split(data, col, split);
                 const auto yhat_l = yhat.first;
                 const auto yhat_r = yhat.second;
 

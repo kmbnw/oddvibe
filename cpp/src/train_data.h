@@ -67,10 +67,8 @@ namespace oddvibe {
              */
             size_t ncols() const;
 
-            /**
-             * Compute mean of subset of response.
-             */
-            float filtered_mean(const std::vector<bool> &row_filter) const;
+            double mean_y(const std::vector<bool>& active) const;
+            double variance_y(const std::vector<bool>& active) const;
 
             std::pair<size_t, float> best_split() const;
 
@@ -79,6 +77,9 @@ namespace oddvibe {
             size_t m_ncols;
             std::vector<float> m_xs;
             std::vector<float> m_ys;
+
+            std::unordered_set<float>
+            unique_values(const size_t col, std::vector<bool>& active) const;
     };
 }
 #endif //KMBNW_TRAIN_DATA_H

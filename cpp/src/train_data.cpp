@@ -57,17 +57,63 @@ namespace oddvibe {
         return m_ncols;
     }
 
-    float DataSet::filtered_mean(
-            const std::vector<bool> &row_filter) const {
-        double sum = 0;
+    size_t DataSet::x_index(const size_t row, const size_t col) const {
+        return (row * m_ncols) + col;
+    }
+
+    std::unordered_set<float>
+    DataSet::unique_values(const size_t col, std::vector<bool>& active) const {
+        std::unordered_set<float> uniques;
+
+        for (size_t row = 0; row != m_nrows; ++row) {
+            if (active[row]) {
+                uniques.insert(m_xs[x_at(row, col)]);
+            }
+        }
+        return uniques;
+    }
+
+
+    double DataSet::mean_y(const std::vector<bool>& active) const {
+        if (m_ys.empty()) {
+            return 0;
+        }
+        if (m_nrows != active.size()) {
+            throw std::invalid_argument("Active must have same number of rows");
+        }
+
         size_t count = 0;
-        for (size_t i = 0; i != m_ys.size(); ++i) {
-            if (row_filter[i]) {
-                sum += m_ys[i];
+        double total = 0;
+
+        for (size_t idx = 0; idx != m_nrows; ++idx) {
+            if (active[idx]) {
+                total += m_ys[idx];
+                ++count;
+            }
+        }
+        return (count < 1 ? 0 : total / count);
+    }
+
+    double DataSet::variance_y(const std::vector<bool>& active) const {
+        if (m_ys.empty()) {
+            return 0;
+        }
+        if (m_nrows != active.size()) {
+            throw std::invalid_argument("Active must have same number of rows");
+        }
+
+        size_t count = 0;
+        double total = 0;
+        const auto mean = mean(active);
+
+        for (size_t idx = 0; idx != m_nrows; ++idx) {
+            if (active[idx]) {
+                total += pow(m_ys[idx] - mean, 2);
                 ++count;
             }
         }
 
-        return (float) (sum / count);
+        const auto nan = std::numeric_limits<double>::quiet_NaN();
+        return (count < 1 ? nan : total / count);
     }
 }

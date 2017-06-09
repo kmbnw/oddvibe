@@ -15,6 +15,8 @@
  */
 
 #include <algorithm>
+#include <stdexcept>
+#include <cmath>
 #include "math_x.h"
 
 namespace oddvibe {
@@ -25,21 +27,5 @@ namespace oddvibe {
             std::end(pmf),
             std::begin(pmf),
             [norm = norm](float f) { return f / norm; });
-    }
-
-    double variance(const std::vector<float>& seq) {
-        if (seq.empty()) {
-            return 0;
-        }
-        const auto mean = std::accumulate(
-            std::begin(seq),
-            std::end(seq),
-            0.0) / seq.size();
-
-        double variance = 0;
-        for (const auto & elem : seq) {
-            variance += pow(elem - mean, 2);
-        }
-        return variance / seq.size();
     }
 }
