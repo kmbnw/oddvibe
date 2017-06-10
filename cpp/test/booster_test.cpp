@@ -49,7 +49,7 @@ namespace oddvibe {
 
         const size_t nrows = pmf.size();
         const size_t max_iter = 1000;
-        std::vector<unsigned int> expected_counts(nrows, 0);
+        std::vector<size_t> expected_counts(nrows, 0);
 
         CachedSampler cache(sampler);
 
@@ -59,7 +59,7 @@ namespace oddvibe {
             }
         }
 
-        std::vector<unsigned int> counts(nrows, 0);
+        std::vector<size_t> counts(nrows, 0);
         for (size_t i = 0; i < max_iter; ++i) {
             add_counts(cache, counts);
         }
@@ -69,7 +69,7 @@ namespace oddvibe {
         }
 
         // expect sequential calls to give us the same values from the CachedSampler
-        std::vector<unsigned int> counts2(nrows, 0);
+        std::vector<size_t> counts2(nrows, 0);
         for (size_t i = 0; i < max_iter; ++i) {
             add_counts(cache, counts2);
         }
@@ -87,7 +87,7 @@ namespace oddvibe {
         const size_t max_iter = 100000;
         const size_t sample_sz = max_iter * nrows;
 
-        std::vector<unsigned int> counts(nrows, 0);
+        std::vector<size_t> counts(nrows, 0);
         for (size_t i = 0; i < max_iter; ++i) {
             add_counts(sampler, counts);
         }
@@ -158,10 +158,10 @@ namespace oddvibe {
 
         const Booster fitter(seed);
         std::vector<float> pmf;
-        std::vector<unsigned int> counts;
+        std::vector<size_t> counts;
         for (size_t k = 0; k < num_rounds; ++k) {
             //std::cout << "========================" << std::endl;
-            fitter.update_one(pmf, counts, train_data);
+            fitter.update_one(train_data, pmf, counts);
             for (size_t j = 0; j != pmf.size(); ++j) {
                 //std::cout << std::fixed << std::setprecision(2);
                 //std::cout << "P(x1 = " << std::setw(7) << std::left << xs[j * nfeatures] << ", x2 = ";

@@ -16,7 +16,6 @@
 #include "cached_sampler.h"
 
 namespace oddvibe {
-
     CachedSampler::CachedSampler(Sampler& sampler): m_size(sampler.size()) {
         m_samples.clear();
         for (size_t k = 0; k != sampler.size(); ++k) {

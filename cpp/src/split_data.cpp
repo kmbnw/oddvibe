@@ -27,7 +27,7 @@ namespace oddvibe {
     bool SplitData::is_valid() const {
         return !std::isnan(m_value);
     }
-   
+
     float SplitData::value() const {
         return m_value;
     }

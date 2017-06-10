@@ -51,11 +51,15 @@ namespace oddvibe {
             /**
              * Get the Y-value (response) at the given row.
              */
-            float y_at(const size_t row_idx) const;
+            float
+            y_at(const size_t row_idx)
+            const;
             /**
              * Get the X-value (feature and value) at the given column and row.
              */
-            float x_at(const size_t row_idx, const size_t col_idx) const;
+            float
+            x_at(const size_t row_idx, const size_t col_idx)
+            const;
 
             /**
              * Number of rows.
@@ -67,14 +71,24 @@ namespace oddvibe {
              */
             size_t ncols() const;
 
-            double mean_y(const std::vector<size_t>& active) const;
+            double
+            mean_y(const std::vector<size_t>& active)
+            const;
 
-            double variance_y(const std::vector<size_t>& active) const;
+            double
+            variance_y(const std::vector<size_t>& active)
+            const;
 
             std::unordered_set<float>
-            unique_x(const size_t col, const std::vector<size_t>& active) const;
+            unique_x(const size_t col, const std::vector<size_t>& active)
+            const;
 
-            std::pair<size_t, float> best_split() const;
+            /**
+             * RMSE loss
+             */
+            std::vector<double>
+            loss(const std::vector<float>& yhat)
+            const;
 
         private:
             size_t m_nrows;
@@ -82,7 +96,9 @@ namespace oddvibe {
             std::vector<float> m_xs;
             std::vector<float> m_ys;
 
-            size_t x_index(const size_t row, const size_t col) const;
+            size_t
+            x_index(const size_t row, const size_t col)
+            const;
     };
 }
 #endif //KMBNW_TRAIN_DATA_H

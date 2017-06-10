@@ -21,14 +21,15 @@
 #include <numeric>
 
 namespace oddvibe {
-    std::vector<size_t> sequential_ints(const size_t len) {
+    std::vector<size_t>
+    sequential_ints(const size_t len) {
         std::vector<size_t> seq(len, 0);
         std::iota(seq.begin(), seq.end(), 0);
         return seq;
     }
 
     RTree::RTree(const DataSet& data, const std::vector<size_t>& active) :
-        m_active(active) {
+        m_active(active), m_yhat(data.mean_y(m_active)) {
 
         if (active.empty()) {
             throw std::invalid_argument("Must have at least one active row");
@@ -37,27 +38,28 @@ namespace oddvibe {
             auto split = best_split(data);
 
             if (split.is_valid()) {
+                m_is_leaf = false;
                 m_split_col = split.col_idx();
                 m_split_val = split.value();
 
-                std::vector<size_t> left_filter;
-                std::vector<size_t> right_filter;
-                populate_filter(
-                    data, m_split_col, m_split_val, left_filter, right_filter);
+                std::vector<size_t> active_left;
+                std::vector<size_t> active_right;
+                populate_active(
+                    data, m_split_col, m_split_val, active_left, active_right);
 
                 /*std::cout
                     << " ============ "
-                    << std::accumulate(left_filter.begin(), left_filter.end(), 0.0)
+                    << std::accumulate(active_left.begin(), active_left.end(), 0.0)
                     << " ============ "
-                    << std::accumulate(right_filter.begin(), right_filter.end(), 0.0)
+                    << std::accumulate(active_right.begin(), active_right.end(), 0.0)
                     << " ============ "
                     << split_col
                     << " ============ "
                     << split_val
                     << std::endl;*/
 
-                m_left_child = std::make_unique<RTree>(data, left_filter);
-                m_right_child = std::make_unique<RTree>(data, right_filter);
+                m_left_child = std::make_unique<RTree>(data, active_left);
+                m_right_child = std::make_unique<RTree>(data, active_right);
             }
         }
     }
@@ -66,28 +68,32 @@ namespace oddvibe {
         RTree(data, sequential_ints(data.nrows())) {
     }
 
-    void RTree::populate_filter(
+    void
+    RTree::populate_active(
             const DataSet& data,
             const size_t col,
             const float split_val,
-            std::vector<size_t>& left_filter,
-            std::vector<size_t>& right_filter) const {
+            std::vector<size_t>& active_left,
+            std::vector<size_t>& active_right)
+    const {
         for (const auto & row : m_active) {
             const auto x = data.x_at(row, col);
             if (x <= split_val) {
-                left_filter.push_back(row);
+                active_left.push_back(row);
             } else {
-                right_filter.push_back(row);
+                active_right.push_back(row);
             }
         }
     }
 
-    double RTree::calc_total_err(
+    double
+    RTree::calc_total_err(
             const DataSet& data,
             const size_t col,
             const float split,
             const float yhat_l,
-            const float yhat_r) const {
+            const float yhat_r)
+    const {
         double err = 0;
 
         for (const auto & row : m_active) {
@@ -99,26 +105,53 @@ namespace oddvibe {
         return err;
     }
 
-    float RTree::fit_leaf(const DataSet& data) const {
-        return data.mean_y(m_active);
+    void
+    RTree::predict(const DataSet& data, std::vector<float>& yhat)
+    const {
+        if (m_is_leaf) {
+            for (const auto row : m_active) {
+                yhat[row] = m_yhat;
+            }
+        }
+        if (!m_left_child) {
+            throw std::logic_error("Cannot predict on null left child node");
+        }
+        if (!m_right_child) {
+            throw std::logic_error("Cannot predict on null right child node");
+        }
+
+        m_left_child->predict(data, yhat);
+        m_right_child->predict(data, yhat);
+    }
+
+    std::vector<float>
+    RTree::predict(const DataSet& data)
+    const {
+        const auto nan = std::numeric_limits<double>::quiet_NaN();
+        std::vector<float> yhat(data.nrows(), nan);
+
+        predict(data, yhat);
+        return yhat;
     }
 
     std::pair<float, float>
     RTree::fit_children(
             const DataSet& data,
             const size_t col,
-            const float split_val) const {
-        std::vector<size_t> left_filter;
-        std::vector<size_t> right_filter;
-        populate_filter(data, col, split_val, left_filter, right_filter);
-        const float yhat_l = data.mean_y(left_filter);
-        const float yhat_r = data.mean_y(right_filter);
+            const float split_val)
+    const {
+        std::vector<size_t> active_left;
+        std::vector<size_t> active_right;
+        populate_active(data, col, split_val, active_left, active_right);
+        const float yhat_l = data.mean_y(active_left);
+        const float yhat_r = data.mean_y(active_right);
 
         return std::make_pair(yhat_l, yhat_r);
     }
 
     SplitData
-    RTree::best_split(const DataSet& data) const {
+    RTree::best_split(const DataSet& data)
+    const {
         double best_err = std::numeric_limits<double>::quiet_NaN();
         size_t best_feature = -1;
         float best_value = std::numeric_limits<float>::quiet_NaN();

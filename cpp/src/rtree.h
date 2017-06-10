@@ -46,12 +46,17 @@ namespace oddvibe {
             RTree& operator=(const RTree& other) = delete;
 
             SplitData
-            best_split(const DataSet& data) const;
+            best_split(const DataSet& data)
+            const;
 
-            float fit_leaf(const DataSet& data) const;
+            std::vector<float>
+            predict(const DataSet& data)
+            const;
 
         private:
             std::vector<size_t> m_active;
+            float m_yhat = std::numeric_limits<double>::quiet_NaN();
+            bool m_is_leaf = false;
             size_t m_split_col = 0;
             float m_split_val = std::numeric_limits<double>::quiet_NaN();
             std::unique_ptr<RTree> m_left_child;
@@ -63,20 +68,27 @@ namespace oddvibe {
                 const size_t col,
                 const float split,
                 const float yhat_l,
-                const float yhat_r) const;
+                const float yhat_r)
+            const;
 
             std::pair<float, float>
             fit_children(
                 const DataSet& data,
                 const size_t col,
-                const float split) const;
+                const float split)
+            const;
 
-            void populate_filter(
-                    const DataSet& data,
-                    const size_t col,
-                    const float split_val,
-                    std::vector<size_t>& left_filter,
-                    std::vector<size_t>& right_filter) const;
+            void populate_active(
+                const DataSet& data,
+                const size_t col,
+                const float split_val,
+                std::vector<size_t>& active_left,
+                std::vector<size_t>& active_right)
+            const;
+
+            void
+            predict(const DataSet& data, std::vector<float>& yhat)
+            const;
     };
 }
 #endif //KMBNW_RTREE_H

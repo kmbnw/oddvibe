@@ -19,7 +19,8 @@
 
 namespace oddvibe {
 
-    std::vector<size_t> Sampler::fill_sample(const size_t nrows) {
+    std::vector<size_t>
+    Sampler::gen_samples(const size_t nrows) {
         std::vector<size_t> seq(nrows, 0);
         std::generate(
             seq.begin(),

@@ -29,7 +29,8 @@ namespace oddvibe {
             virtual size_t next_sample()=0;
             virtual size_t size()=0;
 
-            std::vector<size_t> fill_sample(const size_t nrows);
+            std::vector<size_t>
+            gen_samples(const size_t nrows);
     };
 }
 #endif //KMBNW_ODVB_BASE_SAMPLER_H

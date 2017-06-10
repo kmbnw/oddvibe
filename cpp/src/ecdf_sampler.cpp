@@ -46,7 +46,8 @@ namespace oddvibe {
         return m_size;
     }
 
-    void fill_ecdf(const std::vector<float>& pmf, std::vector<float>& ecdf) {
+    void
+    fill_ecdf(const std::vector<float>& pmf, std::vector<float>& ecdf) {
         ecdf.clear();
 
         float previous = 0;

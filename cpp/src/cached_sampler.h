@@ -28,11 +28,13 @@ namespace oddvibe {
     class CachedSampler: public Sampler {
         public:
             CachedSampler(Sampler& sampler);
+
             virtual size_t next_sample() override;
+
             virtual size_t size() override;
 
         private:
-            const size_t m_size = 0;
+            size_t m_size = 0;
             std::vector<size_t> m_samples;
             size_t m_current = 0;
     };

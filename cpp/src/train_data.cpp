@@ -18,6 +18,7 @@
 #include <limits>
 #include <stdexcept>
 #include <cmath>
+#include <algorithm>
 #include "train_data.h"
 
 namespace oddvibe {
@@ -31,14 +32,18 @@ namespace oddvibe {
         }
     }
 
-    float DataSet::y_at(const size_t row_idx) const {
+    float
+    DataSet::y_at(const size_t row_idx)
+    const {
         if (row_idx < m_nrows) {
             return m_ys[row_idx];
         }
         throw std::out_of_range("row_idx out of range");
     }
 
-    float DataSet::x_at(const size_t row_idx, const size_t col_idx) const {
+    float
+    DataSet::x_at(const size_t row_idx, const size_t col_idx)
+    const {
         if (row_idx >= m_nrows) {
             throw std::out_of_range("row_idx out of range");
         }
@@ -57,12 +62,15 @@ namespace oddvibe {
         return m_ncols;
     }
 
-    size_t DataSet::x_index(const size_t row, const size_t col) const {
+    size_t
+    DataSet::x_index(const size_t row, const size_t col)
+    const {
         return (row * m_ncols) + col;
     }
 
     std::unordered_set<float>
-    DataSet::unique_x(const size_t col, const std::vector<size_t>& active) const {
+    DataSet::unique_x(const size_t col, const std::vector<size_t>& active)
+    const {
         std::unordered_set<float> uniques;
 
         for (const auto & row : active) {
@@ -71,8 +79,9 @@ namespace oddvibe {
         return uniques;
     }
 
-
-    double DataSet::mean_y(const std::vector<size_t>& active) const {
+    double
+    DataSet::mean_y(const std::vector<size_t>& active)
+    const {
         if (m_ys.empty()) {
             return 0;
         }
@@ -87,7 +96,9 @@ namespace oddvibe {
         return (count < 1 ? 0 : total / count);
     }
 
-    double DataSet::variance_y(const std::vector<size_t>& active) const {
+    double
+    DataSet::variance_y(const std::vector<size_t>& active)
+    const {
         if (m_ys.empty()) {
             return 0;
         }
@@ -103,5 +114,14 @@ namespace oddvibe {
 
         const auto nan = std::numeric_limits<double>::quiet_NaN();
         return (count < 1 ? nan : total / count);
+    }
+
+    std::vector<double>
+    DataSet::loss(const std::vector<float>& yhats)
+    const {
+        std::vector<double> loss(yhats.size(), 0);
+        std::transform(yhats.begin(), yhats.end(), m_ys.begin(), loss.begin(),
+            [](float yhat, float y) { return pow(yhat - y, 2); });
+        return loss;
     }
 }

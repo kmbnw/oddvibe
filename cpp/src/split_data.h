@@ -27,8 +27,11 @@ namespace oddvibe {
                 const double total_err);
 
             float value() const;
+
             size_t col_idx() const;
+
             double total_err() const;
+            
             bool is_valid() const;
 
         private:

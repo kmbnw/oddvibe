@@ -35,7 +35,8 @@ namespace oddvibe {
      * same size as Sampler.nrows.
      * from.
      */
-    void add_counts(Sampler& sampler, std::vector<unsigned int>& counts);
+    void
+    add_counts(Sampler& sampler, std::vector<size_t>& counts);
 
     /**
      * Provides boosting capabilities to other models.
@@ -48,12 +49,13 @@ namespace oddvibe {
             Booster& operator=(const Booster& other) = delete;
 
             void update_one(
+                const DataSet& data,
                 std::vector<float>& pmf,
-                std::vector<unsigned int>& counts,
-                const DataSet& data) const;
+                std::vector<size_t>& counts)
+            const;
 
         private:
-            const size_t m_seed;
+            size_t m_seed;
     };
 }
 #endif //KMBNW_ODVB_BOOSTER_H
