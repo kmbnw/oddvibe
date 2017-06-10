@@ -75,16 +75,16 @@ namespace oddvibe {
 
         const double beta = epsilon / (max_loss - epsilon);
 
-        //if (epsilon < 0.5 * max_loss) {
+        if (epsilon < 0.5 * max_loss) {
             for (size_t k = 0; k != loss.size(); ++k) {
                 const double d = loss[k] / max_loss;
                 pmf[k] = (float) (pow(beta, 1 - d) * pmf[k]);
             }
-        //} else {
-            //std::cout << "RESET" << std::endl;
+        } else {
+            std::cout << "RESET" << std::endl;
             // reset to uniform distribution
-        //    std::fill(pmf.begin(), pmf.end(), 1.0 / nrows);
-        //}
+            std::fill(pmf.begin(), pmf.end(), 1.0 / nrows);
+        }
         normalize(pmf);
     }
 }
