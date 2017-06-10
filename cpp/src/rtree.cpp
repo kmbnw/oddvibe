@@ -29,7 +29,7 @@ namespace oddvibe {
     }
 
     RTree::RTree(const DataSet& data, const std::vector<size_t>& active) :
-        m_active(active), m_yhat(data.mean_y(m_active)) {
+        m_active(active), m_yhat(data.mean_y(m_active)), m_is_leaf(true) {
 
         if (active.empty()) {
             throw std::invalid_argument("Must have at least one active row");
@@ -46,17 +46,6 @@ namespace oddvibe {
                 std::vector<size_t> active_right;
                 populate_active(
                     data, m_split_col, m_split_val, active_left, active_right);
-
-                /*std::cout
-                    << " ============ "
-                    << std::accumulate(active_left.begin(), active_left.end(), 0.0)
-                    << " ============ "
-                    << std::accumulate(active_right.begin(), active_right.end(), 0.0)
-                    << " ============ "
-                    << split_col
-                    << " ============ "
-                    << split_val
-                    << std::endl;*/
 
                 m_left_child = std::make_unique<RTree>(data, active_left);
                 m_right_child = std::make_unique<RTree>(data, active_right);
@@ -109,19 +98,20 @@ namespace oddvibe {
     RTree::predict(const DataSet& data, std::vector<float>& yhat)
     const {
         if (m_is_leaf) {
-            for (const auto row : m_active) {
+            for (const auto & row : m_active) {
                 yhat[row] = m_yhat;
             }
-        }
-        if (!m_left_child) {
-            throw std::logic_error("Cannot predict on null left child node");
-        }
-        if (!m_right_child) {
-            throw std::logic_error("Cannot predict on null right child node");
-        }
+        } else {
+            if (!m_left_child) {
+                throw std::logic_error("Cannot predict on null left child node");
+            }
+            if (!m_right_child) {
+                throw std::logic_error("Cannot predict on null right child node");
+            }
 
-        m_left_child->predict(data, yhat);
-        m_right_child->predict(data, yhat);
+            m_left_child->predict(data, yhat);
+            m_right_child->predict(data, yhat);
+        }
     }
 
     std::vector<float>

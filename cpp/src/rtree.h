@@ -56,7 +56,7 @@ namespace oddvibe {
         private:
             std::vector<size_t> m_active;
             float m_yhat = std::numeric_limits<double>::quiet_NaN();
-            bool m_is_leaf = false;
+            bool m_is_leaf;
             size_t m_split_col = 0;
             float m_split_val = std::numeric_limits<double>::quiet_NaN();
             std::unique_ptr<RTree> m_left_child;
