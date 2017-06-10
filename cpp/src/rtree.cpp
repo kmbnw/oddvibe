@@ -18,7 +18,6 @@
 #include <limits>
 #include <stdexcept>
 #include <algorithm>
-#include <cmath>
 #include <iostream>
 #include <numeric>
 
@@ -39,12 +38,13 @@ namespace oddvibe {
             auto split = best_split(data);
 
             if (split.is_valid()) {
-                const auto split_col = split.col_idx();
-                const auto split_val = split.value();
+                m_split_col = split.col_idx();
+                m_split_val = split.value();
 
                 std::vector<size_t> left_filter;
                 std::vector<size_t> right_filter;
-                populate_filter(data, split_col, split_val, left_filter, right_filter);
+                populate_filter(
+                    data, m_split_col, m_split_val, left_filter, right_filter);
 
                 /*std::cout
                     << " ============ "
@@ -100,12 +100,12 @@ namespace oddvibe {
         return err;
     }
 
-    float RTree::predict(const DataSet& data) const {
+    float RTree::fit_leaf(const DataSet& data) const {
         return data.mean_y(m_active);
     }
 
     std::pair<float, float>
-    RTree::predict_split(
+    RTree::fit_children(
             const DataSet& data,
             const size_t col,
             const float split_val) const {

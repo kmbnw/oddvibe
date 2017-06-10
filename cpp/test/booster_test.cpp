@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Krysta M Bouzek
+ * Copyright 2016-2017 Krysta M Bouzek
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -155,10 +155,10 @@ namespace oddvibe {
         const size_t num_rounds = 5000;
 
         const DataSet train_data(nfeatures, xs, ys);
+
         const Booster fitter(seed);
         std::vector<float> pmf;
         std::vector<unsigned int> counts;
-
         for (size_t k = 0; k < num_rounds; ++k) {
             //std::cout << "========================" << std::endl;
             fitter.update_one(pmf, counts, train_data);

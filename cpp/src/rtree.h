@@ -19,6 +19,7 @@
 
 #include <vector>
 #include <memory>
+#include <cmath>
 #include "split_data.h"
 #include "train_data.h"
 
@@ -46,10 +47,12 @@ namespace oddvibe {
             SplitData
             best_split(const DataSet& data) const;
 
-            float predict(const DataSet& data) const;
+            float fit_leaf(const DataSet& data) const;
 
         private:
             std::vector<size_t> m_active;
+            size_t m_split_col = 0;
+            float m_split_val = std::numeric_limits<double>::quiet_NaN();
             std::unique_ptr<RTree> m_left_child;
             std::unique_ptr<RTree> m_right_child;
 
@@ -62,7 +65,7 @@ namespace oddvibe {
                 const float yhat_r) const;
 
             std::pair<float, float>
-            predict_split(
+            fit_children(
                 const DataSet& data,
                 const size_t col,
                 const float split) const;
