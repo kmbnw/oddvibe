@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Krysta M Bouzek
+ * Copyright 2016-2017 Krysta M Bouzek
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@
 #include <vector>
 #include <unordered_map>
 #include <functional>
-#include "sampler.h"
 #include "train_data.h"
 
 #ifndef KMBNW_ODVB_BOOSTER_H

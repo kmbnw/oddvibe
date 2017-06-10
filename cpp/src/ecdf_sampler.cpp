@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Krysta M Bouzek
+ * Copyright 2016-2017 Krysta M Bouzek
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,10 +18,10 @@
 #include <vector>
 #include <random>
 #include <ctime>
+#include <algorithm>
 #include "ecdf_sampler.h"
 
 namespace oddvibe {
-
     EmpiricalSampler::EmpiricalSampler(const size_t& seed, const std::vector<float>& pmf) :
             m_size(pmf.size()),
             m_unif_dist(std::uniform_real_distribution<float>(0, 1)),
@@ -44,6 +44,16 @@ namespace oddvibe {
 
     size_t EmpiricalSampler::size() {
         return m_size;
+    }
+
+    std::vector<size_t>
+    EmpiricalSampler::gen_samples(const size_t nrows) {
+        std::vector<size_t> seq(nrows, 0);
+        std::generate(
+            seq.begin(),
+            seq.end(),
+            [&] { return this->next_sample(); });
+        return seq;
     }
 
     void

@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Krysta M Bouzek
+ * Copyright 2016-2017 Krysta M Bouzek
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,20 +15,22 @@
  */
 #include <vector>
 #include <random>
-#include "sampler.h"
 
 #ifndef KMBNW_ODVB_ECDF_SAMPLER_H
 #define KMBNW_ODVB_ECDF_SAMPLER_H
 
 namespace oddvibe {
-    class EmpiricalSampler: public Sampler {
+    class EmpiricalSampler {
         public:
             // pmf == probability mass function
             EmpiricalSampler(const size_t& seed, const std::vector<float>& pmf);
 
-            virtual size_t next_sample() override;
+            size_t next_sample();
 
-            virtual size_t size() override;
+            size_t size();
+
+            std::vector<size_t>
+            gen_samples(const size_t nrows);
 
         private:
             size_t m_size;

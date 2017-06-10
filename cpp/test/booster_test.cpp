@@ -23,8 +23,6 @@
 #include <iterator>
 #include <functional>
 #include "train_data.h"
-#include "seq_sampler.h"
-#include "cached_sampler.h"
 #include "ecdf_sampler.h"
 #include "booster.h"
 #include "booster_test.h"

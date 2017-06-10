@@ -24,7 +24,6 @@
 #include "booster.h"
 #include "rtree.h"
 #include "ecdf_sampler.h"
-#include "cached_sampler.h"
 #include "math_x.h"
 
 namespace oddvibe {
@@ -57,9 +56,8 @@ namespace oddvibe {
         }
 
         EmpiricalSampler sampler(m_seed, pmf);
-        CachedSampler cache(sampler);
-        
-        const auto active = cache.gen_samples(nrows);
+
+        const auto active = sampler.gen_samples(nrows);
         update_counts(active, counts);
 
         const RTree tree(data, active);
