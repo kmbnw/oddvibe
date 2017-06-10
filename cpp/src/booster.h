@@ -23,20 +23,8 @@
 #define KMBNW_ODVB_BOOSTER_H
 
 namespace oddvibe {
-    /**
-     * Add 1 to each index of counts for active sample indexes.
-     * Does so by repeatedly calling sampler.next_sample().
-     * E.g. if this Sampler holds [1, 10, 10, 11] as its indexes,
-     * this is equivalent to counts[1]++; counts[10]++;
-     * counts[10]++; counts[11]++;
-     *
-     * @param[in] sampler The sampler to get sample indexes from.
-     * @param[inout] counts A sample index count accumulator.  Must be the
-     * same size as Sampler.nrows.
-     * from.
-     */
     void
-    add_counts(Sampler& sampler, std::vector<size_t>& counts);
+    update_counts(const std::vector<size_t>& src, std::vector<size_t>& counts);
 
     /**
      * Provides boosting capabilities to other models.

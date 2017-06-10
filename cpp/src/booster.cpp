@@ -29,10 +29,9 @@
 
 namespace oddvibe {
     void
-    add_counts(Sampler& sampler, std::vector<size_t>& counts) {
-        for (size_t k = 0; k != counts.size(); ++k) {
-            const size_t s = sampler.next_sample();
-            counts[s]++;
+    update_counts(const std::vector<size_t>& src, std::vector<size_t>& counts) {
+        for (const auto & idx : src) {
+            ++counts[idx];
         }
     }
 
@@ -59,11 +58,11 @@ namespace oddvibe {
 
         EmpiricalSampler sampler(m_seed, pmf);
         CachedSampler cache(sampler);
-        add_counts(cache, counts);
-
+        
         const auto active = cache.gen_samples(nrows);
-        const RTree tree(data, active);
+        update_counts(active, counts);
 
+        const RTree tree(data, active);
         const auto yhats = tree.predict(data);
         const auto loss = data.loss(yhats);
         const double max_loss = *std::max_element(loss.begin(), loss.end());
