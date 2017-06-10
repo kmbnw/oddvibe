@@ -65,10 +65,8 @@ namespace oddvibe {
     DataSet::unique_x(const size_t col, const std::vector<size_t>& active) const {
         std::unordered_set<float> uniques;
 
-        for (size_t row = 0; row != m_nrows; ++row) {
-            if (active[row]) {
-                uniques.insert(m_xs[x_index(row, col)]);
-            }
+        for (const auto & row : active) {
+            uniques.insert(m_xs[x_index(row, col)]);
         }
         return uniques;
     }
@@ -82,11 +80,9 @@ namespace oddvibe {
         size_t count = 0;
         double total = 0;
 
-        for (size_t idx = 0; idx != m_nrows; ++idx) {
-            if (active[idx]) {
-                total += m_ys[idx];
-                ++count;
-            }
+        for (const auto & row : active) {
+            total += m_ys[row];
+            ++count;
         }
         return (count < 1 ? 0 : total / count);
     }
@@ -100,11 +96,9 @@ namespace oddvibe {
         double total = 0;
         const auto mean = mean_y(active);
 
-        for (size_t idx = 0; idx != m_nrows; ++idx) {
-            if (active[idx]) {
-                total += pow(m_ys[idx] - mean, 2);
-                ++count;
-            }
+        for (const auto & row : active) {
+            total += pow(m_ys[row] - mean, 2);
+            ++count;
         }
 
         const auto nan = std::numeric_limits<double>::quiet_NaN();
