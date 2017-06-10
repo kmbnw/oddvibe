@@ -53,7 +53,7 @@ namespace oddvibe {
 
         const DataSet data(nfeatures, xs, ys);
         const RTree tree(data);
-        auto split = tree.best_split(data);
+        const auto split = tree.best_split(data, sequential_ints(ys.size()));
 
         CPPUNIT_ASSERT_EQUAL(false, split.is_valid());
     }
@@ -78,9 +78,9 @@ namespace oddvibe {
 
         const DataSet data(nfeatures, xs, ys);
         const RTree tree(data);
-        auto split = tree.best_split(data);
-        auto col = split.col_idx();
-        auto value = split.value();
+        const auto split = tree.best_split(data, sequential_ints(ys.size()));
+        const auto col = split.col_idx();
+        const auto value = split.value();
 
         size_t expected_feature = 1;
 
@@ -109,7 +109,7 @@ namespace oddvibe {
 
         const DataSet data(nfeatures, xs, ys);
         const RTree tree(data);
-        const auto split = tree.best_split(data);
+        const auto split = tree.best_split(data, sequential_ints(ys.size()));
         const auto col = split.col_idx();
         const auto value = split.value();
 
@@ -147,9 +147,9 @@ namespace oddvibe {
 
         const DataSet data(nfeatures, xs, ys);
         const RTree tree(data);
-        auto split = tree.best_split(data);
-        auto col = split.col_idx();
-        auto value = split.value();
+        const auto split = tree.best_split(data, sequential_ints(ys.size()));
+        const auto col = split.col_idx();
+        const auto value = split.value();
 
         size_t expected_feature = 2;
         float expected_val = 3.436f; // TODO hand-calc this

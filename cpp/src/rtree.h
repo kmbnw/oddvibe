@@ -46,7 +46,7 @@ namespace oddvibe {
             RTree& operator=(const RTree& other) = delete;
 
             SplitData
-            best_split(const DataSet& data)
+            best_split(const DataSet& data, const std::vector<size_t>& rows)
             const;
 
             std::vector<float>
@@ -54,7 +54,6 @@ namespace oddvibe {
             const;
 
         private:
-            std::vector<size_t> m_active;
             float m_yhat = std::numeric_limits<double>::quiet_NaN();
             bool m_is_leaf;
             size_t m_split_col = 0;
@@ -65,6 +64,7 @@ namespace oddvibe {
             double
             calc_total_err(
                 const DataSet& data,
+                const std::vector<size_t>& rows,
                 const size_t col,
                 const float split,
                 const float yhat_l,
@@ -74,20 +74,33 @@ namespace oddvibe {
             std::pair<float, float>
             fit_children(
                 const DataSet& data,
+                const std::vector<size_t>& rows,
                 const size_t col,
                 const float split)
             const;
 
-            void populate_active(
+            void fill_row_idx(
                 const DataSet& data,
                 const size_t col,
                 const float split_val,
-                std::vector<size_t>& active_left,
-                std::vector<size_t>& active_right)
+                const std::vector<size_t>& rows,
+                std::vector<size_t>& left_rows,
+                std::vector<size_t>& right_rows)
             const;
 
             void
-            predict(const DataSet& data, std::vector<float>& yhat)
+            predict(
+                const DataSet& data,
+                const std::vector<bool>& active,
+                std::vector<float>& yhat)
+            const;
+
+            void
+            fill_active(
+                const DataSet& data,
+                const std::vector<bool>& init_active,
+                std::vector<bool>& l_active,
+                std::vector<bool>& r_active)
             const;
     };
 }
