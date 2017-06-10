@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2017 Krysta M Bouzek
+ * Copyright 2017 Krysta M Bouzek
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,24 +14,14 @@
  * limitations under the License.
  */
 
-#include <vector>
-#include <cppunit/extensions/HelperMacros.h>
-
-#ifndef KMBNW_ODVB_ECDF_SAMPLER_TEST_H
-#define KMBNW_ODVB_ECDF_SAMPLER_TEST_H
+#include <algorithm>
+#include "algorithm_x.h"
 
 namespace oddvibe {
-    class EmpiricalSamplerTest : public CppUnit::TestFixture {
-        CPPUNIT_TEST_SUITE(EmpiricalSamplerTest);
-        CPPUNIT_TEST(test_next_sample);
-        CPPUNIT_TEST(test_next_sample_zero_prob);
-        CPPUNIT_TEST_SUITE_END();
-
-        public:
-            void setUp();
-            void tearDown();
-            void test_next_sample();
-            void test_next_sample_zero_prob();
-    };
+    std::vector<size_t>
+    sequential_ints(const size_t len) {
+        std::vector<size_t> seq(len, 0);
+        std::iota(seq.begin(), seq.end(), 0);
+        return seq;
+    }
 }
-#endif

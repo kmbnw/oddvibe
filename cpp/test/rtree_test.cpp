@@ -20,6 +20,7 @@
 #include <vector>
 #include "rtree.h"
 #include "rtree_test.h"
+#include "algorithm_x.h"
 
 #include <cppunit/extensions/TestFactoryRegistry.h>
 #include <cppunit/ui/text/TestRunner.h>

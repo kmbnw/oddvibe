@@ -23,7 +23,7 @@ namespace oddvibe {
     class EmpiricalSampler {
         public:
             // pmf == probability mass function
-            EmpiricalSampler(const size_t& seed, const std::vector<float>& pmf);
+            EmpiricalSampler(const size_t seed, const std::vector<float>& pmf);
 
             size_t next_sample();
 
@@ -34,12 +34,8 @@ namespace oddvibe {
 
         private:
             size_t m_size;
-            std::uniform_real_distribution<float> m_unif_dist;
             std::mt19937 m_rand_engine;
-            // empirical CDF
-            std::vector<float> m_ecdf;
+            std::discrete_distribution<size_t> m_dist;
     };
-
-    void fill_ecdf(const std::vector<float>& pmf, std::vector<float>& ecdf);
 }
 #endif //KMBNW_ODVB_ECDF_SAMPLER_H

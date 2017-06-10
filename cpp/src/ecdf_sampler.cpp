@@ -19,27 +19,20 @@
 #include <random>
 #include <ctime>
 #include <algorithm>
+#include "algorithm_x.h"
 #include "ecdf_sampler.h"
 
 namespace oddvibe {
-    EmpiricalSampler::EmpiricalSampler(const size_t& seed, const std::vector<float>& pmf) :
-            m_size(pmf.size()),
-            m_unif_dist(std::uniform_real_distribution<float>(0, 1)),
-            m_rand_engine(std::mt19937(seed)) {
-
-        fill_ecdf(pmf, m_ecdf);
+    EmpiricalSampler::EmpiricalSampler(
+            const size_t seed,
+            const std::vector<float>& pmf) :
+       m_size(pmf.size()),
+       m_rand_engine(std::mt19937(seed)),
+       m_dist(std::discrete_distribution<size_t>(pmf.begin(), pmf.end())) {
     }
 
     size_t EmpiricalSampler::next_sample() {
-        const float unif_val = m_unif_dist(m_rand_engine);
-
-        const size_t last = m_ecdf.size() - 2;
-        for (size_t k = 0; k < last; ++k) {
-            if (unif_val > m_ecdf[k] && unif_val <= m_ecdf[k + 1]) {
-                return k;
-            }
-        }
-        return last;
+        return m_dist(m_rand_engine);
     }
 
     size_t EmpiricalSampler::size() {
@@ -54,19 +47,5 @@ namespace oddvibe {
             seq.end(),
             [&] { return this->next_sample(); });
         return seq;
-    }
-
-    void
-    fill_ecdf(const std::vector<float>& pmf, std::vector<float>& ecdf) {
-        ecdf.clear();
-
-        float previous = 0;
-        ecdf.push_back(previous);
-
-        for (const auto& prob: pmf) {
-            float next = prob + previous;
-            ecdf.push_back(next);
-            previous = next;
-        }
     }
 }

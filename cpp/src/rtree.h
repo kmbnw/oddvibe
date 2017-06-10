@@ -25,9 +25,6 @@
 #include "train_data.h"
 
 namespace oddvibe {
-
-    std::vector<size_t> sequential_ints(const size_t len);
-
     /**
      * Regression tree.
      */

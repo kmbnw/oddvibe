@@ -14,20 +14,14 @@
  * limitations under the License.
  */
 
-#include "rtree.h"
 #include <stdexcept>
 #include <algorithm>
 #include <iostream>
 #include <numeric>
+#include "rtree.h"
+#include "algorithm_x.h"
 
 namespace oddvibe {
-    std::vector<size_t>
-    sequential_ints(const size_t len) {
-        std::vector<size_t> seq(len, 0);
-        std::iota(seq.begin(), seq.end(), 0);
-        return seq;
-    }
-
     RTree::RTree(const DataSet& data, const std::vector<size_t>& rows) :
         m_yhat(data.mean_y(rows)), m_is_leaf(true) {
 
