@@ -134,16 +134,16 @@ namespace oddvibe {
             const std::vector<bool>& active,
             std::vector<float>& yhat)
     const {
+        const auto nrows = data.nrows();
         if (m_is_leaf) {
-            const auto nrows = data.nrows();
             for (size_t row = 0; row != nrows; ++row) {
                 if (active[row]) {
                     yhat[row] = m_yhat;
                 }
             }
         } else {
-            std::vector<bool> l_active;
-            std::vector<bool> r_active;
+            std::vector<bool> l_active(nrows, false);
+            std::vector<bool> r_active(nrows, false);
             fill_active(data, active, l_active, r_active);
 
             m_left_child->predict(data, l_active, yhat);

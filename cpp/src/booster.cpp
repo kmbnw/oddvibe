@@ -53,7 +53,6 @@ namespace oddvibe {
         }
 
         if (pmf.size() != nrows) {
-            std::cout << "Resize" << std::endl;
             pmf.clear();
             pmf.resize(nrows, 1.0 / nrows);
         }
@@ -66,12 +65,8 @@ namespace oddvibe {
         const RTree tree(data, active);
 
         const auto yhats = tree.predict(data);
-        std::vector<float> ys;
         const auto loss = data.loss(yhats);
         const double max_loss = *std::max_element(loss.begin(), loss.end());
-        for (const auto & yh : yhats) {
-            std::cout << "YHat: " << yh << std::endl;
-        }
 
         double epsilon = 0.0;
         for (size_t k = 0; k != loss.size(); ++k) {

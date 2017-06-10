@@ -152,7 +152,7 @@ namespace oddvibe {
 
         std::transform(xs.begin(), xs.end(), xs_noise.begin(), xs.begin(), std::plus<float>());
 
-        const size_t num_rounds = 5;
+        const size_t num_rounds = 50;
 
         const DataSet train_data(nfeatures, xs, ys);
 
@@ -162,14 +162,14 @@ namespace oddvibe {
         for (size_t k = 0; k < num_rounds; ++k) {
             std::cout << "======== Round " << k << " ========" << std::endl;
             fitter.update_one(train_data, pmf, counts);
-            /*for (size_t j = 0; j != pmf.size(); ++j) {
+            for (size_t j = 0; j != pmf.size(); ++j) {
                 std::cout << std::fixed << std::setprecision(2);
                 std::cout << "P(x1 = " << std::setw(7) << std::left << xs[j * nfeatures] << ", x2 = ";
                 std::cout << std::setw(7) << std::left << xs[j * nfeatures + 1] << ") = ";
                 std::cout << std::setw(7) << std::left << pmf[j] << "count[x] = ";
                 std::cout << std::fixed << std::setprecision(0);
                 std::cout << std::setw(7) << std::left << counts[j] << "Y = " << ys[j] << std::endl;
-            }*/
+            }
         }
         //std::cout << "Seed: " << seed << std::endl;
 
