@@ -90,27 +90,37 @@ namespace oddvibe {
 
         std::transform(xs.begin(), xs.end(), xs_noise.begin(), xs.begin(), std::plus<float>());
 
-        const size_t num_rounds = 500;
+        const size_t num_rounds = 5000;
 
         const DataSet train_data(nfeatures, xs, ys);
 
         const Booster fitter(seed);
         std::vector<float> pmf;
         std::vector<size_t> counts;
-        for (size_t k = 0; k < num_rounds; ++k) {
-            std::cout << "======== Round " << k << " ========" << std::endl;
+        std::vector<float> avg_counts(ys.size(), 0);
+        for (size_t k = 0; k != num_rounds; ++k) {
             fitter.update_one(train_data, pmf, counts);
+            // TODO move the average count calc into booster or elsewhere
+            // as they are the potential outliers
+            if (k < (num_rounds - 1)) {
+                continue;
+            }
             for (size_t j = 0; j != pmf.size(); ++j) {
+                avg_counts[j] = 1.0 * counts[j] / (k + 1);
+                std::cout << std::setw(4) << std::left << j;
                 std::cout << std::fixed << std::setprecision(2);
                 std::cout << "P(x1 = " << std::setw(7) << std::left << xs[j * nfeatures] << ", x2 = ";
                 std::cout << std::setw(7) << std::left << xs[j * nfeatures + 1] << ") = ";
-                std::cout << std::setw(7) << std::left << pmf[j] << "count[x] = ";
+                std::cout << std::setw(7) << std::left << pmf[j] << "avg_count[x] = ";
+                std::cout << std::setw(7) << std::left << avg_counts[j];
                 std::cout << std::fixed << std::setprecision(0);
-                std::cout << std::setw(7) << std::left << counts[j] << "Y = " << ys[j] << std::endl;
+                std::cout << "Y = " << ys[j] << std::endl;
             }
         }
         //std::cout << "Seed: " << seed << std::endl;
 
-        std::cout << std::max_element(counts.begin(), counts.end()) - counts.begin() << std::endl;
+        std::cout << (
+            std::max_element(avg_counts.begin(), avg_counts.end()) -
+            avg_counts.begin()) << std::endl;
     }
 }
