@@ -31,6 +31,9 @@ namespace oddvibe {
     RTree::RTree(const DataSet& data, const std::vector<size_t>& active) :
         m_active(active), m_yhat(data.mean_y(m_active)), m_is_leaf(true) {
 
+        if (std::isnan(m_yhat)) {
+            throw std::logic_error("Prediction cannot be NaN");
+        }
         if (active.empty()) {
             throw std::invalid_argument("Must have at least one active row");
         }
@@ -118,10 +121,16 @@ namespace oddvibe {
     RTree::predict(const DataSet& data)
     const {
         const auto nan = std::numeric_limits<double>::quiet_NaN();
-        std::vector<float> yhat(data.nrows(), nan);
+        std::vector<float> yhats(data.nrows(), nan);
 
-        predict(data, yhat);
-        return yhat;
+        predict(data, yhats);
+
+        const auto pred = [](float yhat) { return std::isnan(yhat); };
+        if (std::find_if(yhats.begin(), yhats.end(), pred) != yhats.end()) {
+            throw std::logic_error("One or more predictions were NaN");
+        }
+
+        return yhats;
     }
 
     std::pair<float, float>
