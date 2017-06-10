@@ -16,8 +16,8 @@
 #include <vector>
 #include <unordered_map>
 #include <functional>
-#include "partitioner.h"
 #include "sampler.h"
+#include "train_data.h"
 
 #ifndef KMBNW_ODVB_BOOSTER_H
 #define KMBNW_ODVB_BOOSTER_H
@@ -42,9 +42,7 @@ namespace oddvibe {
      */
     class Booster {
         public:
-            Booster(
-                Partitioner& builder,
-                const size_t& seed);
+            Booster(const size_t& seed);
 
             Booster(const Booster& other) = delete;
             Booster& operator=(const Booster& other) = delete;
@@ -52,11 +50,9 @@ namespace oddvibe {
             void update_one(
                 std::vector<float>& pmf,
                 std::vector<unsigned int>& counts,
-                const std::vector<float> &xs,
-                const std::vector<float> &ys) const;
+                const DataSet& data) const;
 
         private:
-            Partitioner& m_builder;
             const size_t m_seed;
     };
 }

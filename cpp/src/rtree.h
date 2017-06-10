@@ -24,13 +24,15 @@
 
 namespace oddvibe {
 
+    std::vector<size_t> sequential_ints(const size_t len);
+
     /**
      * Regression tree.
      */
     class RTree {
         public:
             RTree(const DataSet& data);
-            RTree(const DataSet& data, const std::vector<bool>& active);
+            RTree(const DataSet& data, const std::vector<size_t>& active);
 
             /**
              * No copy.
@@ -47,7 +49,7 @@ namespace oddvibe {
             float predict(const DataSet& data) const;
 
         private:
-            std::vector<bool> m_active;
+            std::vector<size_t> m_active;
             std::unique_ptr<RTree> m_left_child;
             std::unique_ptr<RTree> m_right_child;
 
@@ -69,8 +71,8 @@ namespace oddvibe {
                     const DataSet& data,
                     const size_t col,
                     const float split_val,
-                    std::vector<bool>& left_filter,
-                    std::vector<bool>& right_filter) const;
+                    std::vector<size_t>& left_filter,
+                    std::vector<size_t>& right_filter) const;
     };
 }
 #endif //KMBNW_RTREE_H

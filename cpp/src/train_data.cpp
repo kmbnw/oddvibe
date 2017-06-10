@@ -62,7 +62,7 @@ namespace oddvibe {
     }
 
     std::unordered_set<float>
-    DataSet::unique_x(const size_t col, const std::vector<bool>& active) const {
+    DataSet::unique_x(const size_t col, const std::vector<size_t>& active) const {
         std::unordered_set<float> uniques;
 
         for (size_t row = 0; row != m_nrows; ++row) {
@@ -74,12 +74,9 @@ namespace oddvibe {
     }
 
 
-    double DataSet::mean_y(const std::vector<bool>& active) const {
+    double DataSet::mean_y(const std::vector<size_t>& active) const {
         if (m_ys.empty()) {
             return 0;
-        }
-        if (m_nrows != active.size()) {
-            throw std::invalid_argument("Active must have same number of rows");
         }
 
         size_t count = 0;
@@ -94,12 +91,9 @@ namespace oddvibe {
         return (count < 1 ? 0 : total / count);
     }
 
-    double DataSet::variance_y(const std::vector<bool>& active) const {
+    double DataSet::variance_y(const std::vector<size_t>& active) const {
         if (m_ys.empty()) {
             return 0;
-        }
-        if (m_nrows != active.size()) {
-            throw std::invalid_argument("Active must have same number of rows");
         }
 
         size_t count = 0;

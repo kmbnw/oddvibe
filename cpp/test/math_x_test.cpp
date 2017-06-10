@@ -66,3 +66,11 @@ namespace oddvibe {
         CPPUNIT_ASSERT_DOUBLES_EQUAL(expected[3], pmf[3], m_tolerance);
     }
 }
+
+int main(int argc, char **argv) {
+    CppUnit::TextUi::TestRunner runner;
+    CppUnit::TestFactoryRegistry &registry = CppUnit::TestFactoryRegistry::getRegistry();
+    runner.addTest( registry.makeTest() );
+    runner.run();
+    return 0;
+}

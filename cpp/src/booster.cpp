@@ -22,7 +22,7 @@
 #include <cmath>
 #include <functional>
 #include "booster.h"
-#include "regression_tree.h"
+#include "rtree.h"
 #include "ecdf_sampler.h"
 #include "cached_sampler.h"
 #include "math_x.h"
@@ -35,17 +35,15 @@ namespace oddvibe {
         }
     }
 
-    Booster::Booster(Partitioner& builder, const size_t& seed) :
-        m_builder(builder), m_seed(seed) {
+    Booster::Booster(const size_t& seed) : m_seed(seed) {
     }
 
     void Booster::update_one(
             std::vector<float>& pmf,
             std::vector<unsigned int>& counts,
-            const std::vector<float> &xs,
-            const std::vector<float> &ys) const {
+            const DataSet& data) const {
         // set up initial uniform distribution over all instances
-        const size_t nrows = ys.size();
+        const size_t nrows = data.nrows();
         if (counts.size() != nrows) {
             counts.clear();
             counts.resize(nrows, 0);
@@ -59,12 +57,17 @@ namespace oddvibe {
         EmpiricalSampler sampler(m_seed, pmf);
         CachedSampler cache(sampler);
         add_counts(cache, counts);
-        m_builder.build(cache);
 
-        const RegressionTree tree(m_builder);
+        std::vector<size_t> active(nrows, 0);
+        std::generate(
+            active.begin(),
+            active.end(),
+            [&cache] { return cache.next_sample(); });
+        const RTree tree(data, active);
 
         std::vector<float> yhats;
-        tree.predict(xs, yhats);
+        std::vector<float> ys;
+        //const auto yhats = tree.predict(data);
 
         std::vector<double> loss(yhats.size(), 0);
         std::transform(yhats.begin(), yhats.end(), ys.begin(), loss.begin(),

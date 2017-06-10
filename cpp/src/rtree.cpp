@@ -20,12 +20,19 @@
 #include <algorithm>
 #include <cmath>
 #include <iostream>
+#include <numeric>
 
 namespace oddvibe {
-    RTree::RTree(const DataSet& data, const std::vector<bool>& active) :
+    std::vector<size_t> sequential_ints(const size_t len) {
+        std::vector<size_t> seq(len, 0);
+        std::iota(seq.begin(), seq.end(), 0);
+        return seq;
+    }
+
+    RTree::RTree(const DataSet& data, const std::vector<size_t>& active) :
         m_active(active) {
 
-        if (std::find(active.begin(), active.end(), true) == active.end()) {
+        if (active.empty()) {
             throw std::invalid_argument("Must have at least one active row");
         }
         if (data.variance_y(active) > 1e-6) {
@@ -34,9 +41,9 @@ namespace oddvibe {
             if (split.is_valid()) {
                 const auto split_col = split.col_idx();
                 const auto split_val = split.value();
-                const auto nrows = data.nrows();
-                std::vector<bool> left_filter(nrows, false);
-                std::vector<bool> right_filter(nrows, false);
+
+                std::vector<size_t> left_filter;
+                std::vector<size_t> right_filter;
                 populate_filter(data, split_col, split_val, left_filter, right_filter);
 
                 /*std::cout
@@ -57,25 +64,21 @@ namespace oddvibe {
     }
 
     RTree::RTree(const DataSet& data) :
-        RTree(data, std::vector<bool>(data.nrows(), true)) {
+        RTree(data, sequential_ints(data.nrows())) {
     }
 
     void RTree::populate_filter(
             const DataSet& data,
             const size_t col,
             const float split_val,
-            std::vector<bool>& left_filter,
-            std::vector<bool>& right_filter) const {
-        const auto nrows = data.nrows();
-
-        for (size_t row = 0; row != nrows; ++row) {
-            if (m_active[row]) {
-                const auto x = data.x_at(row, col);
-                if (x <= split_val) {
-                    left_filter[row] = true;
-                } else {
-                    right_filter[row] = true;
-                }
+            std::vector<size_t>& left_filter,
+            std::vector<size_t>& right_filter) const {
+        for (const auto & row : m_active) {
+            const auto x = data.x_at(row, col);
+            if (x <= split_val) {
+                left_filter.push_back(row);
+            } else {
+                right_filter.push_back(row);
             }
         }
     }
@@ -87,15 +90,12 @@ namespace oddvibe {
             const float yhat_l,
             const float yhat_r) const {
         double err = 0;
-        const auto nrows = data.nrows();
 
-        for (size_t row_j = 0; row_j != nrows; ++row_j) {
-            if (m_active[row_j]) {
-                auto x_j = data.x_at(row_j, col);
-                auto y_j = data.y_at(row_j);
-                auto yhat = x_j <= split ? yhat_l : yhat_r;
-                err += pow((y_j - yhat), 2.0);
-            }
+        for (const auto & row : m_active) {
+            auto x_j = data.x_at(row, col);
+            auto y_j = data.y_at(row);
+            auto yhat = x_j <= split ? yhat_l : yhat_r;
+            err += pow((y_j - yhat), 2.0);
         }
         return err;
     }
@@ -109,10 +109,8 @@ namespace oddvibe {
             const DataSet& data,
             const size_t col,
             const float split_val) const {
-        const auto nrows = data.nrows();
-
-        std::vector<bool> left_filter(nrows, false);
-        std::vector<bool> right_filter(nrows, false);
+        std::vector<size_t> left_filter;
+        std::vector<size_t> right_filter;
         populate_filter(data, col, split_val, left_filter, right_filter);
         const float yhat_l = data.mean_y(left_filter);
         const float yhat_r = data.mean_y(right_filter);

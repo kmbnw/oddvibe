@@ -67,12 +67,12 @@ namespace oddvibe {
              */
             size_t ncols() const;
 
-            double mean_y(const std::vector<bool>& active) const;
+            double mean_y(const std::vector<size_t>& active) const;
 
-            double variance_y(const std::vector<bool>& active) const;
+            double variance_y(const std::vector<size_t>& active) const;
 
             std::unordered_set<float>
-            unique_x(const size_t col, const std::vector<bool>& active) const;
+            unique_x(const size_t col, const std::vector<size_t>& active) const;
 
             std::pair<size_t, float> best_split() const;
 

@@ -23,11 +23,9 @@
 #include <iterator>
 #include <functional>
 #include "train_data.h"
-#include "partitioner.h"
 #include "seq_sampler.h"
 #include "cached_sampler.h"
 #include "ecdf_sampler.h"
-#include "regression_tree.h"
 #include "booster.h"
 #include "booster_test.h"
 
@@ -154,18 +152,16 @@ namespace oddvibe {
 
         std::transform(xs.begin(), xs.end(), xs_noise.begin(), xs.begin(), std::plus<float>());
 
-        const size_t depth = 3;
         const size_t num_rounds = 5000;
 
         const DataSet train_data(nfeatures, xs, ys);
-        Partitioner builder(train_data, depth);
-        const Booster fitter(builder, seed);
+        const Booster fitter(seed);
         std::vector<float> pmf;
         std::vector<unsigned int> counts;
 
         for (size_t k = 0; k < num_rounds; ++k) {
             //std::cout << "========================" << std::endl;
-            fitter.update_one(pmf, counts, xs, ys);
+            fitter.update_one(pmf, counts, train_data);
             for (size_t j = 0; j != pmf.size(); ++j) {
                 //std::cout << std::fixed << std::setprecision(2);
                 //std::cout << "P(x1 = " << std::setw(7) << std::left << xs[j * nfeatures] << ", x2 = ";
