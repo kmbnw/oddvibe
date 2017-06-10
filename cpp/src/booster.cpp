@@ -66,7 +66,8 @@ namespace oddvibe {
         const RTree tree(data, active);
 
         //const auto yhats = tree.predict(data);
-
+        std::vector<float> yhats;
+        std::vector<float> ys;
         std::vector<double> loss(yhats.size(), 0);
         std::transform(yhats.begin(), yhats.end(), ys.begin(), loss.begin(),
             [](float yhat, float y) { return pow(yhat - y, 2); });

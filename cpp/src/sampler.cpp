@@ -14,22 +14,17 @@
  * limitations under the License.
  */
 
-#ifndef KMBNW_ODVB_BASE_SAMPLER_H
-#define KMBNW_ODVB_BASE_SAMPLER_H
-
-#include <vector>
+#include <algorithm>
+#include "sampler.h"
 
 namespace oddvibe {
-    /**
-     * Base class for objects that generate sample indexes.
-     */
-    class Sampler {
-        public:
-            virtual ~Sampler() {};
-            virtual size_t next_sample()=0;
-            virtual size_t size()=0;
 
-            std::vector<size_t> fill_sample(const size_t nrows);
-    };
+    std::vector<size_t> Sampler::fill_sample(const size_t nrows) {
+        std::vector<size_t> seq(nrows, 0);
+        std::generate(
+            seq.begin(),
+            seq.end(),
+            [&] { return this->next_sample(); });
+        return seq;
+    }
 }
-#endif //KMBNW_ODVB_BASE_SAMPLER_H

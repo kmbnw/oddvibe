@@ -15,7 +15,6 @@
  */
 
 #include "rtree.h"
-#include <limits>
 #include <stdexcept>
 #include <algorithm>
 #include <iostream>
@@ -135,7 +134,7 @@ namespace oddvibe {
 
             for (const auto & split : uniques) {
                 // calculate yhat for left and right side of split
-                const auto yhat = predict_split(data, col, split);
+                const auto yhat = fit_children(data, col, split);
                 const auto yhat_l = yhat.first;
                 const auto yhat_r = yhat.second;
 
