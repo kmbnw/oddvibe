@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['update_5fone',['update_one',['../classoddvibe_1_1Booster.html#a8cefd0adbdb517abb2b89f7df987f6b3',1,'oddvibe::Booster']]]
+  ['loss',['loss',['../classoddvibe_1_1DataSet.html#a038e9b3ac99bdd5c5fe82ac74da4a8f7',1,'oddvibe::DataSet']]]
 ];
