@@ -33,25 +33,25 @@ namespace oddvibe {
     }
 
     float
-    DataSet::y_at(const size_t row_idx)
+    DataSet::y_at(const size_t row)
     const {
-        if (row_idx < m_nrows) {
-            return m_ys[row_idx];
+        if (row < m_nrows) {
+            return m_ys[row];
         }
-        throw std::out_of_range("row_idx out of range");
+        throw std::out_of_range("row out of range");
     }
 
     float
-    DataSet::x_at(const size_t row_idx, const size_t col_idx)
+    DataSet::x_at(const size_t row, const size_t col)
     const {
-        if (row_idx >= m_nrows) {
-            throw std::out_of_range("row_idx out of range");
+        if (row >= m_nrows) {
+            throw std::out_of_range("row out of range");
         }
-        if (col_idx >= m_ncols) {
-            throw std::out_of_range("col_idx out of range");
+        if (col >= m_ncols) {
+            throw std::out_of_range("col out of range");
         }
 
-        return m_xs[x_index(row_idx, col_idx)];
+        return m_xs[x_index(row, col)];
     }
 
     size_t DataSet::nrows() const {

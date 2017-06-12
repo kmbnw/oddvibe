@@ -53,8 +53,9 @@ namespace oddvibe {
         const size_t nfeatures = 2;
 
         const DataSet data(nfeatures, xs, ys);
-        const RTree tree(data);
-        const auto split = tree.best_split(data, sequential_ints(ys.size()));
+        RTree::Fitter fitter(sequential_ints(ys.size()));
+        //const auto tree = builder.build();
+        const auto split = fitter.best_split(data);
 
         CPPUNIT_ASSERT_EQUAL(false, split.is_valid());
     }
@@ -78,8 +79,10 @@ namespace oddvibe {
         const size_t nfeatures = 2;
 
         const DataSet data(nfeatures, xs, ys);
-        const RTree tree(data);
-        const auto split = tree.best_split(data, sequential_ints(ys.size()));
+        RTree::Fitter fitter(sequential_ints(ys.size()));
+        //const auto tree = builder.build();
+
+        const auto split = fitter.best_split(data);
         const auto col = split.col_idx();
         const auto value = split.value();
 
@@ -109,8 +112,9 @@ namespace oddvibe {
         const size_t nfeatures = 2;
 
         const DataSet data(nfeatures, xs, ys);
-        const RTree tree(data);
-        const auto split = tree.best_split(data, sequential_ints(ys.size()));
+        RTree::Fitter fitter(sequential_ints(ys.size()));
+        //const auto tree = builder.build();
+        const auto split = fitter.best_split(data);
         const auto col = split.col_idx();
         const auto value = split.value();
 
@@ -147,8 +151,9 @@ namespace oddvibe {
         const size_t nfeatures = 3;
 
         const DataSet data(nfeatures, xs, ys);
-        const RTree tree(data);
-        const auto split = tree.best_split(data, sequential_ints(ys.size()));
+        RTree::Fitter fitter(sequential_ints(ys.size()));
+        //const auto tree = builder.build();
+        const auto split = fitter.best_split(data);
         const auto col = split.col_idx();
         const auto value = split.value();
 

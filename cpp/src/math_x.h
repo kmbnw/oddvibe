@@ -23,7 +23,6 @@ namespace oddvibe {
      * Normalize a vector to sum to 1 (e.g. proper probability mass function).
      * @param[inout] pmf The vector to normalize; overwritten in-place.
      */
-    void
-    normalize(std::vector<float>& pmf);
+    void normalize(std::vector<float>& pmf);
 }
 #endif //KMBNW_ODVB_MATHX_H

@@ -25,26 +25,14 @@
 #include "train_data.h"
 
 namespace oddvibe {
+
     /**
-     * Regression tree.
+     * Regression decision tree
      */
     class RTree {
         public:
-            RTree(const DataSet& data);
-            RTree(const DataSet& data, const std::vector<size_t>& active);
-
-            /**
-             * No copy.
-             */
-            RTree(const RTree& other) = delete;
-            /**
-             * No copy.
-             */
-            RTree& operator=(const RTree& other) = delete;
-
-            SplitData
-            best_split(const DataSet& data, const std::vector<size_t>& rows)
-            const;
+            class Fitter;
+            RTree(const Fitter& fitter);
 
             std::vector<float>
             predict(const DataSet& data)
@@ -52,52 +40,81 @@ namespace oddvibe {
 
         private:
             float m_yhat = std::numeric_limits<double>::quiet_NaN();
-            bool m_is_leaf;
+            bool m_is_leaf = true;
             size_t m_split_col = 0;
             float m_split_val = std::numeric_limits<double>::quiet_NaN();
-            std::unique_ptr<RTree> m_left_child;
-            std::unique_ptr<RTree> m_right_child;
+            std::unique_ptr<RTree> m_left;
+            std::unique_ptr<RTree> m_right;
 
-            double
-            calc_total_err(
-                const DataSet& data,
-                const std::vector<size_t>& rows,
-                const size_t col,
-                const float split,
-                const float yhat_l,
-                const float yhat_r)
-            const;
+            void validate();
 
-            std::pair<float, float>
-            fit_children(
-                const DataSet& data,
-                const std::vector<size_t>& rows,
-                const size_t col,
-                const float split)
-            const;
-
-            void fill_row_idx(
-                const DataSet& data,
-                const size_t col,
-                const float split_val,
-                const std::vector<size_t>& rows,
-                std::vector<size_t>& left_rows,
-                std::vector<size_t>& right_rows)
-            const;
-
-            void
-            predict(
+            void predict(
                 const DataSet& data,
                 const std::vector<bool>& active,
                 std::vector<float>& yhat)
             const;
 
-            void
-            fill_active(
+            void fill_active(
                 const DataSet& data,
                 const std::vector<bool>& init_active,
                 std::vector<bool>& l_active,
                 std::vector<bool>& r_active)
+            const;
+    };
+
+    /**
+     * Fit data for a regression decision tree
+     */
+    class RTree::Fitter {
+        friend class RTree;
+
+        public:
+            Fitter(const std::vector<size_t>& active);
+
+            /**
+             * No copy.
+             */
+            Fitter(const Fitter& other) = delete;
+            /**
+             * No copy.
+             */
+            Fitter& operator=(const Fitter& other) = delete;
+
+            SplitData best_split(const DataSet& data) const;
+
+            RTree build();
+
+            void fit(const DataSet& data);
+
+        private:
+            float m_yhat = std::numeric_limits<double>::quiet_NaN();
+            bool m_is_leaf = true;
+            size_t m_split_col = 0;
+            float m_split_val = std::numeric_limits<double>::quiet_NaN();
+            std::vector<size_t> m_active_idx;
+            std::unique_ptr<Fitter> m_left;
+            std::unique_ptr<Fitter> m_right;
+
+            double calc_total_err(
+                const DataSet& data,
+                const size_t split_col,
+                const float split_val,
+                const float yhat_l,
+                const float yhat_r)
+            const;
+
+            std::pair<float, float> fit_children(
+                const DataSet& data,
+                const size_t split_col,
+                const float split_val)
+            const;
+
+            void fill_row_idx(
+                const DataSet& data,
+                const size_t split_col,
+                const float split_val,
+                std::vector<size_t>& left_rows,
+                std::vector<size_t>& right_rows)
             const;
     };
 }

@@ -29,8 +29,7 @@ namespace oddvibe {
 
             size_t size();
 
-            std::vector<size_t>
-            gen_samples(const size_t nrows);
+            std::vector<size_t> gen_samples(const size_t nrows);
 
         private:
             size_t m_size;
