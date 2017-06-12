@@ -65,12 +65,12 @@ namespace oddvibe {
                 }
             }
         } else {
-            std::vector<bool> l_active(nrows, false);
-            std::vector<bool> r_active(nrows, false);
-            fill_active(data, active, l_active, r_active);
+            std::vector<bool> left_active(nrows, false);
+            std::vector<bool> right_active(nrows, false);
+            fill_active(data, active, left_active, right_active);
 
-            m_left->predict(data, l_active, yhat);
-            m_right->predict(data, r_active, yhat);
+            m_left->predict(data, left_active, yhat);
+            m_right->predict(data, right_active, yhat);
         }
     }
 
@@ -91,17 +91,17 @@ namespace oddvibe {
     RTree::fill_active(
             const DataSet& data,
             const std::vector<bool>& init_active,
-            std::vector<bool>& l_active,
-            std::vector<bool>& r_active)
+            std::vector<bool>& left_active,
+            std::vector<bool>& right_active)
     const {
         const auto nrows = data.nrows();
         for (size_t row = 0; row != nrows; ++row) {
             if (init_active[row]) {
                 auto x_j = data.x_at(row, m_split_col);
                 if (x_j <= m_split_val) {
-                    l_active[row] = true;
+                    left_active[row] = true;
                 } else {
-                    r_active[row] = true;
+                    right_active[row] = true;
                 }
             }
         }

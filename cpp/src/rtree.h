@@ -57,8 +57,8 @@ namespace oddvibe {
             void fill_active(
                 const DataSet& data,
                 const std::vector<bool>& init_active,
-                std::vector<bool>& l_active,
-                std::vector<bool>& r_active)
+                std::vector<bool>& left_active,
+                std::vector<bool>& right_active)
             const;
     };
 
@@ -69,7 +69,7 @@ namespace oddvibe {
         friend class RTree;
 
         public:
-            Fitter(const std::vector<size_t>& active);
+            Fitter(const std::vector<size_t>& active_idx);
 
             /**
              * No copy.

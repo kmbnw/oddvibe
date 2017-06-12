@@ -69,18 +69,18 @@ namespace oddvibe {
     }
 
     std::unordered_set<float>
-    DataSet::unique_x(const size_t col, const std::vector<size_t>& active)
+    DataSet::unique_x(const size_t col, const std::vector<size_t>& row_idx)
     const {
         std::unordered_set<float> uniques;
 
-        for (const auto & row : active) {
+        for (const auto & row : row_idx) {
             uniques.insert(m_xs[x_index(row, col)]);
         }
         return uniques;
     }
 
     double
-    DataSet::mean_y(const std::vector<size_t>& active)
+    DataSet::mean_y(const std::vector<size_t>& row_idx)
     const {
         if (m_ys.empty()) {
             return 0;
@@ -89,7 +89,7 @@ namespace oddvibe {
         size_t count = 0;
         double total = 0;
 
-        for (const auto & row : active) {
+        for (const auto & row : row_idx) {
             total += m_ys[row];
             ++count;
         }
@@ -97,7 +97,7 @@ namespace oddvibe {
     }
 
     double
-    DataSet::variance_y(const std::vector<size_t>& active)
+    DataSet::variance_y(const std::vector<size_t>& row_idx)
     const {
         if (m_ys.empty()) {
             return 0;
@@ -105,9 +105,9 @@ namespace oddvibe {
 
         size_t count = 0;
         double total = 0;
-        const auto mean = mean_y(active);
+        const auto mean = mean_y(row_idx);
 
-        for (const auto & row : active) {
+        for (const auto & row : row_idx) {
             total += pow(m_ys[row] - mean, 2);
             ++count;
         }
