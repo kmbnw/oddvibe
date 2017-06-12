@@ -15,9 +15,7 @@
  */
 
 #include <iostream>
-#include <sstream>
-#include <vector>
-#include <unordered_map>
+#include <iomanip>
 #include <algorithm>
 #include <cmath>
 #include <functional>
@@ -43,17 +41,7 @@ namespace oddvibe {
         std::vector<float>& pmf,
         std::vector<size_t>& counts)
     const {
-        // set up initial uniform distribution over all instances
         const size_t nrows = data.nrows();
-        if (counts.size() != nrows) {
-            counts.clear();
-            counts.resize(nrows, 0);
-        }
-
-        if (pmf.size() != nrows) {
-            pmf.clear();
-            pmf.resize(nrows, 1.0 / nrows);
-        }
 
         EmpiricalSampler sampler(m_seed, pmf);
 
@@ -64,7 +52,7 @@ namespace oddvibe {
         fitter.fit(data);
         const auto tree = fitter.build();
         const auto yhats = tree.predict(data);
-        const auto loss = data.loss(yhats);
+        auto loss = data.loss(yhats);
         const double max_loss = *std::max_element(loss.begin(), loss.end());
 
         double epsilon = 0.0;
@@ -75,15 +63,59 @@ namespace oddvibe {
         const double beta = epsilon / (max_loss - epsilon);
 
         if (epsilon < 0.5 * max_loss) {
-            for (size_t k = 0; k != loss.size(); ++k) {
-                const double d = loss[k] / max_loss;
-                pmf[k] = (float) (pow(beta, 1 - d) * pmf[k]);
-            }
+            std::transform(
+                pmf.begin(),
+                pmf.end(),
+                loss.begin(),
+                pmf.begin(),
+                [beta = beta, max_loss = max_loss](float pmf_k, double loss_k) {
+                    return (float) (pow(beta, 1 - loss_k / max_loss) * pmf_k);
+                });
         } else {
             std::cout << "RESET" << std::endl;
             // reset to uniform distribution
             std::fill(pmf.begin(), pmf.end(), 1.0 / nrows);
         }
         normalize(pmf);
+    }
+
+    std::pair<size_t, float>
+    Booster::fit(const DataSet& data, size_t nrounds) const {
+        const auto nrows = data.nrows();
+
+        // set up initial uniform distribution over all instances
+        std::vector<float> pmf(nrows, 1.0 / nrows);
+        std::vector<size_t> counts(nrows, 0);
+
+        for (size_t k = 0; k != nrounds; ++k) {
+            update_one(data, pmf, counts);
+
+            if (k == (nrounds - 2)) {
+                for (size_t j = 0; j != nrows; ++j) {
+                    const auto avg_count = 1.0 * counts[j] / (k + 1);
+                    std::cout << std::setw(4) << std::left << j;
+                    std::cout << std::fixed << std::setprecision(2);
+                    std::cout << std::setw(7) << std::left << pmf[j];
+                    std::cout << "avg_count[x] = " << std::setw(7) << std::left;
+                    std::cout << avg_count << std::endl;
+                }
+            }
+        }
+
+        auto best = std::numeric_limits<float>::quiet_NaN();
+        size_t best_idx = 1;
+
+        const float actual_rounds = 1.0f * nrounds + 1;
+        for (size_t j = 0; j != nrows; ++j) {
+            const auto norm_count = 1.0 * counts[j] / actual_rounds;
+            if (std::isnan(norm_count)) {
+                throw std::logic_error("NaN for normalized count");
+            }
+            if (std::isnan(best) || norm_count > best) {
+                best = norm_count;
+                best_idx = j;
+            }
+        }
+        return std::make_pair(best_idx, best);
     }
 }

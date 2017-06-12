@@ -35,14 +35,17 @@ namespace oddvibe {
             Booster(const Booster& other) = delete;
             Booster& operator=(const Booster& other) = delete;
 
+            std::pair<size_t, float>
+            fit(const DataSet& data, const size_t nrows) const;
+
+        private:
+            size_t m_seed;
+
             void update_one(
                 const DataSet& data,
                 std::vector<float>& pmf,
                 std::vector<size_t>& counts)
             const;
-
-        private:
-            size_t m_seed;
     };
 }
 #endif //KMBNW_ODVB_BOOSTER_H
