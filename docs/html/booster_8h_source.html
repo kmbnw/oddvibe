@@ -121,24 +121,27 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;            <a class="code" href="classoddvibe_1_1Booster.html">Booster</a>(<span class="keyword">const</span> <a class="code" href="classoddvibe_1_1Booster.html">Booster</a>&amp; other) = <span class="keyword">delete</span>;</div>
 <div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;            <a class="code" href="classoddvibe_1_1Booster.html">Booster</a>&amp; operator=(<span class="keyword">const</span> <a class="code" href="classoddvibe_1_1Booster.html">Booster</a>&amp; other) = <span class="keyword">delete</span>;</div>
 <div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;            <span class="keywordtype">void</span> update_one(</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;                <span class="keyword">const</span> <a class="code" href="classoddvibe_1_1DataSet.html">DataSet</a>&amp; data,</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;                std::vector&lt;float&gt;&amp; pmf,</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;                std::vector&lt;size_t&gt;&amp; counts)</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;            <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;            std::pair&lt;size_t, float&gt;</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;            fit(<span class="keyword">const</span> <a class="code" href="classoddvibe_1_1DataSet.html">DataSet</a>&amp; data, <span class="keyword">const</span> <span class="keywordtype">size_t</span> nrows) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;            <span class="keywordtype">size_t</span> m_seed;</div>
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;            <span class="keywordtype">size_t</span> m_seed;</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    };</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;}</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;<span class="preprocessor">#endif //KMBNW_ODVB_BOOSTER_H</span></div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;            <span class="keywordtype">void</span> update_one(</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;                <span class="keyword">const</span> <a class="code" href="classoddvibe_1_1DataSet.html">DataSet</a>&amp; data,</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;                std::vector&lt;float&gt;&amp; pmf,</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;                std::vector&lt;size_t&gt;&amp; counts)</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;            <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    };</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;}</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;<span class="preprocessor">#endif //KMBNW_ODVB_BOOSTER_H</span></div>
 <div class="ttc" id="namespaceoddvibe_html"><div class="ttname"><a href="namespaceoddvibe.html">oddvibe</a></div><div class="ttdef"><b>Definition:</b> algorithm_x.cpp:20</div></div>
 <div class="ttc" id="classoddvibe_1_1DataSet_html"><div class="ttname"><a href="classoddvibe_1_1DataSet.html">oddvibe::DataSet</a></div><div class="ttdef"><b>Definition:</b> train_data.h:28</div></div>
 <div class="ttc" id="classoddvibe_1_1Booster_html"><div class="ttname"><a href="classoddvibe_1_1Booster.html">oddvibe::Booster</a></div><div class="ttdef"><b>Definition:</b> booster.h:31</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sun Jun 11 2017 12:47:49 for oddvibe by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sun Jun 11 2017 23:33:23 for oddvibe by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.8
 </small></address>

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['y_5fat',['y_at',['../classoddvibe_1_1DataSet.html#a494aff58993672902ccf4b879583144d',1,'oddvibe::DataSet']]]
+  ['x_5fat',['x_at',['../classoddvibe_1_1DataSet.html#a00140670a1d890241d9cecf5b4a77baa',1,'oddvibe::DataSet']]]
 ];
