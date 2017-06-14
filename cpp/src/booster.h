@@ -17,13 +17,14 @@
 #include <unordered_map>
 #include <functional>
 #include "train_data.h"
+#include "defs_x.h"
 
 #ifndef KMBNW_ODVB_BOOSTER_H
 #define KMBNW_ODVB_BOOSTER_H
 
 namespace oddvibe {
     void
-    update_counts(const std::vector<size_t>& src, std::vector<size_t>& counts);
+    update_counts(const SizeVec& src, SizeVec& counts);
 
     /**
      * Provides boosting capabilities to other models.
@@ -41,10 +42,11 @@ namespace oddvibe {
         private:
             size_t m_seed;
 
-            void update_one(
+            void
+            update_one(
                 const DataSet& data,
-                std::vector<float>& pmf,
-                std::vector<size_t>& counts)
+                FloatVec& pmf,
+                SizeVec& counts)
             const;
     };
 }

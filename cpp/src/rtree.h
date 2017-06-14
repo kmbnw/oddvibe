@@ -34,9 +34,7 @@ namespace oddvibe {
             class Fitter;
             RTree(const Fitter& fitter);
 
-            std::vector<float>
-            predict(const DataSet& data)
-            const;
+            FloatVec predict(const DataSet& data) const;
 
         private:
             float m_yhat = std::numeric_limits<double>::quiet_NaN();
@@ -51,7 +49,7 @@ namespace oddvibe {
             void predict(
                 const DataSet& data,
                 const std::vector<bool>& active,
-                std::vector<float>& yhat)
+                FloatVec& predicted)
             const;
 
             void fill_active(
@@ -69,7 +67,7 @@ namespace oddvibe {
         friend class RTree;
 
         public:
-            Fitter(const std::vector<size_t>& active_idx);
+            Fitter(const SizeVec& active_idx);
 
             /**
              * No copy.
@@ -91,7 +89,7 @@ namespace oddvibe {
             bool m_is_leaf = true;
             size_t m_split_col = 0;
             float m_split_val = std::numeric_limits<double>::quiet_NaN();
-            std::vector<size_t> m_active_idx;
+            SizeVec m_active_idx;
             std::unique_ptr<Fitter> m_left;
             std::unique_ptr<Fitter> m_right;
 
@@ -113,8 +111,8 @@ namespace oddvibe {
                 const DataSet& data,
                 const size_t split_col,
                 const float split_val,
-                std::vector<size_t>& left_rows,
-                std::vector<size_t>& right_rows)
+                SizeVec& left_rows,
+                SizeVec& right_rows)
             const;
     };
 }

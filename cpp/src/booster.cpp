@@ -26,7 +26,7 @@
 
 namespace oddvibe {
     void
-    update_counts(const std::vector<size_t>& src, std::vector<size_t>& counts) {
+    update_counts(const SizeVec& src, SizeVec& counts) {
         for (const auto & idx : src) {
             ++counts[idx];
         }
@@ -38,8 +38,8 @@ namespace oddvibe {
     void
     Booster::update_one(
         const DataSet& data,
-        std::vector<float>& pmf,
-        std::vector<size_t>& counts)
+        FloatVec& pmf,
+        SizeVec& counts)
     const {
         const size_t nrows = data.nrows();
 
@@ -84,8 +84,8 @@ namespace oddvibe {
         const auto nrows = data.nrows();
 
         // set up initial uniform distribution over all instances
-        std::vector<float> pmf(nrows, 1.0 / nrows);
-        std::vector<size_t> counts(nrows, 0);
+        FloatVec pmf(nrows, 1.0 / nrows);
+        SizeVec counts(nrows, 0);
 
         for (size_t k = 0; k != nrounds; ++k) {
             update_one(data, pmf, counts);

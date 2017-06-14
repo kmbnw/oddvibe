@@ -17,9 +17,9 @@
 #ifndef KMBNW_ALGORITHM_X
 #define KMBNW_ALGORITHM_X
 
-#include <vector>
+#include "defs_x.h"
 
 namespace oddvibe {
-    std::vector<size_t> sequential_ints(const size_t len);
+    SizeVec sequential_ints(const size_t len);
 }
 #endif //KMBNW_ALGORITHM_X

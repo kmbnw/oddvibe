@@ -15,6 +15,7 @@
  */
 #include <vector>
 #include <random>
+#include "defs_x.h"
 
 #ifndef KMBNW_ODVB_ECDF_SAMPLER_H
 #define KMBNW_ODVB_ECDF_SAMPLER_H
@@ -29,7 +30,7 @@ namespace oddvibe {
 
             size_t size();
 
-            std::vector<size_t> gen_samples(const size_t nrows);
+            SizeVec gen_samples(const size_t nrows);
 
         private:
             size_t m_size;

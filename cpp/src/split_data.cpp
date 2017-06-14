@@ -19,21 +19,25 @@
 
 namespace oddvibe {
     SplitData::SplitData(
-            const float value,
-            const size_t col_idx,
+            const float split_val,
+            const size_t split_col,
             const double total_err):
-        m_value(value), m_col_idx(col_idx), m_total_err(total_err) {}
+        m_split_val(split_val),
+        m_split_col(split_col),
+        m_total_err(total_err) {
+
+        }
 
     bool SplitData::is_valid() const {
-        return !std::isnan(m_value);
+        return !std::isnan(m_split_val);
     }
 
-    float SplitData::value() const {
-        return m_value;
+    float SplitData::split_val() const {
+        return m_split_val;
     }
 
-    size_t SplitData::col_idx() const {
-        return m_col_idx;
+    size_t SplitData::split_col() const {
+        return m_split_col;
     }
 
     double SplitData::total_err() const {

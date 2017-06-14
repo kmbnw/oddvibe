@@ -83,8 +83,8 @@ namespace oddvibe {
         //const auto tree = builder.build();
 
         const auto split = fitter.best_split(data);
-        const auto col = split.col_idx();
-        const auto value = split.value();
+        const auto col = split.split_col();
+        const auto value = split.split_val();
 
         size_t expected_feature = 1;
 
@@ -115,8 +115,8 @@ namespace oddvibe {
         RTree::Fitter fitter(sequential_ints(ys.size()));
         //const auto tree = builder.build();
         const auto split = fitter.best_split(data);
-        const auto col = split.col_idx();
-        const auto value = split.value();
+        const auto col = split.split_col();
+        const auto value = split.split_val();
 
         const size_t expected_feature = 1;
 
@@ -154,8 +154,8 @@ namespace oddvibe {
         RTree::Fitter fitter(sequential_ints(ys.size()));
         //const auto tree = builder.build();
         const auto split = fitter.best_split(data);
-        const auto col = split.col_idx();
-        const auto value = split.value();
+        const auto col = split.split_col();
+        const auto value = split.split_val();
 
         size_t expected_feature = 2;
         float expected_val = 3.436f; // TODO hand-calc this

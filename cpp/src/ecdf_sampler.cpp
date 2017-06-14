@@ -39,9 +39,8 @@ namespace oddvibe {
         return m_size;
     }
 
-    std::vector<size_t>
-    EmpiricalSampler::gen_samples(const size_t nrows) {
-        std::vector<size_t> seq(nrows, 0);
+    SizeVec EmpiricalSampler::gen_samples(const size_t nrows) {
+        SizeVec seq(nrows, 0);
         std::generate(
             seq.begin(),
             seq.end(),

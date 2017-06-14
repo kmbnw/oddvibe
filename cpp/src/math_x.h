@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#include <vector>
+#include "defs_x.h"
 
 #ifndef KMBNW_ODVB_MATHX_H
 #define KMBNW_ODVB_MATHX_H
@@ -23,6 +23,8 @@ namespace oddvibe {
      * Normalize a vector to sum to 1 (e.g. proper probability mass function).
      * @param[inout] pmf The vector to normalize; overwritten in-place.
      */
-    void normalize(std::vector<float>& pmf);
+    void normalize(FloatVec& pmf);
+
+    double rmse_loss(const float predicted, const float observed);
 }
 #endif //KMBNW_ODVB_MATHX_H

@@ -15,17 +15,20 @@
  */
 
 #include <algorithm>
-#include <stdexcept>
 #include <cmath>
 #include "math_x.h"
 
 namespace oddvibe {
-    void normalize(std::vector<float>& pmf) {
+    void normalize(FloatVec& pmf) {
         const auto norm = std::accumulate(std::begin(pmf), std::end(pmf), 0.0);
         std::transform(
             std::begin(pmf),
             std::end(pmf),
             std::begin(pmf),
             [norm = norm](float f) { return f / norm; });
+    }
+
+    double rmse_loss(const float predicted, const float observed) {
+        return pow(predicted - observed, 2);
     }
 }

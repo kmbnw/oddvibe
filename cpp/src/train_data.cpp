@@ -22,10 +22,7 @@
 #include "train_data.h"
 
 namespace oddvibe {
-     DataSet::DataSet(
-            const size_t ncols,
-            const std::vector<float>& xs,
-            const std::vector<float>& ys):
+     DataSet::DataSet(const size_t ncols, const FloatVec& xs, const FloatVec& ys):
             m_nrows(ys.size()), m_ncols(ncols), m_xs(xs), m_ys(ys) {
         if (ys.size() != xs.size() / ncols) {
             throw std::invalid_argument("xs and ys must have same number of rows");
@@ -69,8 +66,7 @@ namespace oddvibe {
     }
 
     std::unordered_set<float>
-    DataSet::unique_x(const size_t col, const std::vector<size_t>& row_idx)
-    const {
+    DataSet::unique_x(const size_t col, const SizeVec& row_idx) const {
         std::unordered_set<float> uniques;
 
         for (const auto & row : row_idx) {
@@ -80,8 +76,7 @@ namespace oddvibe {
     }
 
     double
-    DataSet::mean_y(const std::vector<size_t>& row_idx)
-    const {
+    DataSet::mean_y(const SizeVec& row_idx) const {
         if (m_ys.empty()) {
             return 0;
         }
@@ -97,8 +92,7 @@ namespace oddvibe {
     }
 
     double
-    DataSet::variance_y(const std::vector<size_t>& row_idx)
-    const {
+    DataSet::variance_y(const SizeVec& row_idx) const {
         if (m_ys.empty()) {
             return 0;
         }
@@ -116,12 +110,15 @@ namespace oddvibe {
         return (count < 1 ? nan : total / count);
     }
 
-    std::vector<double>
-    DataSet::loss(const std::vector<float>& yhats)
-    const {
-        std::vector<double> loss(yhats.size(), 0);
-        std::transform(yhats.begin(), yhats.end(), m_ys.begin(), loss.begin(),
-            [](float yhat, float y) { return pow(yhat - y, 2); });
+    DoubleVec
+    DataSet::loss(const FloatVec& yhats) const {
+        DoubleVec loss(yhats.size(), 0);
+        std::transform(
+            yhats.begin(),
+            yhats.end(),
+            m_ys.begin(),
+            loss.begin(),
+            rmse_loss);
         return loss;
     }
 }

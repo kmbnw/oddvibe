@@ -54,8 +54,8 @@ namespace oddvibe {
     void
     RTree::predict(
             const DataSet& data,
-            const std::vector<bool>& active,
-            std::vector<float>& yhat)
+            const BoolVec& active,
+            FloatVec& yhat)
     const {
         const auto nrows = data.nrows();
         if (m_is_leaf) {
@@ -65,8 +65,8 @@ namespace oddvibe {
                 }
             }
         } else {
-            std::vector<bool> left_active(nrows, false);
-            std::vector<bool> right_active(nrows, false);
+            BoolVec left_active(nrows, false);
+            BoolVec right_active(nrows, false);
             fill_active(data, active, left_active, right_active);
 
             m_left->predict(data, left_active, yhat);
@@ -74,13 +74,11 @@ namespace oddvibe {
         }
     }
 
-    std::vector<float>
-    RTree::predict(const DataSet& data)
-    const {
+    FloatVec RTree::predict(const DataSet& data) const {
         const auto nan = std::numeric_limits<double>::quiet_NaN();
         const auto nrows = data.nrows();
-        std::vector<float> yhats(nrows, nan);
-        std::vector<bool> active(nrows, true);
+        FloatVec yhats(nrows, nan);
+        BoolVec active(nrows, true);
 
         predict(data, active, yhats);
 
@@ -90,9 +88,9 @@ namespace oddvibe {
     void
     RTree::fill_active(
             const DataSet& data,
-            const std::vector<bool>& init_active,
-            std::vector<bool>& left_active,
-            std::vector<bool>& right_active)
+            const BoolVec& init_active,
+            BoolVec& left_active,
+            BoolVec& right_active)
     const {
         const auto nrows = data.nrows();
         for (size_t row = 0; row != nrows; ++row) {
@@ -128,8 +126,8 @@ namespace oddvibe {
 
             if (split.is_valid()) {
                 m_is_leaf = false;
-                m_split_col = split.col_idx();
-                m_split_val = split.value();
+                m_split_col = split.split_col();
+                m_split_val = split.split_val();
 
                 std::vector<size_t> left_idx;
                 std::vector<size_t> right_idx;

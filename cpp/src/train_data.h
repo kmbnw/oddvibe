@@ -16,6 +16,7 @@
 #include <vector>
 #include <unordered_set>
 #include <utility>
+#include "math_x.h"
 
 #ifndef KMBNW_TRAIN_DATA_H
 #define KMBNW_TRAIN_DATA_H
@@ -34,10 +35,7 @@ namespace oddvibe {
              * row1, etc.
              * @param[in] ys: Response (independent variable).
              */
-            DataSet(
-                const size_t ncols,
-                const std::vector<float> &xs,
-                const std::vector<float> &ys);
+            DataSet(const size_t ncols, const FloatVec &xs, const FloatVec &ys);
 
             /**
              * No copy.
@@ -67,25 +65,24 @@ namespace oddvibe {
              */
             size_t ncols() const;
 
-            double mean_y(const std::vector<size_t>& row_idx) const;
+            double mean_y(const SizeVec& row_idx) const;
 
-            double variance_y(const std::vector<size_t>& row_idx) const;
+            double variance_y(const SizeVec& row_idx) const;
 
-            std::unordered_set<float> unique_x(
-                const size_t col,
-                const std::vector<size_t>& row_idx)
+            std::unordered_set<float>
+            unique_x(const size_t col, const SizeVec& row_idx)
             const;
 
             /**
              * RMSE loss
              */
-            std::vector<double> loss(const std::vector<float>& yhat) const;
+            DoubleVec loss(const FloatVec& yhat) const;
 
         private:
             size_t m_nrows;
             size_t m_ncols;
-            std::vector<float> m_xs;
-            std::vector<float> m_ys;
+            FloatVec m_xs;
+            FloatVec m_ys;
 
             size_t x_index(const size_t row, const size_t col) const;
     };

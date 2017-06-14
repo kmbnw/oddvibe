@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Krysta M Bouzek
+ * Copyright 2016-2017 Krysta M Bouzek
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,14 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+#include <vector>
 
-#include <algorithm>
-#include "algorithm_x.h"
+#ifndef KMBNW_ODVB_DEFSX_H
+#define KMBNW_ODVB_DEFSX_H
 
 namespace oddvibe {
-    SizeVec sequential_ints(const size_t len) {
-        SizeVec seq(len, 0);
-        std::iota(seq.begin(), seq.end(), 0);
-        return seq;
-    }
+    using FloatVec = std::vector<float>;
+    using DoubleVec = std::vector<double>;
+    using BoolVec = std::vector<bool>;
+    using SizeVec = std::vector<size_t>;
 }
+#endif //KMBNW_ODVB_DEFSX_H

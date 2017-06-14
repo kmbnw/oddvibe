@@ -22,21 +22,21 @@ namespace oddvibe {
     class SplitData {
         public:
             SplitData(
-                const float value,
-                const size_t col_idx,
+                const float split_val,
+                const size_t split_col,
                 const double total_err);
 
-            float value() const;
+            float split_val() const;
 
-            size_t col_idx() const;
+            size_t split_col() const;
 
             double total_err() const;
-            
+
             bool is_valid() const;
 
         private:
-            float m_value;
-            size_t m_col_idx;
+            float m_split_val;
+            size_t m_split_col;
             double m_total_err;
     };
 }
