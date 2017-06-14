@@ -37,10 +37,10 @@ namespace oddvibe {
             FloatVec predict(const DataSet& data) const;
 
         private:
-            float m_yhat = std::numeric_limits<double>::quiet_NaN();
+            float m_yhat = std::numeric_limits<float>::quiet_NaN();
             bool m_is_leaf = true;
-            size_t m_split_col = 0;
-            float m_split_val = std::numeric_limits<double>::quiet_NaN();
+            SplitData m_split;
+
             std::unique_ptr<RTree> m_left;
             std::unique_ptr<RTree> m_right;
 
@@ -48,15 +48,15 @@ namespace oddvibe {
 
             void predict(
                 const DataSet& data,
-                const std::vector<bool>& active,
+                const BoolVec& active,
                 FloatVec& predicted)
             const;
 
             void fill_active(
                 const DataSet& data,
-                const std::vector<bool>& init_active,
-                std::vector<bool>& left_active,
-                std::vector<bool>& right_active)
+                const BoolVec& init_active,
+                BoolVec& left_active,
+                BoolVec& right_active)
             const;
     };
 
@@ -87,30 +87,24 @@ namespace oddvibe {
         private:
             float m_yhat = std::numeric_limits<double>::quiet_NaN();
             bool m_is_leaf = true;
-            size_t m_split_col = 0;
-            float m_split_val = std::numeric_limits<double>::quiet_NaN();
+            SplitData m_split;
             SizeVec m_active_idx;
             std::unique_ptr<Fitter> m_left;
             std::unique_ptr<Fitter> m_right;
 
             double calc_total_err(
                 const DataSet& data,
-                const size_t split_col,
-                const float split_val,
+                const SplitData& split,
                 const float yhat_l,
                 const float yhat_r)
             const;
 
-            std::pair<float, float> fit_children(
-                const DataSet& data,
-                const size_t split_col,
-                const float split_val)
-            const;
+            std::pair<float, float>
+            fit_children(const DataSet& data, const SplitData&) const;
 
             void fill_row_idx(
                 const DataSet& data,
-                const size_t split_col,
-                const float split_val,
+                const SplitData& split,
                 SizeVec& left_rows,
                 SizeVec& right_rows)
             const;

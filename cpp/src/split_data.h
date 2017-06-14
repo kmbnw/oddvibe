@@ -17,27 +17,29 @@
 #define KMBNW_SPLIT_DATA_H
 
 #include <cstddef>
+#include <limits>
 
 namespace oddvibe {
     class SplitData {
         public:
-            SplitData(
-                const float split_val,
-                const size_t split_col,
-                const double total_err);
+            SplitData();
+
+            SplitData(const float split_val, const size_t split_col);
+
+            SplitData(SplitData&& other) = default;
+            SplitData(const SplitData& other) = default;
+            SplitData& operator=(const SplitData& other) = default;
+            ~SplitData() = default;
 
             float split_val() const;
 
             size_t split_col() const;
 
-            double total_err() const;
-
             bool is_valid() const;
 
         private:
-            float m_split_val;
-            size_t m_split_col;
-            double m_total_err;
+            float m_split_val = std::numeric_limits<float>::quiet_NaN();
+            size_t m_split_col = 0;
     };
 }
 #endif //KMBNW_SPLIT_DATA_H

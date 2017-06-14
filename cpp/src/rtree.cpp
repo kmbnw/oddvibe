@@ -26,8 +26,7 @@ namespace oddvibe {
     RTree::RTree(const Fitter& fitter) :
         m_yhat(fitter.m_yhat),
         m_is_leaf(fitter.m_is_leaf),
-        m_split_col(fitter.m_split_col),
-        m_split_val(fitter.m_split_val) {
+        m_split(fitter.m_split) {
     }
 
     void RTree::validate() {
@@ -93,10 +92,13 @@ namespace oddvibe {
             BoolVec& right_active)
     const {
         const auto nrows = data.nrows();
+        const auto split_col = m_split.split_col();
+        const auto split_val = m_split.split_val();
+
         for (size_t row = 0; row != nrows; ++row) {
             if (init_active[row]) {
-                auto x_j = data.x_at(row, m_split_col);
-                if (x_j <= m_split_val) {
+                auto x_j = data.x_at(row, split_col);
+                if (x_j <= split_val) {
                     left_active[row] = true;
                 } else {
                     right_active[row] = true;
@@ -105,7 +107,7 @@ namespace oddvibe {
         }
     }
 
-    RTree::Fitter::Fitter(const std::vector<size_t>& active_idx) {
+    RTree::Fitter::Fitter(const SizeVec& active_idx) {
         if (active_idx.empty()) {
             throw std::invalid_argument("Must have at least one active row");
         }
@@ -126,12 +128,11 @@ namespace oddvibe {
 
             if (split.is_valid()) {
                 m_is_leaf = false;
-                m_split_col = split.split_col();
-                m_split_val = split.split_val();
+                m_split = split;
 
-                std::vector<size_t> left_idx;
-                std::vector<size_t> right_idx;
-                fill_row_idx(data, m_split_col, m_split_val, left_idx, right_idx);
+                SizeVec left_idx;
+                SizeVec right_idx;
+                fill_row_idx(data, m_split, left_idx, right_idx);
 
                 m_left = std::make_unique<Fitter>(left_idx);
                 m_right = std::make_unique<Fitter>(right_idx);
@@ -188,11 +189,13 @@ namespace oddvibe {
     void
     RTree::Fitter::fill_row_idx(
             const DataSet& data,
-            const size_t split_col,
-            const float split_val,
-            std::vector<size_t>& left_rows,
-            std::vector<size_t>& right_rows)
+            const SplitData& split,
+            SizeVec& left_rows,
+            SizeVec& right_rows)
     const {
+        const auto split_col = split.split_col();
+        const auto split_val = split.split_val();
+
         for (const auto & row : m_active_idx) {
             const auto x = data.x_at(row, split_col);
             if (x <= split_val) {
@@ -206,13 +209,14 @@ namespace oddvibe {
     double
     RTree::Fitter::calc_total_err(
             const DataSet& data,
-            const size_t split_col,
-            const float split_val,
+            const SplitData& split,
             const float yhat_l,
             const float yhat_r)
     const {
-        double err = 0;
+        const auto split_col = split.split_col();
+        const auto split_val = split.split_val();
 
+        double err = 0;
         for (const auto & row : m_active_idx) {
             auto x_j = data.x_at(row, split_col);
             auto y_j = data.y_at(row);
@@ -223,14 +227,10 @@ namespace oddvibe {
     }
 
     std::pair<float, float>
-    RTree::Fitter::fit_children(
-            const DataSet& data,
-            const size_t split_col,
-            const float split_val)
-    const {
-        std::vector<size_t> left_idx;
-        std::vector<size_t> right_idx;
-        fill_row_idx(data, split_col, split_val, left_idx, right_idx);
+    RTree::Fitter::fit_children(const DataSet& data, const SplitData& split) const {
+        SizeVec left_idx;
+        SizeVec right_idx;
+        fill_row_idx(data, split, left_idx, right_idx);
         const float yhat_l = data.mean_y(left_idx);
         const float yhat_r = data.mean_y(right_idx);
 
@@ -240,9 +240,8 @@ namespace oddvibe {
     SplitData
     RTree::Fitter::best_split(const DataSet& data)
     const {
+        SplitData best;
         double best_err = std::numeric_limits<double>::quiet_NaN();
-        size_t best_feature = -1;
-        float best_value = std::numeric_limits<float>::quiet_NaN();
         bool init = false;
 
         const auto ncols = data.ncols();
@@ -255,7 +254,8 @@ namespace oddvibe {
 
             for (const auto & split_val : uniques) {
                 // calculate yhat for left and right side of split_val
-                const auto yhat = fit_children(data, split_col, split_val);
+                SplitData split(split_val, split_col);
+                const auto yhat = fit_children(data, split);
                 const auto yhat_l = yhat.first;
                 const auto yhat_r = yhat.second;
 
@@ -264,18 +264,16 @@ namespace oddvibe {
                 }
 
                 // total squared error for left and right side of split_val
-                const auto err = calc_total_err(
-                    data, split_col, split_val, yhat_l, yhat_r);
+                const auto err = calc_total_err(data, split, yhat_l, yhat_r);
 
                 // TODO randomly allow the same error as best to 'win'
                 if (!init || (!std::isnan(err) && err < best_err)) {
                     init = true;
+                    best = split;
                     best_err = err;
-                    best_value = split_val;
-                    best_feature = split_col;
                 }
             }
         }
-        return SplitData(best_value, best_feature, best_err);
+        return best;
     }
 }
