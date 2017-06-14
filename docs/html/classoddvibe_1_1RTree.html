@@ -102,6 +102,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 Collaboration diagram for oddvibe::RTree:</div>
 <div class="dyncontent">
 <div class="center"><img src="classoddvibe_1_1RTree__coll__graph.png" border="0" usemap="#oddvibe_1_1RTree_coll__map" alt="Collaboration graph"/></div>
+<map name="oddvibe_1_1RTree_coll__map" id="oddvibe_1_1RTree_coll__map">
+<area shape="rect" id="node2" href="classoddvibe_1_1SplitData.html" title="oddvibe::SplitData" alt="" coords="23,5,153,32"/></map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
@@ -114,36 +116,33 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a2765c7d65607e473a6819fc4e79d7207"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2765c7d65607e473a6819fc4e79d7207"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>RTree</b> (const <a class="el" href="classoddvibe_1_1RTree_1_1Fitter.html">Fitter</a> &amp;fitter)</td></tr>
 <tr class="separator:a2765c7d65607e473a6819fc4e79d7207"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afe1d1494c4dec45c4f934f74212985f2"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afe1d1494c4dec45c4f934f74212985f2"></a>
-std::vector&lt; float &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>predict</b> (const <a class="el" href="classoddvibe_1_1DataSet.html">DataSet</a> &amp;data) const </td></tr>
-<tr class="separator:afe1d1494c4dec45c4f934f74212985f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a09e015ea5dc4d87ef3a882314db91a7b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a09e015ea5dc4d87ef3a882314db91a7b"></a>
+FloatVec&#160;</td><td class="memItemRight" valign="bottom"><b>predict</b> (const <a class="el" href="classoddvibe_1_1DataSet.html">DataSet</a> &amp;data) const </td></tr>
+<tr class="separator:a09e015ea5dc4d87ef3a882314db91a7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
 <tr class="memitem:a346b4bcf5a58b17f8e51ca44a6964545"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a346b4bcf5a58b17f8e51ca44a6964545"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>validate</b> ()</td></tr>
 <tr class="separator:a346b4bcf5a58b17f8e51ca44a6964545"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0ba876b87c8ebf747b7f66fe67b80531"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0ba876b87c8ebf747b7f66fe67b80531"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>predict</b> (const <a class="el" href="classoddvibe_1_1DataSet.html">DataSet</a> &amp;data, const std::vector&lt; bool &gt; &amp;active, std::vector&lt; float &gt; &amp;yhat) const </td></tr>
-<tr class="separator:a0ba876b87c8ebf747b7f66fe67b80531"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aec95cabae9fdc7552c1e9e22585aebc9"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aec95cabae9fdc7552c1e9e22585aebc9"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>fill_active</b> (const <a class="el" href="classoddvibe_1_1DataSet.html">DataSet</a> &amp;data, const std::vector&lt; bool &gt; &amp;init_active, std::vector&lt; bool &gt; &amp;left_active, std::vector&lt; bool &gt; &amp;right_active) const </td></tr>
-<tr class="separator:aec95cabae9fdc7552c1e9e22585aebc9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acff0faea3bed254c5c98bcf2ef4f3c49"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="acff0faea3bed254c5c98bcf2ef4f3c49"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>predict</b> (const <a class="el" href="classoddvibe_1_1DataSet.html">DataSet</a> &amp;data, const BoolVec &amp;active, FloatVec &amp;predicted) const </td></tr>
+<tr class="separator:acff0faea3bed254c5c98bcf2ef4f3c49"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad21e8fe1672928d3e0576010b43adf51"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad21e8fe1672928d3e0576010b43adf51"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>fill_active</b> (const <a class="el" href="classoddvibe_1_1DataSet.html">DataSet</a> &amp;data, const BoolVec &amp;init_active, BoolVec &amp;left_active, BoolVec &amp;right_active) const </td></tr>
+<tr class="separator:ad21e8fe1672928d3e0576010b43adf51"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
 <tr class="memitem:aaeef9ffac9876570c6ef6c27f4e9386c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aaeef9ffac9876570c6ef6c27f4e9386c"></a>
-float&#160;</td><td class="memItemRight" valign="bottom"><b>m_yhat</b> = std::numeric_limits&lt;double&gt;::quiet_NaN()</td></tr>
+float&#160;</td><td class="memItemRight" valign="bottom"><b>m_yhat</b> = std::numeric_limits&lt;float&gt;::quiet_NaN()</td></tr>
 <tr class="separator:aaeef9ffac9876570c6ef6c27f4e9386c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae3b082fc866e1c6edfe4e344e66795c9"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae3b082fc866e1c6edfe4e344e66795c9"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>m_is_leaf</b> = true</td></tr>
 <tr class="separator:ae3b082fc866e1c6edfe4e344e66795c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8b022d76f4fdf829832007e721ae1a11"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8b022d76f4fdf829832007e721ae1a11"></a>
-size_t&#160;</td><td class="memItemRight" valign="bottom"><b>m_split_col</b> = 0</td></tr>
-<tr class="separator:a8b022d76f4fdf829832007e721ae1a11"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9ba586f5b69e5898ba5f50a23c23df1f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9ba586f5b69e5898ba5f50a23c23df1f"></a>
-float&#160;</td><td class="memItemRight" valign="bottom"><b>m_split_val</b> = std::numeric_limits&lt;double&gt;::quiet_NaN()</td></tr>
-<tr class="separator:a9ba586f5b69e5898ba5f50a23c23df1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5278001536efc9c3ee5e44f4eebecd20"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5278001536efc9c3ee5e44f4eebecd20"></a>
+<a class="el" href="classoddvibe_1_1SplitData.html">SplitData</a>&#160;</td><td class="memItemRight" valign="bottom"><b>m_split</b></td></tr>
+<tr class="separator:a5278001536efc9c3ee5e44f4eebecd20"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afe5b942ab3e01832a55dd9847b641264"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afe5b942ab3e01832a55dd9847b641264"></a>
 std::unique_ptr&lt; <a class="el" href="classoddvibe_1_1RTree.html">RTree</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>m_left</b></td></tr>
 <tr class="separator:afe5b942ab3e01832a55dd9847b641264"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -160,7 +159,7 @@ std::unique_ptr&lt; <a class="el" href="classoddvibe_1_1RTree.html">RTree</a> &g
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sun Jun 11 2017 23:33:23 for oddvibe by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Jun 13 2017 23:52:39 for oddvibe by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.8
 </small></address>

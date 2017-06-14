@@ -105,62 +105,59 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="preprocessor">#include &lt;vector&gt;</span></div>
 <div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="preprocessor">#include &lt;unordered_set&gt;</span></div>
 <div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="preprocessor">#include &lt;utility&gt;</span></div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="preprocessor">#ifndef KMBNW_TRAIN_DATA_H</span></div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="preprocessor">#define KMBNW_TRAIN_DATA_H</span></div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespaceoddvibe.html">oddvibe</a> {</div>
-<div class="line"><a name="l00028"></a><span class="lineno"><a class="line" href="classoddvibe_1_1DataSet.html">   28</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classoddvibe_1_1DataSet.html">DataSet</a> {</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;        <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;            <a class="code" href="classoddvibe_1_1DataSet.html#ac217df4721036e18ad96a0dd76bb56ac">DataSet</a>(</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;                <span class="keyword">const</span> <span class="keywordtype">size_t</span> <a class="code" href="classoddvibe_1_1DataSet.html#a630b236f858a8d08ee296d7323c68a88">ncols</a>,</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;                <span class="keyword">const</span> std::vector&lt;float&gt; &amp;xs,</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;                <span class="keyword">const</span> std::vector&lt;float&gt; &amp;ys);</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;            <a class="code" href="classoddvibe_1_1DataSet.html#ac217df4721036e18ad96a0dd76bb56ac">DataSet</a>(<span class="keyword">const</span> <a class="code" href="classoddvibe_1_1DataSet.html">DataSet</a>&amp; other) = <span class="keyword">delete</span>;</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;            <a class="code" href="classoddvibe_1_1DataSet.html">DataSet</a>&amp; <a class="code" href="classoddvibe_1_1DataSet.html#aa5ba5413c631b94f8f41561b05d9e25d">operator=</a>(<span class="keyword">const</span> <a class="code" href="classoddvibe_1_1DataSet.html">DataSet</a>&amp; other) = <span class="keyword">delete</span>;</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;            <span class="keywordtype">float</span> <a class="code" href="classoddvibe_1_1DataSet.html#a3503d565cab5bc1c5aacf4511eda8888">y_at</a>(<span class="keyword">const</span> <span class="keywordtype">size_t</span> row) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;            <span class="keywordtype">float</span> <a class="code" href="classoddvibe_1_1DataSet.html#a00140670a1d890241d9cecf5b4a77baa">x_at</a>(<span class="keyword">const</span> <span class="keywordtype">size_t</span> row, <span class="keyword">const</span> <span class="keywordtype">size_t</span> col) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;            <span class="keywordtype">size_t</span> <a class="code" href="classoddvibe_1_1DataSet.html#a746e7ec6423d1babb48f3b3c3660273c">nrows</a>() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;            <span class="keywordtype">size_t</span> <a class="code" href="classoddvibe_1_1DataSet.html#a630b236f858a8d08ee296d7323c68a88">ncols</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="preprocessor">#include &quot;math_x.h&quot;</span></div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="preprocessor">#ifndef KMBNW_TRAIN_DATA_H</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="preprocessor">#define KMBNW_TRAIN_DATA_H</span></div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespaceoddvibe.html">oddvibe</a> {</div>
+<div class="line"><a name="l00029"></a><span class="lineno"><a class="line" href="classoddvibe_1_1DataSet.html">   29</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classoddvibe_1_1DataSet.html">DataSet</a> {</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;        <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;            <a class="code" href="classoddvibe_1_1DataSet.html#a46830c0f678e8ef8f40c2a13fa0dcdbc">DataSet</a>(<span class="keyword">const</span> <span class="keywordtype">size_t</span> <a class="code" href="classoddvibe_1_1DataSet.html#a630b236f858a8d08ee296d7323c68a88">ncols</a>, <span class="keyword">const</span> FloatVec &amp;xs, <span class="keyword">const</span> FloatVec &amp;ys);</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;            <a class="code" href="classoddvibe_1_1DataSet.html#a46830c0f678e8ef8f40c2a13fa0dcdbc">DataSet</a>(<span class="keyword">const</span> <a class="code" href="classoddvibe_1_1DataSet.html">DataSet</a>&amp; other) = <span class="keyword">delete</span>;</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;            <a class="code" href="classoddvibe_1_1DataSet.html">DataSet</a>&amp; <a class="code" href="classoddvibe_1_1DataSet.html#aa5ba5413c631b94f8f41561b05d9e25d">operator=</a>(<span class="keyword">const</span> <a class="code" href="classoddvibe_1_1DataSet.html">DataSet</a>&amp; other) = <span class="keyword">delete</span>;</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;            <span class="keywordtype">float</span> <a class="code" href="classoddvibe_1_1DataSet.html#a3503d565cab5bc1c5aacf4511eda8888">y_at</a>(<span class="keyword">const</span> <span class="keywordtype">size_t</span> row) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;            <span class="keywordtype">float</span> <a class="code" href="classoddvibe_1_1DataSet.html#a00140670a1d890241d9cecf5b4a77baa">x_at</a>(<span class="keyword">const</span> <span class="keywordtype">size_t</span> row, <span class="keyword">const</span> <span class="keywordtype">size_t</span> col) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;            <span class="keywordtype">size_t</span> <a class="code" href="classoddvibe_1_1DataSet.html#a746e7ec6423d1babb48f3b3c3660273c">nrows</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;            <span class="keywordtype">size_t</span> <a class="code" href="classoddvibe_1_1DataSet.html#a630b236f858a8d08ee296d7323c68a88">ncols</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;            <span class="keywordtype">double</span> mean_y(<span class="keyword">const</span> SizeVec&amp; row_idx) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;            <span class="keywordtype">double</span> mean_y(<span class="keyword">const</span> std::vector&lt;size_t&gt;&amp; row_idx) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;            <span class="keywordtype">double</span> variance_y(<span class="keyword">const</span> SizeVec&amp; row_idx) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;            <span class="keywordtype">double</span> variance_y(<span class="keyword">const</span> std::vector&lt;size_t&gt;&amp; row_idx) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;            std::unordered_set&lt;float&gt; unique_x(</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;                <span class="keyword">const</span> <span class="keywordtype">size_t</span> col,</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;                <span class="keyword">const</span> std::vector&lt;size_t&gt;&amp; row_idx)</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;            <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;            std::vector&lt;double&gt; <a class="code" href="classoddvibe_1_1DataSet.html#a038e9b3ac99bdd5c5fe82ac74da4a8f7">loss</a>(<span class="keyword">const</span> std::vector&lt;float&gt;&amp; yhat) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;        <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;            <span class="keywordtype">size_t</span> m_nrows;</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;            <span class="keywordtype">size_t</span> m_ncols;</div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;            std::vector&lt;float&gt; m_xs;</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;            std::vector&lt;float&gt; m_ys;</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;            <span class="keywordtype">size_t</span> x_index(<span class="keyword">const</span> <span class="keywordtype">size_t</span> row, <span class="keyword">const</span> <span class="keywordtype">size_t</span> col) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;    };</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;}</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;<span class="preprocessor">#endif //KMBNW_TRAIN_DATA_H</span></div>
-<div class="ttc" id="classoddvibe_1_1DataSet_html_a3503d565cab5bc1c5aacf4511eda8888"><div class="ttname"><a href="classoddvibe_1_1DataSet.html#a3503d565cab5bc1c5aacf4511eda8888">oddvibe::DataSet::y_at</a></div><div class="ttdeci">float y_at(const size_t row) const </div><div class="ttdef"><b>Definition:</b> train_data.cpp:36</div></div>
-<div class="ttc" id="classoddvibe_1_1DataSet_html_a746e7ec6423d1babb48f3b3c3660273c"><div class="ttname"><a href="classoddvibe_1_1DataSet.html#a746e7ec6423d1babb48f3b3c3660273c">oddvibe::DataSet::nrows</a></div><div class="ttdeci">size_t nrows() const </div><div class="ttdef"><b>Definition:</b> train_data.cpp:57</div></div>
-<div class="ttc" id="classoddvibe_1_1DataSet_html_a630b236f858a8d08ee296d7323c68a88"><div class="ttname"><a href="classoddvibe_1_1DataSet.html#a630b236f858a8d08ee296d7323c68a88">oddvibe::DataSet::ncols</a></div><div class="ttdeci">size_t ncols() const </div><div class="ttdef"><b>Definition:</b> train_data.cpp:61</div></div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;            std::unordered_set&lt;float&gt;</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;            unique_x(<span class="keyword">const</span> <span class="keywordtype">size_t</span> col, <span class="keyword">const</span> SizeVec&amp; row_idx)</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;            <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;            DoubleVec <a class="code" href="classoddvibe_1_1DataSet.html#a242d1cee7e44fd9ec2d627deb21ccfcf">loss</a>(<span class="keyword">const</span> FloatVec&amp; yhat) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;        <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;            <span class="keywordtype">size_t</span> m_nrows;</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;            <span class="keywordtype">size_t</span> m_ncols;</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;            FloatVec m_xs;</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;            FloatVec m_ys;</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;            <span class="keywordtype">size_t</span> x_index(<span class="keyword">const</span> <span class="keywordtype">size_t</span> row, <span class="keyword">const</span> <span class="keywordtype">size_t</span> col) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;    };</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;}</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;<span class="preprocessor">#endif //KMBNW_TRAIN_DATA_H</span></div>
+<div class="ttc" id="classoddvibe_1_1DataSet_html_a3503d565cab5bc1c5aacf4511eda8888"><div class="ttname"><a href="classoddvibe_1_1DataSet.html#a3503d565cab5bc1c5aacf4511eda8888">oddvibe::DataSet::y_at</a></div><div class="ttdeci">float y_at(const size_t row) const </div><div class="ttdef"><b>Definition:</b> train_data.cpp:33</div></div>
+<div class="ttc" id="classoddvibe_1_1DataSet_html_a746e7ec6423d1babb48f3b3c3660273c"><div class="ttname"><a href="classoddvibe_1_1DataSet.html#a746e7ec6423d1babb48f3b3c3660273c">oddvibe::DataSet::nrows</a></div><div class="ttdeci">size_t nrows() const </div><div class="ttdef"><b>Definition:</b> train_data.cpp:54</div></div>
+<div class="ttc" id="classoddvibe_1_1DataSet_html_a630b236f858a8d08ee296d7323c68a88"><div class="ttname"><a href="classoddvibe_1_1DataSet.html#a630b236f858a8d08ee296d7323c68a88">oddvibe::DataSet::ncols</a></div><div class="ttdeci">size_t ncols() const </div><div class="ttdef"><b>Definition:</b> train_data.cpp:58</div></div>
+<div class="ttc" id="classoddvibe_1_1DataSet_html_a46830c0f678e8ef8f40c2a13fa0dcdbc"><div class="ttname"><a href="classoddvibe_1_1DataSet.html#a46830c0f678e8ef8f40c2a13fa0dcdbc">oddvibe::DataSet::DataSet</a></div><div class="ttdeci">DataSet(const size_t ncols, const FloatVec &amp;xs, const FloatVec &amp;ys)</div><div class="ttdef"><b>Definition:</b> train_data.cpp:25</div></div>
 <div class="ttc" id="classoddvibe_1_1DataSet_html_aa5ba5413c631b94f8f41561b05d9e25d"><div class="ttname"><a href="classoddvibe_1_1DataSet.html#aa5ba5413c631b94f8f41561b05d9e25d">oddvibe::DataSet::operator=</a></div><div class="ttdeci">DataSet &amp; operator=(const DataSet &amp;other)=delete</div></div>
-<div class="ttc" id="classoddvibe_1_1DataSet_html_a038e9b3ac99bdd5c5fe82ac74da4a8f7"><div class="ttname"><a href="classoddvibe_1_1DataSet.html#a038e9b3ac99bdd5c5fe82ac74da4a8f7">oddvibe::DataSet::loss</a></div><div class="ttdeci">std::vector&lt; double &gt; loss(const std::vector&lt; float &gt; &amp;yhat) const </div><div class="ttdef"><b>Definition:</b> train_data.cpp:120</div></div>
-<div class="ttc" id="classoddvibe_1_1DataSet_html_a00140670a1d890241d9cecf5b4a77baa"><div class="ttname"><a href="classoddvibe_1_1DataSet.html#a00140670a1d890241d9cecf5b4a77baa">oddvibe::DataSet::x_at</a></div><div class="ttdeci">float x_at(const size_t row, const size_t col) const </div><div class="ttdef"><b>Definition:</b> train_data.cpp:45</div></div>
+<div class="ttc" id="classoddvibe_1_1DataSet_html_a00140670a1d890241d9cecf5b4a77baa"><div class="ttname"><a href="classoddvibe_1_1DataSet.html#a00140670a1d890241d9cecf5b4a77baa">oddvibe::DataSet::x_at</a></div><div class="ttdeci">float x_at(const size_t row, const size_t col) const </div><div class="ttdef"><b>Definition:</b> train_data.cpp:42</div></div>
 <div class="ttc" id="namespaceoddvibe_html"><div class="ttname"><a href="namespaceoddvibe.html">oddvibe</a></div><div class="ttdef"><b>Definition:</b> algorithm_x.cpp:20</div></div>
-<div class="ttc" id="classoddvibe_1_1DataSet_html_ac217df4721036e18ad96a0dd76bb56ac"><div class="ttname"><a href="classoddvibe_1_1DataSet.html#ac217df4721036e18ad96a0dd76bb56ac">oddvibe::DataSet::DataSet</a></div><div class="ttdeci">DataSet(const size_t ncols, const std::vector&lt; float &gt; &amp;xs, const std::vector&lt; float &gt; &amp;ys)</div><div class="ttdef"><b>Definition:</b> train_data.cpp:25</div></div>
-<div class="ttc" id="classoddvibe_1_1DataSet_html"><div class="ttname"><a href="classoddvibe_1_1DataSet.html">oddvibe::DataSet</a></div><div class="ttdef"><b>Definition:</b> train_data.h:28</div></div>
+<div class="ttc" id="classoddvibe_1_1DataSet_html_a242d1cee7e44fd9ec2d627deb21ccfcf"><div class="ttname"><a href="classoddvibe_1_1DataSet.html#a242d1cee7e44fd9ec2d627deb21ccfcf">oddvibe::DataSet::loss</a></div><div class="ttdeci">DoubleVec loss(const FloatVec &amp;yhat) const </div><div class="ttdef"><b>Definition:</b> train_data.cpp:114</div></div>
+<div class="ttc" id="classoddvibe_1_1DataSet_html"><div class="ttname"><a href="classoddvibe_1_1DataSet.html">oddvibe::DataSet</a></div><div class="ttdef"><b>Definition:</b> train_data.h:29</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sun Jun 11 2017 23:33:23 for oddvibe by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Jun 13 2017 23:52:39 for oddvibe by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.8
 </small></address>

@@ -102,13 +102,15 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 Collaboration diagram for oddvibe::RTree::Fitter:</div>
 <div class="dyncontent">
 <div class="center"><img src="classoddvibe_1_1RTree_1_1Fitter__coll__graph.png" border="0" usemap="#oddvibe_1_1RTree_1_1Fitter_coll__map" alt="Collaboration graph"/></div>
+<map name="oddvibe_1_1RTree_1_1Fitter_coll__map" id="oddvibe_1_1RTree_1_1Fitter_coll__map">
+<area shape="rect" id="node2" href="classoddvibe_1_1SplitData.html" title="oddvibe::SplitData" alt="" coords="5,5,135,32"/></map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a12b89b8a607c2e2f51c31779d5620802"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a12b89b8a607c2e2f51c31779d5620802"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Fitter</b> (const std::vector&lt; size_t &gt; &amp;active_idx)</td></tr>
-<tr class="separator:a12b89b8a607c2e2f51c31779d5620802"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9058e8a7abd4129e4825a1f7d3c4d6b8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9058e8a7abd4129e4825a1f7d3c4d6b8"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>Fitter</b> (const SizeVec &amp;active_idx)</td></tr>
+<tr class="separator:a9058e8a7abd4129e4825a1f7d3c4d6b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af5e08ea41155f5b6c7b6404a52d8a4c6"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classoddvibe_1_1RTree_1_1Fitter.html#af5e08ea41155f5b6c7b6404a52d8a4c6">Fitter</a> (const <a class="el" href="classoddvibe_1_1RTree_1_1Fitter.html">Fitter</a> &amp;other)=delete</td></tr>
 <tr class="separator:af5e08ea41155f5b6c7b6404a52d8a4c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1d2098cc3c54c664f822579964fd3dfe"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classoddvibe_1_1RTree_1_1Fitter.html">Fitter</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classoddvibe_1_1RTree_1_1Fitter.html#a1d2098cc3c54c664f822579964fd3dfe">operator=</a> (const <a class="el" href="classoddvibe_1_1RTree_1_1Fitter.html">Fitter</a> &amp;other)=delete</td></tr>
@@ -125,15 +127,15 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>fit</b> (const <a cla
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
-<tr class="memitem:a0d18796fcc284457369905f901ea734a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0d18796fcc284457369905f901ea734a"></a>
-double&#160;</td><td class="memItemRight" valign="bottom"><b>calc_total_err</b> (const <a class="el" href="classoddvibe_1_1DataSet.html">DataSet</a> &amp;data, const size_t split_col, const float split_val, const float yhat_l, const float yhat_r) const </td></tr>
-<tr class="separator:a0d18796fcc284457369905f901ea734a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0a1a3ab7bc689453b57d8604e2c707bf"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0a1a3ab7bc689453b57d8604e2c707bf"></a>
-std::pair&lt; float, float &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>fit_children</b> (const <a class="el" href="classoddvibe_1_1DataSet.html">DataSet</a> &amp;data, const size_t split_col, const float split_val) const </td></tr>
-<tr class="separator:a0a1a3ab7bc689453b57d8604e2c707bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad073231ba932133c2841e65d0e71161d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad073231ba932133c2841e65d0e71161d"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>fill_row_idx</b> (const <a class="el" href="classoddvibe_1_1DataSet.html">DataSet</a> &amp;data, const size_t split_col, const float split_val, std::vector&lt; size_t &gt; &amp;left_rows, std::vector&lt; size_t &gt; &amp;right_rows) const </td></tr>
-<tr class="separator:ad073231ba932133c2841e65d0e71161d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7bbeb0e609cc9b8525441565a90fd51e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7bbeb0e609cc9b8525441565a90fd51e"></a>
+double&#160;</td><td class="memItemRight" valign="bottom"><b>calc_total_err</b> (const <a class="el" href="classoddvibe_1_1DataSet.html">DataSet</a> &amp;data, const <a class="el" href="classoddvibe_1_1SplitData.html">SplitData</a> &amp;split, const float yhat_l, const float yhat_r) const </td></tr>
+<tr class="separator:a7bbeb0e609cc9b8525441565a90fd51e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acb4848218b5540b2f791573d8ca1d38f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="acb4848218b5540b2f791573d8ca1d38f"></a>
+std::pair&lt; float, float &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>fit_children</b> (const <a class="el" href="classoddvibe_1_1DataSet.html">DataSet</a> &amp;data, const <a class="el" href="classoddvibe_1_1SplitData.html">SplitData</a> &amp;) const </td></tr>
+<tr class="separator:acb4848218b5540b2f791573d8ca1d38f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5832888d8c5743e7a73b28cbf70dbd76"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5832888d8c5743e7a73b28cbf70dbd76"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>fill_row_idx</b> (const <a class="el" href="classoddvibe_1_1DataSet.html">DataSet</a> &amp;data, const <a class="el" href="classoddvibe_1_1SplitData.html">SplitData</a> &amp;split, SizeVec &amp;left_rows, SizeVec &amp;right_rows) const </td></tr>
+<tr class="separator:a5832888d8c5743e7a73b28cbf70dbd76"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
@@ -143,15 +145,12 @@ float&#160;</td><td class="memItemRight" valign="bottom"><b>m_yhat</b> = std::nu
 <tr class="memitem:a365184c615089f8d8f48b7e0d8cb2394"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a365184c615089f8d8f48b7e0d8cb2394"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>m_is_leaf</b> = true</td></tr>
 <tr class="separator:a365184c615089f8d8f48b7e0d8cb2394"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8cb0b8a7641a2208db32ed460dd6c089"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8cb0b8a7641a2208db32ed460dd6c089"></a>
-size_t&#160;</td><td class="memItemRight" valign="bottom"><b>m_split_col</b> = 0</td></tr>
-<tr class="separator:a8cb0b8a7641a2208db32ed460dd6c089"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aebe0d25243d7d12308444789d40ea569"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aebe0d25243d7d12308444789d40ea569"></a>
-float&#160;</td><td class="memItemRight" valign="bottom"><b>m_split_val</b> = std::numeric_limits&lt;double&gt;::quiet_NaN()</td></tr>
-<tr class="separator:aebe0d25243d7d12308444789d40ea569"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac94a1ebd4b7867ffcd11ed2c68d93a4b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac94a1ebd4b7867ffcd11ed2c68d93a4b"></a>
-std::vector&lt; size_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>m_active_idx</b></td></tr>
-<tr class="separator:ac94a1ebd4b7867ffcd11ed2c68d93a4b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3a94725560331b0afb11c666e015beda"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3a94725560331b0afb11c666e015beda"></a>
+<a class="el" href="classoddvibe_1_1SplitData.html">SplitData</a>&#160;</td><td class="memItemRight" valign="bottom"><b>m_split</b></td></tr>
+<tr class="separator:a3a94725560331b0afb11c666e015beda"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a52406f5e9a7b811c694c21021030e853"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a52406f5e9a7b811c694c21021030e853"></a>
+SizeVec&#160;</td><td class="memItemRight" valign="bottom"><b>m_active_idx</b></td></tr>
+<tr class="separator:a52406f5e9a7b811c694c21021030e853"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae5db202334b304d2721c51a504bed4a1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae5db202334b304d2721c51a504bed4a1"></a>
 std::unique_ptr&lt; <a class="el" href="classoddvibe_1_1RTree_1_1Fitter.html">Fitter</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>m_left</b></td></tr>
 <tr class="separator:ae5db202334b304d2721c51a504bed4a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -226,7 +225,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>RTree</b></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sun Jun 11 2017 23:33:23 for oddvibe by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Jun 13 2017 23:52:39 for oddvibe by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.8
 </small></address>

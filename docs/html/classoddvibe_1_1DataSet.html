@@ -105,8 +105,8 @@ Collaboration diagram for oddvibe::DataSet:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ac217df4721036e18ad96a0dd76bb56ac"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classoddvibe_1_1DataSet.html#ac217df4721036e18ad96a0dd76bb56ac">DataSet</a> (const size_t <a class="el" href="classoddvibe_1_1DataSet.html#a630b236f858a8d08ee296d7323c68a88">ncols</a>, const std::vector&lt; float &gt; &amp;xs, const std::vector&lt; float &gt; &amp;ys)</td></tr>
-<tr class="separator:ac217df4721036e18ad96a0dd76bb56ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a46830c0f678e8ef8f40c2a13fa0dcdbc"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classoddvibe_1_1DataSet.html#a46830c0f678e8ef8f40c2a13fa0dcdbc">DataSet</a> (const size_t <a class="el" href="classoddvibe_1_1DataSet.html#a630b236f858a8d08ee296d7323c68a88">ncols</a>, const FloatVec &amp;xs, const FloatVec &amp;ys)</td></tr>
+<tr class="separator:a46830c0f678e8ef8f40c2a13fa0dcdbc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aac2e64aca1b8af851e19926c79143cfd"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classoddvibe_1_1DataSet.html#aac2e64aca1b8af851e19926c79143cfd">DataSet</a> (const <a class="el" href="classoddvibe_1_1DataSet.html">DataSet</a> &amp;other)=delete</td></tr>
 <tr class="separator:aac2e64aca1b8af851e19926c79143cfd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa5ba5413c631b94f8f41561b05d9e25d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classoddvibe_1_1DataSet.html">DataSet</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classoddvibe_1_1DataSet.html#aa5ba5413c631b94f8f41561b05d9e25d">operator=</a> (const <a class="el" href="classoddvibe_1_1DataSet.html">DataSet</a> &amp;other)=delete</td></tr>
@@ -119,17 +119,17 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a746e7ec6423d1babb48f3b3c3660273c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a630b236f858a8d08ee296d7323c68a88"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classoddvibe_1_1DataSet.html#a630b236f858a8d08ee296d7323c68a88">ncols</a> () const </td></tr>
 <tr class="separator:a630b236f858a8d08ee296d7323c68a88"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aae1abbe6cb8c3fcf651c75e469574ea6"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aae1abbe6cb8c3fcf651c75e469574ea6"></a>
-double&#160;</td><td class="memItemRight" valign="bottom"><b>mean_y</b> (const std::vector&lt; size_t &gt; &amp;row_idx) const </td></tr>
-<tr class="separator:aae1abbe6cb8c3fcf651c75e469574ea6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acfeaaa7011891fe11fa465f0646af956"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="acfeaaa7011891fe11fa465f0646af956"></a>
-double&#160;</td><td class="memItemRight" valign="bottom"><b>variance_y</b> (const std::vector&lt; size_t &gt; &amp;row_idx) const </td></tr>
-<tr class="separator:acfeaaa7011891fe11fa465f0646af956"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a347506587942b8202993ae32ec533136"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a347506587942b8202993ae32ec533136"></a>
-std::unordered_set&lt; float &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>unique_x</b> (const size_t col, const std::vector&lt; size_t &gt; &amp;row_idx) const </td></tr>
-<tr class="separator:a347506587942b8202993ae32ec533136"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a038e9b3ac99bdd5c5fe82ac74da4a8f7"><td class="memItemLeft" align="right" valign="top">std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classoddvibe_1_1DataSet.html#a038e9b3ac99bdd5c5fe82ac74da4a8f7">loss</a> (const std::vector&lt; float &gt; &amp;yhat) const </td></tr>
-<tr class="separator:a038e9b3ac99bdd5c5fe82ac74da4a8f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7c1073ada688d7a3ec05be41642acccf"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7c1073ada688d7a3ec05be41642acccf"></a>
+double&#160;</td><td class="memItemRight" valign="bottom"><b>mean_y</b> (const SizeVec &amp;row_idx) const </td></tr>
+<tr class="separator:a7c1073ada688d7a3ec05be41642acccf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad513edb07ac6c400ea6e9896d14f1099"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad513edb07ac6c400ea6e9896d14f1099"></a>
+double&#160;</td><td class="memItemRight" valign="bottom"><b>variance_y</b> (const SizeVec &amp;row_idx) const </td></tr>
+<tr class="separator:ad513edb07ac6c400ea6e9896d14f1099"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3da364f413891f300592a5c8d829d616"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3da364f413891f300592a5c8d829d616"></a>
+std::unordered_set&lt; float &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>unique_x</b> (const size_t col, const SizeVec &amp;row_idx) const </td></tr>
+<tr class="separator:a3da364f413891f300592a5c8d829d616"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a242d1cee7e44fd9ec2d627deb21ccfcf"><td class="memItemLeft" align="right" valign="top">DoubleVec&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classoddvibe_1_1DataSet.html#a242d1cee7e44fd9ec2d627deb21ccfcf">loss</a> (const FloatVec &amp;yhat) const </td></tr>
+<tr class="separator:a242d1cee7e44fd9ec2d627deb21ccfcf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
@@ -145,17 +145,17 @@ size_t&#160;</td><td class="memItemRight" valign="bottom"><b>m_nrows</b></td></t
 <tr class="memitem:a6f630d6661bbd05fe26339180dcd397f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6f630d6661bbd05fe26339180dcd397f"></a>
 size_t&#160;</td><td class="memItemRight" valign="bottom"><b>m_ncols</b></td></tr>
 <tr class="separator:a6f630d6661bbd05fe26339180dcd397f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab64b8e8ccaff3386526220fd6a0ab9ad"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab64b8e8ccaff3386526220fd6a0ab9ad"></a>
-std::vector&lt; float &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>m_xs</b></td></tr>
-<tr class="separator:ab64b8e8ccaff3386526220fd6a0ab9ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a054bafa14cb0dbe0027097a4a5dad4fe"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a054bafa14cb0dbe0027097a4a5dad4fe"></a>
-std::vector&lt; float &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>m_ys</b></td></tr>
-<tr class="separator:a054bafa14cb0dbe0027097a4a5dad4fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a95b4457255401c016133027682d4e7fb"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a95b4457255401c016133027682d4e7fb"></a>
+FloatVec&#160;</td><td class="memItemRight" valign="bottom"><b>m_xs</b></td></tr>
+<tr class="separator:a95b4457255401c016133027682d4e7fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad3c959a5232a295df2cc5aab4a9e6d85"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad3c959a5232a295df2cc5aab4a9e6d85"></a>
+FloatVec&#160;</td><td class="memItemRight" valign="bottom"><b>m_ys</b></td></tr>
+<tr class="separator:ad3c959a5232a295df2cc5aab4a9e6d85"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Abstraction over training data (features and response). Immutable. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="ac217df4721036e18ad96a0dd76bb56ac"></a>
+<a class="anchor" id="a46830c0f678e8ef8f40c2a13fa0dcdbc"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -168,13 +168,13 @@ std::vector&lt; float &gt;&#160;</td><td class="memItemRight" valign="bottom"><b
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::vector&lt; float &gt; &amp;&#160;</td>
+          <td class="paramtype">const FloatVec &amp;&#160;</td>
           <td class="paramname"><em>xs</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::vector&lt; float &gt; &amp;&#160;</td>
+          <td class="paramtype">const FloatVec &amp;&#160;</td>
           <td class="paramname"><em>ys</em>&#160;</td>
         </tr>
         <tr>
@@ -221,14 +221,14 @@ std::vector&lt; float &gt;&#160;</td><td class="memItemRight" valign="bottom"><b
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="a038e9b3ac99bdd5c5fe82ac74da4a8f7"></a>
+<a class="anchor" id="a242d1cee7e44fd9ec2d627deb21ccfcf"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">std::vector&lt; double &gt; oddvibe::DataSet::loss </td>
+          <td class="memname">DoubleVec oddvibe::DataSet::loss </td>
           <td>(</td>
-          <td class="paramtype">const std::vector&lt; float &gt; &amp;&#160;</td>
+          <td class="paramtype">const FloatVec &amp;&#160;</td>
           <td class="paramname"><em>yhat</em></td><td>)</td>
           <td> const</td>
         </tr>
@@ -346,7 +346,7 @@ std::vector&lt; float &gt;&#160;</td><td class="memItemRight" valign="bottom"><b
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sun Jun 11 2017 23:33:23 for oddvibe by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Jun 13 2017 23:52:39 for oddvibe by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.8
 </small></address>
