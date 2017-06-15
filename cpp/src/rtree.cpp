@@ -103,7 +103,7 @@ namespace oddvibe {
 
                 SizeVec left_filter;
                 SizeVec right_filter;
-                fill_row_idx(data, split, filter, left_filter, right_filter);
+                split.fill_row_idx(data, filter, left_filter, right_filter);
 
                 left = std::make_unique<RTree>();
                 right = std::make_unique<RTree>();
@@ -130,27 +130,6 @@ namespace oddvibe {
         m_is_leaf = is_leaf;
     }
 
-    void
-    RTree::fill_row_idx(
-            const DataSet& data,
-            const SplitData& split,
-            const SizeVec& filter,
-            SizeVec& left_rows,
-            SizeVec& right_rows)
-    const {
-        const auto split_col = split.split_col();
-        const auto split_val = split.split_val();
-
-        for (const auto & row : filter) {
-            const auto x = data.x_at(row, split_col);
-            if (x <= split_val) {
-                left_rows.push_back(row);
-            } else {
-                right_rows.push_back(row);
-            }
-        }
-    }
-
     double
     RTree::calc_total_err(
             const DataSet& data,
@@ -171,21 +150,6 @@ namespace oddvibe {
         return err;
     }
 
-    std::pair<float, float>
-    RTree::fit_children(
-            const DataSet& data,
-            const SplitData& split,
-            const SizeVec& filter)
-    const {
-        SizeVec left_idx;
-        SizeVec right_idx;
-        fill_row_idx(data, split, filter, left_idx, right_idx);
-        const float yhat_l = data.mean_y(left_idx);
-        const float yhat_r = data.mean_y(right_idx);
-
-        return std::make_pair(yhat_l, yhat_r);
-    }
-
     SplitData
     RTree::best_split(const DataSet& data, const SizeVec& filter)
     const {
@@ -204,7 +168,7 @@ namespace oddvibe {
             for (const auto & split_val : uniques) {
                 // calculate yhat for left and right side of split_val
                 SplitData split(split_val, split_col);
-                const auto yhat = fit_children(data, split, filter);
+                const auto yhat = split.fit_children(data, filter);
 
                 if (std::isnan(yhat.first) || std::isnan(yhat.second)) {
                     continue;

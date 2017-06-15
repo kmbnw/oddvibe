@@ -71,20 +71,6 @@ namespace oddvibe {
                 const SizeVec& filter,
                 const std::pair<float, float>& yhat)
             const;
-
-            std::pair<float, float> fit_children(
-                const DataSet& data,
-                const SplitData&,
-                const SizeVec& filter)
-            const;
-
-            void fill_row_idx(
-                const DataSet& data,
-                const SplitData& split,
-                const SizeVec& filter,
-                SizeVec& left_rows,
-                SizeVec& right_rows)
-            const;
     };
 }
 #endif //KMBNW_RTREE_H
