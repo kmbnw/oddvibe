@@ -23,10 +23,10 @@
 
 namespace oddvibe {
 
-    RTree::RTree(const Fitter& fitter) :
-        m_yhat(fitter.m_yhat),
-        m_is_leaf(fitter.m_is_leaf),
-        m_split(fitter.m_split) {
+    RTree::RTree(const float yhat, const bool is_leaf, const SplitData& split) :
+        m_yhat(yhat),
+        m_is_leaf(is_leaf),
+        m_split(split) {
     }
 
     void RTree::validate() {
@@ -156,7 +156,7 @@ namespace oddvibe {
         std::stack<RTree::Fitter*> fit_stk;
         fit_stk.push(this);
 
-        RTree root(*this);
+        RTree root(this->m_yhat, this->m_is_leaf, this->m_split);
         std::stack<RTree*> tree_stk;
         tree_stk.push(&root);
 
@@ -172,8 +172,16 @@ namespace oddvibe {
             if (!(fit->m_is_leaf)) {
                 // create the basic data parts of the child nodes but not
                 // their children
-                tree->m_left = std::make_unique<RTree>(*(fit->m_left));
-                tree->m_right = std::make_unique<RTree>(*(fit->m_right));
+                const auto left = fit->m_left.get();
+                const auto right = fit->m_right.get();
+                tree->m_left = std::make_unique<RTree>(
+                    left->m_yhat,
+                    left->m_is_leaf,
+                    left->m_split);
+                tree->m_right = std::make_unique<RTree>(
+                    right->m_yhat,
+                    right->m_is_leaf,
+                    right->m_split);
 
                 fit_stk.push(fit->m_left.get());
                 fit_stk.push(fit->m_right.get());

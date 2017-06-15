@@ -32,7 +32,7 @@ namespace oddvibe {
     class RTree {
         public:
             class Fitter;
-            RTree(const Fitter& fitter);
+            RTree(const float yhat, const bool is_leaf, const SplitData& split);
 
             FloatVec predict(const DataSet& data) const;
 
@@ -65,7 +65,7 @@ namespace oddvibe {
      */
     class RTree::Fitter {
         friend class RTree;
-
+        
         public:
             Fitter(const SizeVec& active_idx);
 
