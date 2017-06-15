@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['fitter',['Fitter',['../classoddvibe_1_1RTree_1_1Fitter.html',1,'oddvibe::RTree']]]
+  ['mathxtest',['MathXTest',['../classoddvibe_1_1MathXTest.html',1,'oddvibe']]]
 ];

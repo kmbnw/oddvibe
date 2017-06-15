@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['fitter',['Fitter',['../classoddvibe_1_1RTree_1_1Fitter.html#af5e08ea41155f5b6c7b6404a52d8a4c6',1,'oddvibe::RTree::Fitter']]]
+  ['loss',['loss',['../classoddvibe_1_1DataSet.html#a242d1cee7e44fd9ec2d627deb21ccfcf',1,'oddvibe::DataSet']]]
 ];

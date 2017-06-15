@@ -87,7 +87,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- top -->
 <div class="header">
   <div class="summary">
-<a href="#nested-classes">Classes</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="#pri-attribs">Private Attributes</a> &#124;
@@ -106,31 +105,38 @@ Collaboration diagram for oddvibe::RTree:</div>
 <area shape="rect" id="node2" href="classoddvibe_1_1SplitData.html" title="oddvibe::SplitData" alt="" coords="23,5,153,32"/></map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
-Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classoddvibe_1_1RTree_1_1Fitter.html">Fitter</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a2765c7d65607e473a6819fc4e79d7207"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2765c7d65607e473a6819fc4e79d7207"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>RTree</b> (const <a class="el" href="classoddvibe_1_1RTree_1_1Fitter.html">Fitter</a> &amp;fitter)</td></tr>
-<tr class="separator:a2765c7d65607e473a6819fc4e79d7207"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a543e28484b3e415c170e73acafd36764"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a543e28484b3e415c170e73acafd36764"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>RTree</b> (<a class="el" href="classoddvibe_1_1RTree.html">RTree</a> &amp;&amp;other)=default</td></tr>
+<tr class="separator:a543e28484b3e415c170e73acafd36764"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa918fa5aaeac4ee9ac59224f5a2ac3d3"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa918fa5aaeac4ee9ac59224f5a2ac3d3"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>RTree</b> (const <a class="el" href="classoddvibe_1_1RTree.html">RTree</a> &amp;other)=default</td></tr>
+<tr class="separator:aa918fa5aaeac4ee9ac59224f5a2ac3d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acf6d773850f2e4a6909c6030004f854b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="acf6d773850f2e4a6909c6030004f854b"></a>
+<a class="el" href="classoddvibe_1_1RTree.html">RTree</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (const <a class="el" href="classoddvibe_1_1RTree.html">RTree</a> &amp;other)=default</td></tr>
+<tr class="separator:acf6d773850f2e4a6909c6030004f854b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a09e015ea5dc4d87ef3a882314db91a7b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a09e015ea5dc4d87ef3a882314db91a7b"></a>
 FloatVec&#160;</td><td class="memItemRight" valign="bottom"><b>predict</b> (const <a class="el" href="classoddvibe_1_1DataSet.html">DataSet</a> &amp;data) const </td></tr>
 <tr class="separator:a09e015ea5dc4d87ef3a882314db91a7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4e40b7181b311dd81d790ac0a4d56536"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4e40b7181b311dd81d790ac0a4d56536"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>fit</b> (const <a class="el" href="classoddvibe_1_1DataSet.html">DataSet</a> &amp;data, const SizeVec &amp;filter)</td></tr>
+<tr class="separator:a4e40b7181b311dd81d790ac0a4d56536"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acc045488163a1857ea8af7656b0a0334"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="acc045488163a1857ea8af7656b0a0334"></a>
+<a class="el" href="classoddvibe_1_1SplitData.html">SplitData</a>&#160;</td><td class="memItemRight" valign="bottom"><b>best_split</b> (const <a class="el" href="classoddvibe_1_1DataSet.html">DataSet</a> &amp;data, const SizeVec &amp;filter) const </td></tr>
+<tr class="separator:acc045488163a1857ea8af7656b0a0334"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
-<tr class="memitem:a346b4bcf5a58b17f8e51ca44a6964545"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a346b4bcf5a58b17f8e51ca44a6964545"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>validate</b> ()</td></tr>
-<tr class="separator:a346b4bcf5a58b17f8e51ca44a6964545"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acff0faea3bed254c5c98bcf2ef4f3c49"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="acff0faea3bed254c5c98bcf2ef4f3c49"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>predict</b> (const <a class="el" href="classoddvibe_1_1DataSet.html">DataSet</a> &amp;data, const BoolVec &amp;active, FloatVec &amp;predicted) const </td></tr>
-<tr class="separator:acff0faea3bed254c5c98bcf2ef4f3c49"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad21e8fe1672928d3e0576010b43adf51"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad21e8fe1672928d3e0576010b43adf51"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>fill_active</b> (const <a class="el" href="classoddvibe_1_1DataSet.html">DataSet</a> &amp;data, const BoolVec &amp;init_active, BoolVec &amp;left_active, BoolVec &amp;right_active) const </td></tr>
-<tr class="separator:ad21e8fe1672928d3e0576010b43adf51"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ace2fb55fbbaa473f89e0915e1a131521"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ace2fb55fbbaa473f89e0915e1a131521"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>predict</b> (const <a class="el" href="classoddvibe_1_1DataSet.html">DataSet</a> &amp;data, const BoolVec &amp;filter, FloatVec &amp;yhat) const </td></tr>
+<tr class="separator:ace2fb55fbbaa473f89e0915e1a131521"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a47680deae7f634186a07d49d8c421810"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a47680deae7f634186a07d49d8c421810"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>fill_filter</b> (const <a class="el" href="classoddvibe_1_1DataSet.html">DataSet</a> &amp;data, const BoolVec &amp;init_filter, BoolVec &amp;left_filter, BoolVec &amp;right_filter) const </td></tr>
+<tr class="separator:a47680deae7f634186a07d49d8c421810"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aee68fdc2d33d434ae00eaefffc4fe08a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aee68fdc2d33d434ae00eaefffc4fe08a"></a>
+double&#160;</td><td class="memItemRight" valign="bottom"><b>calc_total_err</b> (const <a class="el" href="classoddvibe_1_1DataSet.html">DataSet</a> &amp;data, const <a class="el" href="classoddvibe_1_1SplitData.html">SplitData</a> &amp;split, const SizeVec &amp;filter, const std::pair&lt; float, float &gt; &amp;yhat) const </td></tr>
+<tr class="separator:aee68fdc2d33d434ae00eaefffc4fe08a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
@@ -159,7 +165,7 @@ std::unique_ptr&lt; <a class="el" href="classoddvibe_1_1RTree.html">RTree</a> &g
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Jun 13 2017 23:52:39 for oddvibe by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Jun 15 2017 00:17:10 for oddvibe by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.8
 </small></address>
