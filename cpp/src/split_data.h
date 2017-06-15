@@ -18,11 +18,12 @@
 
 #include <cstddef>
 #include <limits>
+#include "defs_x.h"
 
 namespace oddvibe {
     class SplitData {
         public:
-            SplitData();
+            SplitData() = default;
 
             SplitData(const float split_val, const size_t split_col);
 

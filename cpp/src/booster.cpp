@@ -48,9 +48,8 @@ namespace oddvibe {
         const auto active = sampler.gen_samples(nrows);
         update_counts(active, counts);
 
-        RTree::Fitter fitter(active);
-        fitter.fit(data);
-        const auto tree = fitter.build();
+        RTree tree;
+        tree.fit(data, active);
         const auto yhats = tree.predict(data);
         auto loss = data.loss(yhats);
         const double max_loss = *std::max_element(loss.begin(), loss.end());

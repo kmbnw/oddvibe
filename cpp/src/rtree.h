@@ -31,10 +31,18 @@ namespace oddvibe {
      */
     class RTree {
         public:
-            class Fitter;
-            RTree(const float yhat, const bool is_leaf, const SplitData& split);
+            RTree() = default;
+            RTree(RTree&& other) = default;
+            RTree(const RTree& other) = default;
+            RTree& operator=(const RTree& other) = default;
+            ~RTree() = default;
 
             FloatVec predict(const DataSet& data) const;
+
+            void fit(const DataSet& data, const SizeVec& filter);
+
+            SplitData
+            best_split(const DataSet& data, const SizeVec& filter) const;
 
         private:
             float m_yhat = std::numeric_limits<float>::quiet_NaN();
@@ -44,67 +52,36 @@ namespace oddvibe {
             std::unique_ptr<RTree> m_left;
             std::unique_ptr<RTree> m_right;
 
-            void validate();
-
             void predict(
                 const DataSet& data,
-                const BoolVec& active,
-                FloatVec& predicted)
+                const BoolVec& filter,
+                FloatVec& yhat)
             const;
 
-            void fill_active(
+            void fill_filter(
                 const DataSet& data,
-                const BoolVec& init_active,
-                BoolVec& left_active,
-                BoolVec& right_active)
+                const BoolVec& init_filter,
+                BoolVec& left_filter,
+                BoolVec& right_filter)
             const;
-    };
-
-    /**
-     * Fit data for a regression decision tree
-     */
-    class RTree::Fitter {
-        friend class RTree;
-        
-        public:
-            Fitter(const SizeVec& active_idx);
-
-            /**
-             * No copy.
-             */
-            Fitter(const Fitter& other) = delete;
-            /**
-             * No copy.
-             */
-            Fitter& operator=(const Fitter& other) = delete;
-
-            SplitData best_split(const DataSet& data) const;
-
-            RTree build();
-
-            void fit(const DataSet& data);
-
-        private:
-            float m_yhat = std::numeric_limits<double>::quiet_NaN();
-            bool m_is_leaf = true;
-            SplitData m_split;
-            SizeVec m_active_idx;
-            std::unique_ptr<Fitter> m_left;
-            std::unique_ptr<Fitter> m_right;
 
             double calc_total_err(
                 const DataSet& data,
                 const SplitData& split,
-                const float yhat_l,
-                const float yhat_r)
+                const SizeVec& filter,
+                const std::pair<float, float>& yhat)
             const;
 
-            std::pair<float, float>
-            fit_children(const DataSet& data, const SplitData&) const;
+            std::pair<float, float> fit_children(
+                const DataSet& data,
+                const SplitData&,
+                const SizeVec& filter)
+            const;
 
             void fill_row_idx(
                 const DataSet& data,
                 const SplitData& split,
+                const SizeVec& filter,
                 SizeVec& left_rows,
                 SizeVec& right_rows)
             const;
