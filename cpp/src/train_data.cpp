@@ -23,10 +23,12 @@
 
 namespace oddvibe {
      DataSet::DataSet(const size_t ncols, const FloatVec& xs, const FloatVec& ys):
-            m_nrows(ys.size()), m_ncols(ncols), m_xs(xs), m_ys(ys) {
+            m_nrows(ys.size()), m_ncols(ncols) {
         if (ys.size() != xs.size() / ncols) {
             throw std::invalid_argument("xs and ys must have same number of rows");
         }
+        m_xs = xs;
+        m_ys = ys;
     }
 
     float
@@ -112,6 +114,9 @@ namespace oddvibe {
 
     DoubleVec
     DataSet::loss(const FloatVec& yhats) const {
+        if (yhats.size() != m_ys.size()) {
+            throw std::logic_error("Observed and predicted must be same size");
+        }
         DoubleVec loss(yhats.size(), 0);
         std::transform(
             yhats.begin(),
