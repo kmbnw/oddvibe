@@ -39,15 +39,15 @@ namespace oddvibe {
 
             bool is_valid() const;
 
-            std::pair<float, float>
-            fit_children(const DataSet& data, const SizeVec& filter) const;
-
             void fill_row_idx(
                 const DataSet& data,
                 const SizeVec& filter,
                 SizeVec& left_rows,
                 SizeVec& right_rows)
             const;
+
+            double
+            calc_total_err(const DataSet& data, const SizeVec& filter) const;
 
         private:
             float m_split_val = std::numeric_limits<float>::quiet_NaN();

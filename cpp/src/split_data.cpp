@@ -35,18 +35,6 @@ namespace oddvibe {
         return m_split_col;
     }
 
-    std::pair<float, float>
-    SplitData::fit_children(const DataSet& data, const SizeVec& filter) const {
-        SizeVec left_idx;
-        SizeVec right_idx;
-        fill_row_idx(data, filter, left_idx, right_idx);
-        const float yhat_l = data.mean_y(left_idx);
-        const float yhat_r = data.mean_y(right_idx);
-
-        return std::make_pair(yhat_l, yhat_r);
-    }
-
-
     void
     SplitData::fill_row_idx(
             const DataSet& data,
@@ -62,5 +50,32 @@ namespace oddvibe {
                 right_rows.push_back(row);
             }
         }
+    }
+
+    // total squared error for left and right side of split_val
+    double
+    SplitData::calc_total_err(const DataSet& data, const SizeVec& filter) const {
+        SizeVec left_idx;
+        SizeVec right_idx;
+        fill_row_idx(data, filter, left_idx, right_idx);
+
+        const float yhat_l = data.mean_y(left_idx);
+        if (std::isnan(yhat_l)) {
+            return std::numeric_limits<double>::quiet_NaN();
+        }
+
+        const float yhat_r = data.mean_y(right_idx);
+        if (std::isnan(yhat_r)) {
+            return std::numeric_limits<double>::quiet_NaN();
+        }
+
+        double err = 0;
+        for (const auto & row : filter) {
+            const auto x_j = data.x_at(row, m_split_col);
+            const auto y_j = data.y_at(row);
+            const auto yhat_j = x_j <= m_split_val ? yhat_l : yhat_r;
+            err += pow((y_j - yhat_j), 2.0);
+        }
+        return err;
     }
 }

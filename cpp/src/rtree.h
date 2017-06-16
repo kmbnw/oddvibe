@@ -64,13 +64,6 @@ namespace oddvibe {
                 BoolVec& left_filter,
                 BoolVec& right_filter)
             const;
-
-            double calc_total_err(
-                const DataSet& data,
-                const SplitData& split,
-                const SizeVec& filter,
-                const std::pair<float, float>& yhat)
-            const;
     };
 }
 #endif //KMBNW_RTREE_H

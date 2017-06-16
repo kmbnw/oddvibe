@@ -130,26 +130,6 @@ namespace oddvibe {
         m_is_leaf = is_leaf;
     }
 
-    double
-    RTree::calc_total_err(
-            const DataSet& data,
-            const SplitData& split,
-            const SizeVec& filter,
-            const std::pair<float, float>& yhat)
-    const {
-        const auto split_col = split.split_col();
-        const auto split_val = split.split_val();
-
-        double err = 0;
-        for (const auto & row : filter) {
-            const auto x_j = data.x_at(row, split_col);
-            const auto y_j = data.y_at(row);
-            const auto yhat_j = x_j <= split_val ? yhat.first : yhat.second;
-            err += pow((y_j - yhat_j), 2.0);
-        }
-        return err;
-    }
-
     SplitData
     RTree::best_split(const DataSet& data, const SizeVec& filter)
     const {
@@ -166,16 +146,10 @@ namespace oddvibe {
             }
 
             for (const auto & split_val : uniques) {
-                // calculate yhat for left and right side of split_val
                 SplitData split(split_val, split_col);
-                const auto yhat = split.fit_children(data, filter);
-
-                if (std::isnan(yhat.first) || std::isnan(yhat.second)) {
-                    continue;
-                }
 
                 // total squared error for left and right side of split_val
-                const auto err = calc_total_err(data, split, filter, yhat);
+                const auto err = split.calc_total_err(data, filter);
 
                 // TODO randomly allow the same error as best to 'win'
                 if (!init || (!std::isnan(err) && err < best_err)) {
