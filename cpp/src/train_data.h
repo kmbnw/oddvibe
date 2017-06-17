@@ -17,7 +17,7 @@
 #include <unordered_set>
 #include <utility>
 #include "math_x.h"
-#include "split_data.h"
+#include "split_point.h"
 
 #ifndef KMBNW_TRAIN_DATA_H
 #define KMBNW_TRAIN_DATA_H

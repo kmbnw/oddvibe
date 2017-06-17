@@ -21,7 +21,7 @@
 #include <memory>
 #include <cmath>
 #include <limits>
-#include "split_data.h"
+#include "split_point.h"
 #include "train_data.h"
 
 namespace oddvibe {

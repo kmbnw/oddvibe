@@ -15,7 +15,7 @@
  */
 
 #include <cmath>
-#include "split_data.h"
+#include "split_point.h"
 
 namespace oddvibe {
     SplitPoint::SplitPoint(const float split_val, const size_t split_col):
