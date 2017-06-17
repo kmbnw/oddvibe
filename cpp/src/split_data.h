@@ -18,7 +18,6 @@
 
 #include <cstddef>
 #include <limits>
-#include "train_data.h"
 #include "defs_x.h"
 
 namespace oddvibe {
@@ -38,16 +37,6 @@ namespace oddvibe {
             size_t split_col() const;
 
             bool is_valid() const;
-
-            void fill_row_idx(
-                const DataSet& data,
-                const SizeVec& filter,
-                SizeVec& left_rows,
-                SizeVec& right_rows)
-            const;
-
-            double
-            calc_total_err(const DataSet& data, const SizeVec& filter) const;
 
         private:
             float m_split_val = std::numeric_limits<float>::quiet_NaN();

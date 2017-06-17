@@ -17,6 +17,7 @@
 #include <unordered_set>
 #include <utility>
 #include "math_x.h"
+#include "split_data.h"
 
 #ifndef KMBNW_TRAIN_DATA_H
 #define KMBNW_TRAIN_DATA_H
@@ -77,6 +78,15 @@ namespace oddvibe {
              * RMSE loss
              */
             DoubleVec loss(const FloatVec& yhat) const;
+
+            std::pair<BoolVec, BoolVec>
+            partition_rows(const SplitData& split, const BoolVec& filter) const;
+
+            std::pair<SizeVec, SizeVec>
+            partition_rows(const SplitData& split, const SizeVec& filter) const;
+
+            double
+            calc_total_err(const SplitData& split, const SizeVec& filter) const;
 
         private:
             size_t m_nrows;

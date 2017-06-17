@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-#include <utility>
 #include <limits>
 #include <stdexcept>
 #include <cmath>
@@ -125,5 +124,70 @@ namespace oddvibe {
             loss.begin(),
             rmse_loss);
         return loss;
+    }
+
+    std::pair<BoolVec, BoolVec>
+    DataSet::partition_rows(const SplitData& split, const BoolVec& filter) const {
+        const auto split_col = split.split_col();
+        const auto split_val = split.split_val();
+        BoolVec left(m_nrows, false);
+        BoolVec right(m_nrows, false);
+        for (size_t row = 0; row != m_nrows; ++row) {
+            if (filter[row]) {
+                const auto x_j = m_xs[x_index(row, split_col)];
+                if (x_j <= split_val) {
+                    left[row] = true;
+                } else {
+                    right[row] = true;
+                }
+            }
+        }
+        return std::make_pair(left, right);
+    }
+
+    std::pair<SizeVec, SizeVec>
+    DataSet::partition_rows(const SplitData& split, const SizeVec& filter) const {
+        const auto split_col = split.split_col();
+        const auto split_val = split.split_val();
+        SizeVec left;
+        SizeVec right;
+
+        for (const auto & row : filter) {
+            const auto x_j = m_xs[x_index(row, split_col)];
+            if (x_j <= split_val) {
+                left.push_back(row);
+            } else {
+                right.push_back(row);
+            }
+        }
+        return std::make_pair(left, right);
+    }
+
+    // total squared error for left and right side of split_val
+    double
+    DataSet::calc_total_err(const SplitData& split, const SizeVec& filter) const {
+        const auto part = partition_rows(split, filter);
+
+        const float yhat_l = mean_y(part.first);
+        if (std::isnan(yhat_l)) {
+            return std::numeric_limits<double>::quiet_NaN();
+        }
+
+        const float yhat_r = mean_y(part.second);
+        if (std::isnan(yhat_r)) {
+            return std::numeric_limits<double>::quiet_NaN();
+        }
+
+        const auto split_col = split.split_col();
+        const auto split_val = split.split_val();
+
+        double err = 0;
+        for (const auto & row : filter) {
+            const auto x_j = m_xs[x_index(row, split_col)];
+            const auto y_j = m_ys[row];
+            const auto yhat_j = x_j <= split_val ? yhat_l : yhat_r;
+            err += pow((y_j - yhat_j), 2.0);
+        }
+        return err;
     }
 }

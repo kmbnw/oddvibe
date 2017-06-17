@@ -18,7 +18,6 @@
 #include <algorithm>
 #include <iostream>
 #include <numeric>
-#include <stack>
 #include "rtree.h"
 
 namespace oddvibe {
@@ -36,12 +35,10 @@ namespace oddvibe {
                 }
             }
         } else {
-            BoolVec left_filter(nrows, false);
-            BoolVec right_filter(nrows, false);
-            fill_filter(data, filter, left_filter, right_filter);
+            const auto part = data.partition_rows(m_split, filter);
 
-            m_left->predict(data, left_filter, yhat);
-            m_right->predict(data, right_filter, yhat);
+            m_left->predict(data, part.first, yhat);
+            m_right->predict(data, part.second, yhat);
         }
     }
 
@@ -54,29 +51,6 @@ namespace oddvibe {
         predict(data, filter, yhats);
 
         return yhats;
-    }
-
-    void
-    RTree::fill_filter(
-            const DataSet& data,
-            const BoolVec& init_filter,
-            BoolVec& left_filter,
-            BoolVec& right_filter)
-    const {
-        const auto nrows = data.nrows();
-        const auto split_col = m_split.split_col();
-        const auto split_val = m_split.split_val();
-
-        for (size_t row = 0; row != nrows; ++row) {
-            if (init_filter[row]) {
-                auto x_j = data.x_at(row, split_col);
-                if (x_j <= split_val) {
-                    left_filter[row] = true;
-                } else {
-                    right_filter[row] = true;
-                }
-            }
-        }
     }
 
     void
@@ -101,15 +75,13 @@ namespace oddvibe {
             if (split.is_valid()) {
                 is_leaf = false;
 
-                SizeVec left_filter;
-                SizeVec right_filter;
-                split.fill_row_idx(data, filter, left_filter, right_filter);
+                const auto part = data.partition_rows(split, filter);
 
                 left = std::make_unique<RTree>();
                 right = std::make_unique<RTree>();
 
-                left->fit(data, left_filter);
-                right->fit(data, right_filter);
+                left->fit(data, part.first);
+                right->fit(data, part.second);
             }
         }
 
@@ -149,7 +121,7 @@ namespace oddvibe {
                 SplitData split(split_val, split_col);
 
                 // total squared error for left and right side of split_val
-                const auto err = split.calc_total_err(data, filter);
+                const auto err = data.calc_total_err(split, filter);
 
                 // TODO randomly allow the same error as best to 'win'
                 if (!init || (!std::isnan(err) && err < best_err)) {

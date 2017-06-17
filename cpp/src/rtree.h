@@ -57,13 +57,6 @@ namespace oddvibe {
                 const BoolVec& filter,
                 FloatVec& yhat)
             const;
-
-            void fill_filter(
-                const DataSet& data,
-                const BoolVec& init_filter,
-                BoolVec& left_filter,
-                BoolVec& right_filter)
-            const;
     };
 }
 #endif //KMBNW_RTREE_H
