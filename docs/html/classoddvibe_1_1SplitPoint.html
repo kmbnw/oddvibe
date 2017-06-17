@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.8"/>
-<title>oddvibe: oddvibe::EmpiricalSampler Class Reference</title>
+<title>oddvibe: oddvibe::SplitPoint Class Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -82,50 +82,58 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><b>oddvibe</b></li><li class="navelem"><a class="el" href="classoddvibe_1_1EmpiricalSampler.html">EmpiricalSampler</a></li>  </ul>
+<li class="navelem"><b>oddvibe</b></li><li class="navelem"><a class="el" href="classoddvibe_1_1SplitPoint.html">SplitPoint</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pri-attribs">Private Attributes</a> &#124;
-<a href="classoddvibe_1_1EmpiricalSampler-members.html">List of all members</a>  </div>
+<a href="classoddvibe_1_1SplitPoint-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">oddvibe::EmpiricalSampler Class Reference</div>  </div>
+<div class="title">oddvibe::SplitPoint Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:adc45888ef9b5b89a2a8b4cfee3855ccf"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="adc45888ef9b5b89a2a8b4cfee3855ccf"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>EmpiricalSampler</b> (const size_t seed, const std::vector&lt; float &gt; &amp;pmf)</td></tr>
-<tr class="separator:adc45888ef9b5b89a2a8b4cfee3855ccf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a406a6e460a1e7b439ff5d83cd4ff0f6d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a406a6e460a1e7b439ff5d83cd4ff0f6d"></a>
-size_t&#160;</td><td class="memItemRight" valign="bottom"><b>next_sample</b> ()</td></tr>
-<tr class="separator:a406a6e460a1e7b439ff5d83cd4ff0f6d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3ed1c01c085c87a770e80b8ed4b30805"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3ed1c01c085c87a770e80b8ed4b30805"></a>
-size_t&#160;</td><td class="memItemRight" valign="bottom"><b>size</b> ()</td></tr>
-<tr class="separator:a3ed1c01c085c87a770e80b8ed4b30805"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab2ab2dcb51c38c2f079fc4ae2deb72ed"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab2ab2dcb51c38c2f079fc4ae2deb72ed"></a>
-SizeVec&#160;</td><td class="memItemRight" valign="bottom"><b>gen_samples</b> (const size_t nrows)</td></tr>
-<tr class="separator:ab2ab2dcb51c38c2f079fc4ae2deb72ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1c3f149a5d52eabc8e93fedcf7fe3a16"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1c3f149a5d52eabc8e93fedcf7fe3a16"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>SplitPoint</b> (const float split_val, const size_t split_col)</td></tr>
+<tr class="separator:a1c3f149a5d52eabc8e93fedcf7fe3a16"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a140f3a66ec68ff62df0495ee0c9dfba5"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a140f3a66ec68ff62df0495ee0c9dfba5"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>SplitPoint</b> (<a class="el" href="classoddvibe_1_1SplitPoint.html">SplitPoint</a> &amp;&amp;other)=default</td></tr>
+<tr class="separator:a140f3a66ec68ff62df0495ee0c9dfba5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaf5e88a318ce4aad2d264462613fe81b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aaf5e88a318ce4aad2d264462613fe81b"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>SplitPoint</b> (const <a class="el" href="classoddvibe_1_1SplitPoint.html">SplitPoint</a> &amp;other)=default</td></tr>
+<tr class="separator:aaf5e88a318ce4aad2d264462613fe81b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a307781d82bef22787072eed8f0c441e1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a307781d82bef22787072eed8f0c441e1"></a>
+<a class="el" href="classoddvibe_1_1SplitPoint.html">SplitPoint</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (const <a class="el" href="classoddvibe_1_1SplitPoint.html">SplitPoint</a> &amp;other)=default</td></tr>
+<tr class="separator:a307781d82bef22787072eed8f0c441e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a090910465cf8551fdfa7dd25666604e9"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a090910465cf8551fdfa7dd25666604e9"></a>
+<a class="el" href="classoddvibe_1_1SplitPoint.html">SplitPoint</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (<a class="el" href="classoddvibe_1_1SplitPoint.html">SplitPoint</a> &amp;&amp;other)=default</td></tr>
+<tr class="separator:a090910465cf8551fdfa7dd25666604e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a863d03907d44038cca7140839dc4a908"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a863d03907d44038cca7140839dc4a908"></a>
+float&#160;</td><td class="memItemRight" valign="bottom"><b>split_val</b> () const </td></tr>
+<tr class="separator:a863d03907d44038cca7140839dc4a908"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae6dbf88ede72e955a7e463d09b8c9724"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae6dbf88ede72e955a7e463d09b8c9724"></a>
+size_t&#160;</td><td class="memItemRight" valign="bottom"><b>split_col</b> () const </td></tr>
+<tr class="separator:ae6dbf88ede72e955a7e463d09b8c9724"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9a81f08b8d6bf47baff2c39c251eaee4"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9a81f08b8d6bf47baff2c39c251eaee4"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_valid</b> () const </td></tr>
+<tr class="separator:a9a81f08b8d6bf47baff2c39c251eaee4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
-<tr class="memitem:ae3d852ec5552f218f15ddc283ff836b3"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae3d852ec5552f218f15ddc283ff836b3"></a>
-size_t&#160;</td><td class="memItemRight" valign="bottom"><b>m_size</b></td></tr>
-<tr class="separator:ae3d852ec5552f218f15ddc283ff836b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae97a63d7daae102f39fb6134a19503c6"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae97a63d7daae102f39fb6134a19503c6"></a>
-std::mt19937&#160;</td><td class="memItemRight" valign="bottom"><b>m_rand_engine</b></td></tr>
-<tr class="separator:ae97a63d7daae102f39fb6134a19503c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:accd5161c8304df9541c55a34de4621fc"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="accd5161c8304df9541c55a34de4621fc"></a>
-std::discrete_distribution<br class="typebreak" />
-&lt; size_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>m_dist</b></td></tr>
-<tr class="separator:accd5161c8304df9541c55a34de4621fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3ae30d86c32b9f9fd29b7a0b9fdc77cd"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3ae30d86c32b9f9fd29b7a0b9fdc77cd"></a>
+float&#160;</td><td class="memItemRight" valign="bottom"><b>m_split_val</b> = std::numeric_limits&lt;float&gt;::quiet_NaN()</td></tr>
+<tr class="separator:a3ae30d86c32b9f9fd29b7a0b9fdc77cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a53494e3352fe86d8fcb6009b008b0320"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a53494e3352fe86d8fcb6009b008b0320"></a>
+size_t&#160;</td><td class="memItemRight" valign="bottom"><b>m_split_col</b> = 0</td></tr>
+<tr class="separator:a53494e3352fe86d8fcb6009b008b0320"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <hr/>The documentation for this class was generated from the following files:<ul>
-<li>cpp/src/<a class="el" href="ecdf__sampler_8h_source.html">ecdf_sampler.h</a></li>
-<li>cpp/src/ecdf_sampler.cpp</li>
+<li>cpp/src/<a class="el" href="split__point_8h_source.html">split_point.h</a></li>
+<li>cpp/src/split_point.cpp</li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->

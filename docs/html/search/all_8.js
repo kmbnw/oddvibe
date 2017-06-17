@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['splitdata',['SplitData',['../classoddvibe_1_1SplitData.html',1,'oddvibe']]]
+  ['splitpoint',['SplitPoint',['../classoddvibe_1_1SplitPoint.html',1,'oddvibe']]]
 ];

@@ -96,7 +96,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!--header-->
 <div class="contents">
 
-<p><code>#include &lt;<a class="el" href="train__data_8h_source.html">train_data.h</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="dataset_8h_source.html">dataset.h</a>&gt;</code></p>
 <div class="dynheader">
 Collaboration diagram for oddvibe::DataSet:</div>
 <div class="dyncontent">
@@ -130,6 +130,15 @@ std::unordered_set&lt; float &gt;&#160;</td><td class="memItemRight" valign="bot
 <tr class="separator:a3da364f413891f300592a5c8d829d616"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a242d1cee7e44fd9ec2d627deb21ccfcf"><td class="memItemLeft" align="right" valign="top">DoubleVec&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classoddvibe_1_1DataSet.html#a242d1cee7e44fd9ec2d627deb21ccfcf">loss</a> (const FloatVec &amp;yhat) const </td></tr>
 <tr class="separator:a242d1cee7e44fd9ec2d627deb21ccfcf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2072523a1c21caffc8ed3a8771b8df59"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2072523a1c21caffc8ed3a8771b8df59"></a>
+std::pair&lt; BoolVec, BoolVec &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>partition_rows</b> (const <a class="el" href="classoddvibe_1_1SplitPoint.html">SplitPoint</a> &amp;split, const BoolVec &amp;filter) const </td></tr>
+<tr class="separator:a2072523a1c21caffc8ed3a8771b8df59"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af3c9a07f1046e8819961e13ec25f4437"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af3c9a07f1046e8819961e13ec25f4437"></a>
+std::pair&lt; SizeVec, SizeVec &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>partition_rows</b> (const <a class="el" href="classoddvibe_1_1SplitPoint.html">SplitPoint</a> &amp;split, const SizeVec &amp;filter) const </td></tr>
+<tr class="separator:af3c9a07f1046e8819961e13ec25f4437"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adb8f8310f427db9dbc5a4aa59c7cac6c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="adb8f8310f427db9dbc5a4aa59c7cac6c"></a>
+double&#160;</td><td class="memItemRight" valign="bottom"><b>calc_total_err</b> (const <a class="el" href="classoddvibe_1_1SplitPoint.html">SplitPoint</a> &amp;split, const SizeVec &amp;filter) const </td></tr>
+<tr class="separator:adb8f8310f427db9dbc5a4aa59c7cac6c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
@@ -340,13 +349,13 @@ FloatVec&#160;</td><td class="memItemRight" valign="bottom"><b>m_ys</b></td></tr
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
-<li>cpp/src/<a class="el" href="train__data_8h_source.html">train_data.h</a></li>
-<li>cpp/src/train_data.cpp</li>
+<li>cpp/src/<a class="el" href="dataset_8h_source.html">dataset.h</a></li>
+<li>cpp/src/dataset.cpp</li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Jun 15 2017 00:17:10 for oddvibe by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Jun 17 2017 00:09:00 for oddvibe by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.8
 </small></address>
