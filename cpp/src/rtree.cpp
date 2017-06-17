@@ -126,7 +126,7 @@ namespace oddvibe {
                 // TODO randomly allow the same error as best to 'win'
                 if (!init || (!std::isnan(err) && err < best_err)) {
                     init = true;
-                    best = split;
+                    best = std::move(split);
                     best_err = err;
                 }
             }

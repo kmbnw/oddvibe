@@ -30,6 +30,7 @@ namespace oddvibe {
             SplitPoint(SplitPoint&& other) = default;
             SplitPoint(const SplitPoint& other) = default;
             SplitPoint& operator=(const SplitPoint& other) = default;
+            SplitPoint& operator=(SplitPoint&& other) = default;
             ~SplitPoint() = default;
 
             float split_val() const;

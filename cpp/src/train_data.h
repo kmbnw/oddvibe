@@ -47,6 +47,8 @@ namespace oddvibe {
              */
             DataSet& operator=(const DataSet& other) = delete;
 
+            ~DataSet() = default;
+
             /**
              * Get the Y-value (response) at the given row.
              */
