@@ -22,7 +22,7 @@
 #include <cmath>
 #include <limits>
 #include "split_point.h"
-#include "train_data.h"
+#include "dataset.h"
 
 namespace oddvibe {
 

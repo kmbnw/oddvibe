@@ -16,7 +16,7 @@
 #include <vector>
 #include <unordered_map>
 #include <functional>
-#include "train_data.h"
+#include "dataset.h"
 #include "defs_x.h"
 
 #ifndef KMBNW_ODVB_BOOSTER_H

@@ -18,7 +18,7 @@
 #include <stdexcept>
 #include <cmath>
 #include <algorithm>
-#include "train_data.h"
+#include "dataset.h"
 
 namespace oddvibe {
      DataSet::DataSet(const size_t ncols, const FloatVec& xs, const FloatVec& ys):

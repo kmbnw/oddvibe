@@ -22,7 +22,7 @@
 #include <algorithm>
 #include <iterator>
 #include <functional>
-#include "train_data.h"
+#include "dataset.h"
 #include "ecdf_sampler.h"
 #include "booster.h"
 #include "booster_test.h"
