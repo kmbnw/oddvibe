@@ -127,7 +127,7 @@ namespace oddvibe {
     }
 
     std::pair<BoolVec, BoolVec>
-    DataSet::partition_rows(const SplitData& split, const BoolVec& filter) const {
+    DataSet::partition_rows(const SplitPoint& split, const BoolVec& filter) const {
         const auto split_col = split.split_col();
         const auto split_val = split.split_val();
         BoolVec left(m_nrows, false);
@@ -142,11 +142,11 @@ namespace oddvibe {
                 }
             }
         }
-        return std::make_pair(left, right);
+        return std::make_pair(std::move(left), std::move(right));
     }
 
     std::pair<SizeVec, SizeVec>
-    DataSet::partition_rows(const SplitData& split, const SizeVec& filter) const {
+    DataSet::partition_rows(const SplitPoint& split, const SizeVec& filter) const {
         const auto split_col = split.split_col();
         const auto split_val = split.split_val();
         SizeVec left;
@@ -160,12 +160,12 @@ namespace oddvibe {
                 right.push_back(row);
             }
         }
-        return std::make_pair(left, right);
+        return std::make_pair(std::move(left), std::move(right));
     }
 
     // total squared error for left and right side of split_val
     double
-    DataSet::calc_total_err(const SplitData& split, const SizeVec& filter) const {
+    DataSet::calc_total_err(const SplitPoint& split, const SizeVec& filter) const {
         const auto part = partition_rows(split, filter);
 
         const float yhat_l = mean_y(part.first);

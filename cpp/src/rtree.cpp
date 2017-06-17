@@ -61,7 +61,7 @@ namespace oddvibe {
 
         const auto yhat = data.mean_y(filter);
         auto is_leaf = true;
-        SplitData split;
+        SplitPoint split;
         std::unique_ptr<RTree> left;
         std::unique_ptr<RTree> right;
 
@@ -102,10 +102,10 @@ namespace oddvibe {
         m_is_leaf = is_leaf;
     }
 
-    SplitData
+    SplitPoint
     RTree::best_split(const DataSet& data, const SizeVec& filter)
     const {
-        SplitData best;
+        SplitPoint best;
         double best_err = std::numeric_limits<double>::quiet_NaN();
         bool init = false;
 
@@ -118,7 +118,7 @@ namespace oddvibe {
             }
 
             for (const auto & split_val : uniques) {
-                SplitData split(split_val, split_col);
+                SplitPoint split(split_val, split_col);
 
                 // total squared error for left and right side of split_val
                 const auto err = data.calc_total_err(split, filter);

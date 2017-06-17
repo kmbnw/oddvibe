@@ -41,13 +41,13 @@ namespace oddvibe {
 
             void fit(const DataSet& data, const SizeVec& filter);
 
-            SplitData
+            SplitPoint
             best_split(const DataSet& data, const SizeVec& filter) const;
 
         private:
             float m_yhat = std::numeric_limits<float>::quiet_NaN();
             bool m_is_leaf = true;
-            SplitData m_split;
+            SplitPoint m_split;
 
             std::unique_ptr<RTree> m_left;
             std::unique_ptr<RTree> m_right;

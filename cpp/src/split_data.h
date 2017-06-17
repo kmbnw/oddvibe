@@ -21,16 +21,16 @@
 #include "defs_x.h"
 
 namespace oddvibe {
-    class SplitData {
+    class SplitPoint {
         public:
-            SplitData() = default;
+            SplitPoint() = default;
 
-            SplitData(const float split_val, const size_t split_col);
+            SplitPoint(const float split_val, const size_t split_col);
 
-            SplitData(SplitData&& other) = default;
-            SplitData(const SplitData& other) = default;
-            SplitData& operator=(const SplitData& other) = default;
-            ~SplitData() = default;
+            SplitPoint(SplitPoint&& other) = default;
+            SplitPoint(const SplitPoint& other) = default;
+            SplitPoint& operator=(const SplitPoint& other) = default;
+            ~SplitPoint() = default;
 
             float split_val() const;
 
