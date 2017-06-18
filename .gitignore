@@ -10,3 +10,4 @@ TestResult.xml
 .*.swp
 core
 *.bak
+.vscode
