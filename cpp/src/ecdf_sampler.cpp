@@ -26,17 +26,12 @@ namespace oddvibe {
     EmpiricalSampler::EmpiricalSampler(
             const size_t seed,
             const std::vector<float>& pmf) :
-       m_size(pmf.size()),
        m_rand_engine(std::mt19937(seed)),
        m_dist(std::discrete_distribution<size_t>(pmf.begin(), pmf.end())) {
     }
 
     size_t EmpiricalSampler::next_sample() {
         return m_dist(m_rand_engine);
-    }
-
-    size_t EmpiricalSampler::size() {
-        return m_size;
     }
 
     SizeVec EmpiricalSampler::gen_samples(const size_t nrows) {

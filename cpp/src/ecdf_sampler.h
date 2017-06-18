@@ -28,12 +28,9 @@ namespace oddvibe {
 
             size_t next_sample();
 
-            size_t size();
-
             SizeVec gen_samples(const size_t nrows);
 
         private:
-            size_t m_size;
             std::mt19937 m_rand_engine;
             std::discrete_distribution<size_t> m_dist;
     };
