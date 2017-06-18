@@ -95,14 +95,26 @@ namespace oddvibe {
         const DataSet train_data(nfeatures, xs, ys);
 
         const Booster booster(seed);
-        std::vector<float> pmf;
-        std::vector<size_t> counts;
-        std::vector<float> avg_counts(ys.size(), 0);
 
-        const auto outlier = booster.fit(train_data, nrounds);
+        const auto counts = booster.fit(train_data, nrounds);
+
+        for (size_t j = 0; j != nrows; ++j) {
+            std::cout << std::setw(4) << std::left << j;
+            std::cout << std::fixed << std::setprecision(2);
+            std::cout << "avg_count[" << j << "] = " << std::setw(7);
+            std::cout << std::left << counts[j] << std::endl;
+        }
+
+        const auto max_elem = std::max_element(counts.begin(), counts.end());
+
+        CPPUNIT_ASSERT_EQUAL(true, max_elem != counts.end());
+
+        const size_t actual_row = std::distance(counts.begin(), max_elem);
+        const auto actual_count = *max_elem;
+
         const size_t expected_row = 27;
 
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(5.63f, outlier.second, 1e-3);
-        CPPUNIT_ASSERT_EQUAL(expected_row, outlier.first);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(5.63f, actual_count, 1e-3);
+        CPPUNIT_ASSERT_EQUAL(expected_row, actual_row);
     }
 }

@@ -32,8 +32,26 @@ namespace oddvibe {
         }
     }
 
-    Booster::Booster(const size_t& seed) : m_seed(seed) {
+    FloatVec normalize_counts(const SizeVec& counts, const size_t nrounds) {
+        const auto f_nrounds = (1.0f * nrounds) + 1;
+        FloatVec norm_counts(counts.size(), 0);
+
+        std::transform(
+            counts.begin(),
+            counts.end(),
+            norm_counts.begin(),
+            [f_nrounds = f_nrounds](const size_t count) {
+                const auto norm_count = (1.0 * count) / f_nrounds;
+                if (std::isnan(norm_count)) {
+                    throw std::logic_error("NaN for normalized count");
+                }
+                return norm_count;
+            });
+        return norm_counts;
     }
+
+    Booster::Booster(const size_t &seed) : m_seed(seed)
+    { }
 
     void
     Booster::update_one(
@@ -78,8 +96,8 @@ namespace oddvibe {
         normalize(pmf);
     }
 
-    std::pair<size_t, float>
-    Booster::fit(const DataSet& data, size_t nrounds) const {
+    FloatVec
+    Booster::fit(const DataSet& data, const size_t nrounds) const {
         const auto nrows = data.nrows();
 
         // set up initial uniform distribution over all instances
@@ -89,7 +107,7 @@ namespace oddvibe {
         for (size_t k = 0; k != nrounds; ++k) {
             update_one(data, pmf, counts);
 
-            if (k == (nrounds - 2)) {
+            /*if (k == (nrounds - 2)) {
                 for (size_t j = 0; j != nrows; ++j) {
                     const auto avg_count = 1.0 * counts[j] / (k + 1);
                     std::cout << std::setw(4) << std::left << j;
@@ -98,23 +116,9 @@ namespace oddvibe {
                     std::cout << "avg_count[x] = " << std::setw(7) << std::left;
                     std::cout << avg_count << std::endl;
                 }
-            }
+            }*/
         }
 
-        auto best = std::numeric_limits<float>::quiet_NaN();
-        size_t best_idx = 1;
-
-        const float actual_rounds = 1.0f * nrounds + 1;
-        for (size_t j = 0; j != nrows; ++j) {
-            const auto norm_count = 1.0 * counts[j] / actual_rounds;
-            if (std::isnan(norm_count)) {
-                throw std::logic_error("NaN for normalized count");
-            }
-            if (std::isnan(best) || norm_count > best) {
-                best = norm_count;
-                best_idx = j;
-            }
-        }
-        return std::make_pair(best_idx, best);
+        return normalize_counts(counts, nrounds);
     }
 }

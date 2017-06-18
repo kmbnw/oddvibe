@@ -23,30 +23,29 @@
 #define KMBNW_ODVB_BOOSTER_H
 
 namespace oddvibe {
-    void
-    update_counts(const SizeVec& src, SizeVec& counts);
+    void update_counts(const SizeVec& src, SizeVec& counts);
+
+    FloatVec normalize_counts(const SizeVec &counts, const size_t nrounds);
 
     /**
      * Provides boosting capabilities to other models.
      */
     class Booster {
         public:
-            Booster(const size_t& seed);
+            Booster(const size_t &seed);
 
-            Booster(const Booster& other) = delete;
-            Booster& operator=(const Booster& other) = delete;
+            Booster(const Booster &other) = delete;
+            Booster &operator=(const Booster &other) = delete;
 
-            std::pair<size_t, float>
-            fit(const DataSet& data, const size_t nrows) const;
+            FloatVec fit(const DataSet& data, const size_t nrounds) const;
 
-        private:
+      private:
             size_t m_seed;
 
-            void
-            update_one(
-                const DataSet& data,
-                FloatVec& pmf,
-                SizeVec& counts)
+            void update_one(
+                const DataSet &data,
+                FloatVec &pmf,
+                SizeVec &counts)
             const;
     };
 }
