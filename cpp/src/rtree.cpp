@@ -21,13 +21,11 @@
 #include "rtree.h"
 
 namespace oddvibe {
-    void
-    RTree::predict(
-            const DataSet& data,
+    void RTree::predict(
+            const FloatMatrix& mat,
             const BoolVec& filter,
-            FloatVec& yhat)
-    const {
-        const auto nrows = data.nrows();
+            FloatVec& yhat) const {
+        const auto nrows = mat.nrows();
         if (m_is_leaf) {
             for (size_t row = 0; row != nrows; ++row) {
                 if (filter[row]) {
@@ -35,53 +33,55 @@ namespace oddvibe {
                 }
             }
         } else {
-            const auto part = data.partition_rows(m_split, filter);
+            const auto part = m_split.partition_rows(mat, filter);
 
-            m_left->predict(data, part.first, yhat);
-            m_right->predict(data, part.second, yhat);
+            m_left->predict(mat, part.first, yhat);
+            m_right->predict(mat, part.second, yhat);
         }
     }
 
-    FloatVec RTree::predict(const DataSet& data) const {
+    FloatVec RTree::predict(const FloatMatrix& mat) const {
         const auto nan = std::numeric_limits<double>::quiet_NaN();
-        const auto nrows = data.nrows();
+        const auto nrows = mat.nrows();
         FloatVec yhats(nrows, nan);
         BoolVec filter(nrows, true);
 
-        predict(data, filter, yhats);
+        predict(mat, filter, yhats);
 
         return yhats;
     }
 
-    void
-    RTree::fit(const DataSet& data, const SizeVec& filter) {
+    void RTree::fit(
+            const FloatMatrix& mat,
+            const FloatVec& ys,
+            const SizeVec& filter) {
         if (filter.empty()) {
             throw std::invalid_argument("Must have at least one entry in filter");
         }
 
-        const auto yhat = data.mean_y(filter);
+        const auto yhat = mean(ys, filter);
+        if (std::isnan(yhat)) {
+            throw std::logic_error("Prediction cannot be NaN");
+        }
+
         auto is_leaf = true;
         SplitPoint split;
         std::unique_ptr<RTree> left;
         std::unique_ptr<RTree> right;
 
-        if (std::isnan(yhat)) {
-            throw std::logic_error("Prediction cannot be NaN");
-        }
-
-        if (data.variance_y(filter) > 1e-6) {
-            split = best_split(data, filter);
+        if (variance(ys, filter) > 1e-6) {
+            split = best_split(mat, ys, filter);
 
             if (split.is_valid()) {
                 is_leaf = false;
 
-                const auto part = data.partition_rows(split, filter);
+                const auto part = split.partition_rows(mat, filter);
 
                 left = std::make_unique<RTree>();
                 right = std::make_unique<RTree>();
 
-                left->fit(data, part.first);
-                right->fit(data, part.second);
+                left->fit(mat, ys, part.first);
+                right->fit(mat, ys, part.second);
             }
         }
 
@@ -102,16 +102,17 @@ namespace oddvibe {
         m_is_leaf = is_leaf;
     }
 
-    SplitPoint
-    RTree::best_split(const DataSet& data, const SizeVec& filter)
-    const {
+    SplitPoint RTree::best_split(
+            const FloatMatrix& mat,
+            const FloatVec& ys,
+            const SizeVec& filter) const {
         SplitPoint best;
         double best_err = std::numeric_limits<double>::quiet_NaN();
         bool init = false;
 
-        const auto ncols = data.ncols();
+        const auto ncols = mat.ncols();
         for (size_t split_col = 0; split_col != ncols; ++split_col) {
-            auto uniques = data.unique_x(split_col, filter);
+            auto uniques = mat.unique_x(split_col, filter);
 
             if (uniques.size() < 2) {
                 continue;
@@ -121,7 +122,7 @@ namespace oddvibe {
                 SplitPoint split(split_val, split_col);
 
                 // total squared error for left and right side of split_val
-                const auto err = data.calc_total_err(split, filter);
+                const auto err = split.calc_total_err(mat, ys, filter);
 
                 // TODO randomly allow the same error as best to 'win'
                 if (!init || (!std::isnan(err) && err < best_err)) {

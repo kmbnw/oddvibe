@@ -17,46 +17,29 @@
 #include <unordered_set>
 #include <utility>
 #include "math_x.h"
-#include "split_point.h"
 
 #ifndef KMBNW_TRAIN_DATA_H
 #define KMBNW_TRAIN_DATA_H
 
 namespace oddvibe {
-    /**
-     * Abstraction over training data (features and response).
-     * Immutable.
-     */
-    class DataSet {
+    // follow R's NumericVector API where necessary to facilitate easier use
+    class FloatMatrix {
         public:
             /**
-             * Create new training data from flattened features and responses.
+             * Create new instance.
              * @param[in] ncols: Number of columns/features.
              * @param[in] xs: Flattened matrix of features: row0 followed by
              * row1, etc.
-             * @param[in] ys: Response (independent variable).
              */
-            DataSet(const size_t ncols, const FloatVec &xs, const FloatVec &ys);
+            FloatMatrix(const size_t ncols, FloatVec&& xs);
 
-            /**
-             * No copy.
-             */
-            DataSet(const DataSet& other) = delete;
-            /**
-             * No copy.
-             */
-            DataSet& operator=(const DataSet& other) = delete;
+            FloatMatrix(FloatMatrix&& other) = default;
+            FloatMatrix(const FloatMatrix& other) = default;
+            FloatMatrix& operator=(const FloatMatrix& other) = default;
+            FloatMatrix& operator=(FloatMatrix&& other) = default;
+            ~FloatMatrix() = default;
 
-            ~DataSet() = default;
-
-            /**
-             * Get the Y-value (response) at the given row.
-             */
-            float y_at(const size_t row) const;
-            /**
-             * Get the X-value (feature and value) at the given column and row.
-             */
-            float x_at(const size_t row, const size_t col) const;
+            float operator() (const size_t row, const size_t col) const;
 
             /**
              * Number of rows.
@@ -68,35 +51,16 @@ namespace oddvibe {
              */
             size_t ncols() const;
 
-            double mean_y(const SizeVec& row_idx) const;
-
-            double variance_y(const SizeVec& row_idx) const;
-
             std::unordered_set<float>
-            unique_x(const size_t col, const SizeVec& row_idx)
-            const;
+            unique_x(const size_t col, const SizeVec& row_idx) const;
 
-            /**
-             * RMSE loss
-             */
-            DoubleVec loss(const FloatVec& yhat) const;
+            private:
+                size_t m_nrows = 0;
+                size_t m_ncols = 0;
+                FloatVec m_xs;
 
-            std::pair<BoolVec, BoolVec>
-            partition_rows(const SplitPoint& split, const BoolVec& filter) const;
+                size_t x_index(const size_t row, const size_t col) const;
 
-            std::pair<SizeVec, SizeVec>
-            partition_rows(const SplitPoint& split, const SizeVec& filter) const;
-
-            double
-            calc_total_err(const SplitPoint& split, const SizeVec& filter) const;
-
-        private:
-            size_t m_nrows;
-            size_t m_ncols;
-            FloatVec m_xs;
-            FloatVec m_ys;
-
-            size_t x_index(const size_t row, const size_t col) const;
     };
 }
 #endif //KMBNW_TRAIN_DATA_H

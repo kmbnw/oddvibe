@@ -19,6 +19,7 @@
 #include <cstddef>
 #include <limits>
 #include "defs_x.h"
+#include "dataset.h"
 
 namespace oddvibe {
     class SplitPoint {
@@ -38,6 +39,19 @@ namespace oddvibe {
             size_t split_col() const;
 
             bool is_valid() const;
+
+            std::pair<BoolVec, BoolVec>
+            partition_rows(const FloatMatrix& mat, const BoolVec& filter)
+            const;
+
+            std::pair<SizeVec, SizeVec>
+            partition_rows(const FloatMatrix& mat, const SizeVec& filter)
+            const;
+
+            double calc_total_err(
+                const FloatMatrix& mat,
+                const FloatVec& ys,
+                const SizeVec& filter) const;
 
         private:
             float m_split_val = std::numeric_limits<float>::quiet_NaN();

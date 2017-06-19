@@ -37,13 +37,17 @@ namespace oddvibe {
             Booster(const Booster &other) = delete;
             Booster &operator=(const Booster &other) = delete;
 
-            FloatVec fit(const DataSet& data, const size_t nrounds) const;
+            FloatVec fit(
+                const FloatMatrix& mat,
+                const FloatVec& ys,
+                const size_t nrounds) const;
 
       private:
             size_t m_seed;
 
             void update_one(
-                const DataSet &data,
+                const FloatMatrix& mat,
+                const FloatVec& ys,
                 FloatVec &pmf,
                 SizeVec &counts)
             const;

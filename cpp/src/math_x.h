@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+#include <unordered_set>
 #include "defs_x.h"
 
 #ifndef KMBNW_ODVB_MATHX_H
@@ -26,5 +27,11 @@ namespace oddvibe {
     void normalize(FloatVec& pmf);
 
     double rmse_loss(const float predicted, const float observed);
+
+    double mean(const FloatVec seq, const SizeVec& row_idx);
+
+    double variance(const FloatVec seq, const SizeVec& row_idx);
+
+    DoubleVec loss_seq(const FloatVec& ys, const FloatVec& yhats);
 }
 #endif //KMBNW_ODVB_MATHX_H

@@ -92,11 +92,11 @@ namespace oddvibe {
 
         const size_t nrounds = 5000;
 
-        const DataSet train_data(nfeatures, xs, ys);
+        const FloatMatrix mat(nfeatures, std::move(xs));
 
         const Booster booster(seed);
 
-        const auto counts = booster.fit(train_data, nrounds);
+        const auto counts = booster.fit(mat, ys, nrounds);
 
         for (size_t j = 0; j != nrows; ++j) {
             std::cout << std::setw(4) << std::left << j;

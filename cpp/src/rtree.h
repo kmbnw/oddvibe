@@ -38,12 +38,17 @@ namespace oddvibe {
             RTree& operator=(RTree&& other) = default;
             ~RTree() = default;
 
-            FloatVec predict(const DataSet& data) const;
+            FloatVec predict(const FloatMatrix& mat) const;
 
-            void fit(const DataSet& data, const SizeVec& filter);
+            void fit(
+                    const FloatMatrix& mat,
+                    const FloatVec& ys,
+                    const SizeVec& filter);
 
-            SplitPoint
-            best_split(const DataSet& data, const SizeVec& filter) const;
+            SplitPoint best_split(
+                const FloatMatrix& mat,
+                const FloatVec& ys,
+                const SizeVec& filter) const;
 
         private:
             float m_yhat = std::numeric_limits<float>::quiet_NaN();
@@ -54,10 +59,9 @@ namespace oddvibe {
             std::unique_ptr<RTree> m_right;
 
             void predict(
-                const DataSet& data,
+                const FloatMatrix& mat,
                 const BoolVec& filter,
-                FloatVec& yhat)
-            const;
+                FloatVec& yhat) const;
     };
 }
 #endif //KMBNW_RTREE_H

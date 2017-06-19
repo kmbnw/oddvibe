@@ -38,7 +38,7 @@ namespace oddvibe {
 
     void RTreeTest::test_best_split_none() {
         // odd numbers are feature 1, even are feature 2
-        const std::vector<float> xs {
+        std::vector<float> xs {
             1.2f, 12.2f,
             1.2f, 12.2f,
             1.2f, 12.2f,
@@ -52,11 +52,11 @@ namespace oddvibe {
         };
         const size_t nfeatures = 2;
 
-        const DataSet data(nfeatures, xs, ys);
+        const FloatMatrix mat(nfeatures, std::move(xs));
         const auto filter = sequential_ints(ys.size());
         RTree tree;
         //const auto tree = builder.build();
-        const auto split = tree.best_split(data, filter);
+        const auto split = tree.best_split(mat, ys, filter);
 
         CPPUNIT_ASSERT_EQUAL(false, split.is_valid());
     }
@@ -65,7 +65,7 @@ namespace oddvibe {
     void RTreeTest::test_best_split_perfect() {
         // odd numbers are feature 1, even are feature 2
         const float split_val = 2.6f;
-        const std::vector<float> xs {
+        std::vector<float> xs {
             1.2f, 12.2f,
             1.2f, split_val,
             1.2f, 12.2f,
@@ -79,10 +79,10 @@ namespace oddvibe {
         };
         const size_t nfeatures = 2;
 
-        const DataSet data(nfeatures, xs, ys);
+        const FloatMatrix mat(nfeatures, std::move(xs));
         RTree tree;
         const auto filter = sequential_ints(ys.size());
-        const auto split = tree.best_split(data, filter);
+        const auto split = tree.best_split(mat, ys, filter);
         const auto col = split.split_col();
         const auto value = split.split_val();
 
@@ -97,7 +97,7 @@ namespace oddvibe {
     void RTreeTest::test_best_split_near_perfect() {
         // odd numbers are feature 1, even are feature 2
         const float split_val = 2.6f;
-        const std::vector<float> xs {
+        std::vector<float> xs {
             1.2f, 12.2f,
             3.4f, split_val,
             1.2f, 12.2f,
@@ -111,10 +111,10 @@ namespace oddvibe {
         };
         const size_t nfeatures = 2;
 
-        const DataSet data(nfeatures, xs, ys);
+        const FloatMatrix mat(nfeatures, std::move(xs));
         RTree tree;
         const auto filter = sequential_ints(ys.size());
-        const auto split = tree.best_split(data, filter);
+        const auto split = tree.best_split(mat, ys, filter);
         const auto col = split.split_col();
         const auto value = split.split_val();
 
@@ -150,10 +150,10 @@ namespace oddvibe {
 
         const size_t nfeatures = 3;
 
-        const DataSet data(nfeatures, xs, ys);
+        const FloatMatrix mat(nfeatures, std::move(xs));
         RTree tree;
         const auto filter = sequential_ints(ys.size());
-        const auto split = tree.best_split(data, filter);
+        const auto split = tree.best_split(mat, ys, filter);
         const auto col = split.split_col();
         const auto value = split.split_val();
 
