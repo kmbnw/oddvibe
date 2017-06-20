@@ -45,12 +45,6 @@ namespace oddvibe {
                 const FloatVec& ys,
                 const SizeVec& filter);
 
-            void fit(
-                const FloatMatrix& mat,
-                const FloatVec& ys,
-                const SizeConstIter first,
-                const SizeConstIter last);
-
             SplitPoint best_split(
                 const FloatMatrix& mat,
                 const FloatVec& ys,
@@ -64,6 +58,12 @@ namespace oddvibe {
 
             std::unique_ptr<RTree> m_left;
             std::unique_ptr<RTree> m_right;
+
+            void fit(
+                const FloatMatrix& mat,
+                const FloatVec& ys,
+                const SizeConstIter first,
+                const SizeConstIter last);
 
             void predict(
                 const FloatMatrix& mat,
