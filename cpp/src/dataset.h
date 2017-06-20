@@ -51,8 +51,10 @@ namespace oddvibe {
              */
             size_t ncols() const;
 
-            std::unordered_set<float>
-            unique_x(const size_t col, const SizeVec& row_idx) const;
+            std::unordered_set<float> unique_x(
+                const size_t col,
+                SizeConstIter first,
+                SizeConstIter last) const;
 
             private:
                 size_t m_nrows = 0;

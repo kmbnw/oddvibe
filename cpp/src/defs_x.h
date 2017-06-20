@@ -23,5 +23,8 @@ namespace oddvibe {
     using DoubleVec = std::vector<double>;
     using BoolVec = std::vector<bool>;
     using SizeVec = std::vector<size_t>;
+
+    using SizeIter = std::vector<size_t>::iterator;
+    using SizeConstIter = std::vector<size_t>::const_iterator;
 }
 #endif //KMBNW_ODVB_DEFSX_H

@@ -75,13 +75,19 @@ namespace oddvibe {
             if (split.is_valid()) {
                 is_leaf = false;
 
-                const auto part = split.partition_rows(mat, filter);
+                SizeVec part(filter);
+                const auto pivot = split.partition_idx(mat, part);
+
+                SizeVec lsplit;
+                SizeVec rsplit;
+                std::copy(part.begin(), pivot, std::back_inserter(lsplit));
+                std::copy(pivot, part.end(), std::back_inserter(rsplit));
 
                 left = std::make_unique<RTree>();
                 right = std::make_unique<RTree>();
 
-                left->fit(mat, ys, part.first);
-                right->fit(mat, ys, part.second);
+                left->fit(mat, ys, lsplit);
+                right->fit(mat, ys, rsplit);
             }
         }
 
@@ -112,7 +118,7 @@ namespace oddvibe {
 
         const auto ncols = mat.ncols();
         for (size_t split_col = 0; split_col != ncols; ++split_col) {
-            auto uniques = mat.unique_x(split_col, filter);
+            auto uniques = mat.unique_x(split_col, filter.begin(), filter.end());
 
             if (uniques.size() < 2) {
                 continue;

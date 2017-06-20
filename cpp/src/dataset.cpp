@@ -51,12 +51,16 @@ namespace oddvibe {
         return (row * m_ncols) + col;
     }
 
-    std::unordered_set<float>
-    FloatMatrix::unique_x(const size_t col, const SizeVec& row_idx) const {
+    std::unordered_set<float> FloatMatrix::unique_x(
+            const size_t col,
+            SizeConstIter first,
+            SizeConstIter last) const {
         std::unordered_set<float> uniques;
 
-        for (const auto & row : row_idx) {
-            uniques.insert(m_xs[x_index(row, col)]);
+        if (first != last) {
+            for (auto row = first; row != last; row = std::next(row)) {
+                uniques.insert(m_xs[x_index(*row, col)]);
+            }
         }
         return uniques;
     }
