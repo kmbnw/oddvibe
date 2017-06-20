@@ -73,11 +73,8 @@ namespace oddvibe {
     }
 
     SizeIter
-    SplitPoint::partition_idx(
-            const FloatMatrix& mat,
-            SizeIter first,
-            SizeIter last) const {
-        return std::partition(first, last,
+    SplitPoint::partition_idx(const FloatMatrix& mat, SizeVec& rows) const {
+        return std::partition(rows.begin(), rows.end(),
             [col = m_split_col, val = m_split_val, &mat](const auto & row){
                 return mat(row, col) <= val;
             });
@@ -96,7 +93,7 @@ namespace oddvibe {
 
         // TODO discard this temporary
         SizeVec part(first, last);
-        const auto pivot = partition_idx(mat, part.begin(), part.end());
+        const auto pivot = partition_idx(mat, part);
 
         const float yhat_l = mean(ys, part.begin(), pivot);
         if (std::isnan(yhat_l)) {

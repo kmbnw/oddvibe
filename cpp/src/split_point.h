@@ -48,10 +48,8 @@ namespace oddvibe {
             partition_rows(const FloatMatrix& mat, const SizeVec& filter)
             const;
 
-            SizeIter partition_idx(
-                const FloatMatrix& mat,
-                SizeIter first,
-                SizeIter last) const;
+            SizeIter
+            partition_idx(const FloatMatrix& mat, SizeVec& rows) const;
 
             double calc_total_err(
                 const FloatMatrix& mat,

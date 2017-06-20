@@ -41,9 +41,15 @@ namespace oddvibe {
             FloatVec predict(const FloatMatrix& mat) const;
 
             void fit(
-                    const FloatMatrix& mat,
-                    const FloatVec& ys,
-                    const SizeVec& filter);
+                const FloatMatrix& mat,
+                const FloatVec& ys,
+                const SizeVec& filter);
+
+            void fit(
+                const FloatMatrix& mat,
+                const FloatVec& ys,
+                const SizeConstIter first,
+                const SizeConstIter last);
 
             SplitPoint best_split(
                 const FloatMatrix& mat,
