@@ -67,7 +67,8 @@ namespace oddvibe {
 
             void predict(
                 const FloatMatrix& mat,
-                const BoolVec& filter,
+                const SizeConstIter first,
+                const SizeConstIter last,
                 FloatVec& yhat) const;
     };
 }

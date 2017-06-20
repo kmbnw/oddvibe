@@ -36,42 +36,6 @@ namespace oddvibe {
         return m_split_col;
     }
 
-    std::pair<BoolVec, BoolVec>
-    SplitPoint::partition_rows(const FloatMatrix& mat, const BoolVec& filter)
-    const {
-        const auto nrows = mat.nrows();
-        BoolVec left(nrows, false);
-        BoolVec right(nrows, false);
-        for (size_t row = 0; row != nrows; ++row) {
-            if (filter[row]) {
-                const auto x_j = mat(row, m_split_col);
-                if (x_j <= m_split_val) {
-                    left[row] = true;
-                } else {
-                    right[row] = true;
-                }
-            }
-        }
-        return std::make_pair(std::move(left), std::move(right));
-    }
-
-    std::pair<SizeVec, SizeVec>
-    SplitPoint::partition_rows(const FloatMatrix& mat, const SizeVec& filter)
-    const {
-        SizeVec left;
-        SizeVec right;
-
-        for (const auto & row : filter) {
-            const auto x_j = mat(row, m_split_col);
-            if (x_j <= m_split_val) {
-                left.push_back(row);
-            } else {
-                right.push_back(row);
-            }
-        }
-        return std::make_pair(std::move(left), std::move(right));
-    }
-
     SizeIter
     SplitPoint::partition_idx(const FloatMatrix& mat, SizeVec& rows) const {
         return std::partition(rows.begin(), rows.end(),

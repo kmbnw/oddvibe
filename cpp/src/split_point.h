@@ -40,14 +40,6 @@ namespace oddvibe {
 
             bool is_valid() const;
 
-            std::pair<BoolVec, BoolVec>
-            partition_rows(const FloatMatrix& mat, const BoolVec& filter)
-            const;
-
-            std::pair<SizeVec, SizeVec>
-            partition_rows(const FloatMatrix& mat, const SizeVec& filter)
-            const;
-
             SizeIter
             partition_idx(const FloatMatrix& mat, SizeVec& rows) const;
 

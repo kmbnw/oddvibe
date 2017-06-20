@@ -19,33 +19,33 @@
 #include <iostream>
 #include <numeric>
 #include "rtree.h"
+#include "algorithm_x.h"
 
 namespace oddvibe {
     void RTree::predict(
             const FloatMatrix& mat,
-            const BoolVec& filter,
+            const SizeConstIter first,
+            const SizeConstIter last,
             FloatVec& yhat) const {
-        const auto nrows = mat.nrows();
         if (m_is_leaf) {
-            for (size_t row = 0; row != nrows; ++row) {
-                if (filter[row]) {
-                    yhat[row] = m_yhat;
-                }
+            for (auto row = first; row != last; row = std::next(row)) {
+                yhat[*row] = m_yhat;
             }
         } else {
-            const auto part = m_split.partition_rows(mat, filter);
+            SizeVec part(first, last);
+            const auto pivot = m_split.partition_idx(mat, part);
 
-            m_left->predict(mat, part.first, yhat);
-            m_right->predict(mat, part.second, yhat);
+            m_left->predict(mat, part.begin(), pivot, yhat);
+            m_right->predict(mat, pivot, part.end(), yhat);
         }
     }
 
     FloatVec RTree::predict(const FloatMatrix& mat) const {
         const auto nrows = mat.nrows();
         FloatVec yhats(nrows, floatNaN);
-        BoolVec filter(nrows, true);
+        auto filter = sequential_ints(nrows);
 
-        predict(mat, filter, yhats);
+        predict(mat, filter.begin(), filter.end(), yhats);
 
         return yhats;
     }
