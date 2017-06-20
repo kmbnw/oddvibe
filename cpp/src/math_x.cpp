@@ -33,37 +33,42 @@ namespace oddvibe {
     }
 
 
-    double mean(const FloatVec seq, const SizeVec& row_idx) {
-        if (seq.empty()) {
+    double mean(
+            const FloatVec seq,
+            const SizeConstIter first,
+            const SizeConstIter last) {
+        if (first == last) {
             return 0;
         }
 
         size_t count = 0;
         double total = 0;
 
-        for (const auto & row : row_idx) {
-            total += seq[row];
+        for (auto row = first; row != last; row = std::next(row)) {
+            total += seq[*row];
             ++count;
         }
         return (count < 1 ? 0 : total / count);
     }
 
-    double variance(const FloatVec seq, const SizeVec& row_idx) {
-        if (seq.empty()) {
-            return 0;
+    double variance(
+            const FloatVec seq,
+            const SizeConstIter first,
+            const SizeConstIter last) {
+        if (first == last) {
+            return doubleNaN;
         }
 
         size_t count = 0;
         double total = 0;
-        const auto avg_x = mean(seq, row_idx);
+        const auto avg_x = mean(seq, first, last);
 
-        for (const auto & row : row_idx) {
-            total += pow(seq[row] - avg_x, 2);
+        for (auto row = first; row != last; row = std::next(row)) {
+            total += pow(seq[*row] - avg_x, 2);
             ++count;
         }
 
-        const auto nan = std::numeric_limits<double>::quiet_NaN();
-        return (count < 1 ? nan : total / count);
+        return (count < 1 ? doubleNaN : total / count);
     }
 
     DoubleVec loss_seq(const FloatVec& ys, const FloatVec& yhats) {

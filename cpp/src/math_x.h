@@ -28,9 +28,15 @@ namespace oddvibe {
 
     double rmse_loss(const float predicted, const float observed);
 
-    double mean(const FloatVec seq, const SizeVec& row_idx);
+    double mean(
+        const FloatVec seq,
+        const SizeConstIter first,
+        const SizeConstIter last);
 
-    double variance(const FloatVec seq, const SizeVec& row_idx);
+    double variance(
+        const FloatVec seq,
+        const SizeConstIter first,
+        const SizeConstIter last);
 
     DoubleVec loss_seq(const FloatVec& ys, const FloatVec& yhats);
 }

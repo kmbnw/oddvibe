@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 #include <vector>
+#include <limits>
 
 #ifndef KMBNW_ODVB_DEFSX_H
 #define KMBNW_ODVB_DEFSX_H
@@ -26,5 +27,8 @@ namespace oddvibe {
 
     using SizeIter = std::vector<size_t>::iterator;
     using SizeConstIter = std::vector<size_t>::const_iterator;
+
+    const float floatNaN = std::numeric_limits<float>::quiet_NaN();
+    const double doubleNaN = std::numeric_limits<double>::quiet_NaN();
 }
 #endif //KMBNW_ODVB_DEFSX_H

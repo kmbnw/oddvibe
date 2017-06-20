@@ -59,7 +59,7 @@ namespace oddvibe {
             throw std::invalid_argument("Must have at least one entry in filter");
         }
 
-        const auto yhat = mean(ys, filter);
+        const auto yhat = mean(ys, filter.begin(), filter.end());
         if (std::isnan(yhat)) {
             throw std::logic_error("Prediction cannot be NaN");
         }
@@ -69,7 +69,7 @@ namespace oddvibe {
         std::unique_ptr<RTree> left;
         std::unique_ptr<RTree> right;
 
-        if (variance(ys, filter) > 1e-6) {
+        if (variance(ys, filter.begin(), filter.end()) > 1e-6) {
             split = best_split(mat, ys, filter);
 
             if (split.is_valid()) {

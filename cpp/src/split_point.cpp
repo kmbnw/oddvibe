@@ -87,14 +87,17 @@ namespace oddvibe {
             const FloatMatrix& mat,
             const FloatVec& ys,
             const SizeVec& filter) const {
-        const auto part = partition_rows(mat, filter);
 
-        const float yhat_l = mean(ys, part.first);
+        // TODO discard this temporary
+        SizeVec part(filter);
+        const auto pivot = partition_idx(mat, part);
+
+        const float yhat_l = mean(ys, part.begin(), pivot);
         if (std::isnan(yhat_l)) {
             return std::numeric_limits<double>::quiet_NaN();
         }
 
-        const float yhat_r = mean(ys, part.second);
+        const float yhat_r = mean(ys, pivot, part.end());
         if (std::isnan(yhat_r)) {
             return std::numeric_limits<double>::quiet_NaN();
         }

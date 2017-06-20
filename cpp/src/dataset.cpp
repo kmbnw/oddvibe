@@ -53,8 +53,8 @@ namespace oddvibe {
 
     std::unordered_set<float> FloatMatrix::unique_x(
             const size_t col,
-            SizeConstIter first,
-            SizeConstIter last) const {
+            const SizeConstIter first,
+            const SizeConstIter last) const {
         std::unordered_set<float> uniques;
 
         if (first != last) {
