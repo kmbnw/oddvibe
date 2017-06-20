@@ -41,9 +41,8 @@ namespace oddvibe {
     }
 
     FloatVec RTree::predict(const FloatMatrix& mat) const {
-        const auto nan = std::numeric_limits<double>::quiet_NaN();
         const auto nrows = mat.nrows();
-        FloatVec yhats(nrows, nan);
+        FloatVec yhats(nrows, floatNaN);
         BoolVec filter(nrows, true);
 
         predict(mat, filter, yhats);

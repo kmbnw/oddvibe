@@ -58,7 +58,7 @@ namespace oddvibe {
                 const SizeConstIter last) const;
 
         private:
-            float m_yhat = std::numeric_limits<float>::quiet_NaN();
+            float m_yhat = floatNaN;
             bool m_is_leaf = true;
             SplitPoint m_split;
 

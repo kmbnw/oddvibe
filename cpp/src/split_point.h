@@ -58,7 +58,7 @@ namespace oddvibe {
                 const SizeConstIter last) const;
 
         private:
-            float m_split_val = std::numeric_limits<float>::quiet_NaN();
+            float m_split_val = floatNaN;
             size_t m_split_col = 0;
     };
 }
