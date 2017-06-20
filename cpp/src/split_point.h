@@ -48,14 +48,16 @@ namespace oddvibe {
             partition_rows(const FloatMatrix& mat, const SizeVec& filter)
             const;
 
-            SizeIter
-            partition_idx(
-                const FloatMatrix& mat, SizeVec& filter) const;
+            SizeIter partition_idx(
+                const FloatMatrix& mat,
+                SizeIter first,
+                SizeIter last) const;
 
             double calc_total_err(
                 const FloatMatrix& mat,
                 const FloatVec& ys,
-                const SizeVec& filter) const;
+                const SizeConstIter first,
+                const SizeConstIter last) const;
 
         private:
             float m_split_val = std::numeric_limits<float>::quiet_NaN();

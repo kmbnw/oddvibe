@@ -48,7 +48,8 @@ namespace oddvibe {
             SplitPoint best_split(
                 const FloatMatrix& mat,
                 const FloatVec& ys,
-                const SizeVec& filter) const;
+                const SizeConstIter first,
+                const SizeConstIter last) const;
 
         private:
             float m_yhat = std::numeric_limits<float>::quiet_NaN();

@@ -70,13 +70,13 @@ namespace oddvibe {
         std::unique_ptr<RTree> right;
 
         if (variance(ys, filter.begin(), filter.end()) > 1e-6) {
-            split = best_split(mat, ys, filter);
+            split = best_split(mat, ys, filter.begin(), filter.end());
 
             if (split.is_valid()) {
                 is_leaf = false;
 
                 SizeVec part(filter);
-                const auto pivot = split.partition_idx(mat, part);
+                const auto pivot = split.partition_idx(mat, part.begin(), part.end());
 
                 SizeVec lsplit;
                 SizeVec rsplit;
@@ -111,14 +111,20 @@ namespace oddvibe {
     SplitPoint RTree::best_split(
             const FloatMatrix& mat,
             const FloatVec& ys,
-            const SizeVec& filter) const {
+            const SizeConstIter first,
+            const SizeConstIter last) const {
         SplitPoint best;
-        double best_err = std::numeric_limits<double>::quiet_NaN();
+
+        if (first == last) {
+            return best;
+        }
+
+        double best_err = doubleNaN;
         bool init = false;
 
         const auto ncols = mat.ncols();
         for (size_t split_col = 0; split_col != ncols; ++split_col) {
-            auto uniques = mat.unique_x(split_col, filter.begin(), filter.end());
+            auto uniques = mat.unique_x(split_col, first, last);
 
             if (uniques.size() < 2) {
                 continue;
@@ -128,7 +134,7 @@ namespace oddvibe {
                 SplitPoint split(split_val, split_col);
 
                 // total squared error for left and right side of split_val
-                const auto err = split.calc_total_err(mat, ys, filter);
+                const auto err = split.calc_total_err(mat, ys, first, last);
 
                 // TODO randomly allow the same error as best to 'win'
                 if (!init || (!std::isnan(err) && err < best_err)) {

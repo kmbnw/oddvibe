@@ -73,10 +73,11 @@ namespace oddvibe {
     }
 
     SizeIter
-    SplitPoint::partition_idx(const FloatMatrix& mat, SizeVec& filter) const {
-        return std::partition(
-            filter.begin(),
-            filter.end(),
+    SplitPoint::partition_idx(
+            const FloatMatrix& mat,
+            SizeIter first,
+            SizeIter last) const {
+        return std::partition(first, last,
             [col = m_split_col, val = m_split_val, &mat](const auto & row){
                 return mat(row, col) <= val;
             });
@@ -86,26 +87,31 @@ namespace oddvibe {
     double SplitPoint::calc_total_err(
             const FloatMatrix& mat,
             const FloatVec& ys,
-            const SizeVec& filter) const {
+            const SizeConstIter first,
+            const SizeConstIter last) const {
+
+        if (first == last) {
+            return doubleNaN;
+        }
 
         // TODO discard this temporary
-        SizeVec part(filter);
-        const auto pivot = partition_idx(mat, part);
+        SizeVec part(first, last);
+        const auto pivot = partition_idx(mat, part.begin(), part.end());
 
         const float yhat_l = mean(ys, part.begin(), pivot);
         if (std::isnan(yhat_l)) {
-            return std::numeric_limits<double>::quiet_NaN();
+            return doubleNaN;
         }
 
         const float yhat_r = mean(ys, pivot, part.end());
         if (std::isnan(yhat_r)) {
-            return std::numeric_limits<double>::quiet_NaN();
+            return doubleNaN;
         }
 
         double err = 0;
-        for (const auto & row : filter) {
-            const auto x_j = mat(row, m_split_col);
-            const auto y_j = ys[row];
+        for (auto row = first; row != last; row = std::next(row)) {
+            const auto x_j = mat(*row, m_split_col);
+            const auto y_j = ys[*row];
             const auto yhat_j = x_j <= m_split_val ? yhat_l : yhat_r;
             err += pow((y_j - yhat_j), 2.0);
         }
