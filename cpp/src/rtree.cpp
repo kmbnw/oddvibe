@@ -126,7 +126,7 @@ namespace oddvibe {
 
         const auto ncols = mat.ncols();
         for (size_t split_col = 0; split_col != ncols; ++split_col) {
-            auto uniques = mat.unique_x(split_col, first, last);
+            auto uniques = unique_x(mat, split_col, first, last);
 
             if (uniques.size() < 2) {
                 continue;

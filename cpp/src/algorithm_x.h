@@ -17,9 +17,26 @@
 #ifndef KMBNW_ALGORITHM_X
 #define KMBNW_ALGORITHM_X
 
+#include <unordered_set>
 #include "defs_x.h"
 
 namespace oddvibe {
     SizeVec sequential_ints(const size_t len);
+
+    template <typename MatrixType>
+    std::unordered_set<float> unique_x(
+            const MatrixType& mat,
+            const size_t col,
+            const SizeConstIter first,
+            const SizeConstIter last) {
+        std::unordered_set<float> uniques;
+
+        if (first != last) {
+            for (auto row = first; row != last; row = std::next(row)) {
+                uniques.insert(mat(*row, col));
+            }
+        }
+        return uniques;
+    }
 }
 #endif //KMBNW_ALGORITHM_X
