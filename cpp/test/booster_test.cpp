@@ -22,7 +22,7 @@
 #include <algorithm>
 #include <iterator>
 #include <functional>
-#include "dataset.h"
+#include "float_matrix.h"
 #include "ecdf_sampler.h"
 #include "booster.h"
 #include "booster_test.h"

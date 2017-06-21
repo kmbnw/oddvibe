@@ -19,7 +19,9 @@
 #include <iostream>
 #include <numeric>
 #include "rtree.h"
+#include "dataset.h"
 #include "algorithm_x.h"
+#include "math_x.h"
 
 namespace oddvibe {
     void RTree::predict(
@@ -121,6 +123,8 @@ namespace oddvibe {
             return best;
         }
 
+        Dataset<FloatMatrix, FloatVec> dataset(mat, ys);
+
         double best_err = doubleNaN;
 
         const auto ncols = mat.ncols();
@@ -135,7 +139,7 @@ namespace oddvibe {
                 SplitPoint split(split_val, split_col);
 
                 // total squared error for left and right side of split_val
-                const auto err = split.calc_total_err(mat, ys, first, last);
+                const auto err = dataset.calc_total_err(split, first, last);
 
                 // TODO randomly allow the same error as best to 'win'
                 if (!std::isnan(err) && (std::isnan(best_err) || err < best_err)) {

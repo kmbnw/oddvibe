@@ -19,8 +19,9 @@
 #include <cstddef>
 #include <limits>
 #include <algorithm>
+#include <utility>
 #include "defs_x.h"
-#include "dataset.h"
+#include "float_matrix.h"
 
 namespace oddvibe {
     class SplitPoint {
@@ -52,12 +53,6 @@ namespace oddvibe {
                         return mat(row, self->m_split_col) <= self->m_split_val;
                     });
             }
-
-            double calc_total_err(
-                const FloatMatrix& mat,
-                const FloatVec& ys,
-                const SizeConstIter first,
-                const SizeConstIter last) const;
 
         private:
             float m_split_val = floatNaN;

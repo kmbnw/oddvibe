@@ -17,6 +17,7 @@
 #include <stdexcept>
 #include <cmath>
 #include <algorithm>
+#include "float_matrix.h"
 #include "dataset.h"
 
 namespace oddvibe {

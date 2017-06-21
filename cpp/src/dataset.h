@@ -13,51 +13,88 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#include <vector>
-#include <unordered_set>
-#include <utility>
+#include "defs_x.h"
 #include "math_x.h"
+#include "split_point.h"
 
-#ifndef KMBNW_TRAIN_DATA_H
-#define KMBNW_TRAIN_DATA_H
+#ifndef KMBNW_DATASET_H
+#define KMBNW_DATASET_H
 
 namespace oddvibe {
-    // follow R's NumericVector API where necessary to facilitate easier use
-    class FloatMatrix {
+    template<typename MatrixType, typename VectorType>
+    class Dataset {
         public:
-            /**
-             * Create new instance.
-             * @param[in] ncols: Number of columns/features.
-             * @param[in] xs: Flattened matrix of features: row0 followed by
-             * row1, etc.
-             */
-            FloatMatrix(const size_t ncols, FloatVec&& xs);
+            Dataset(const MatrixType& xs, const VectorType& ys):
+                m_xs(xs),
+                m_ys(ys) {
 
-            FloatMatrix(FloatMatrix&& other) = default;
-            FloatMatrix(const FloatMatrix& other) = default;
-            FloatMatrix& operator=(const FloatMatrix& other) = default;
-            FloatMatrix& operator=(FloatMatrix&& other) = default;
-            ~FloatMatrix() = default;
+            }
 
-            float operator() (const size_t row, const size_t col) const;
+            // TODO explicit defaults
 
-            /**
-             * Number of rows.
-             */
-            size_t nrows() const;
+            // total squared error for left and right side of split_val
+            double calc_total_err(
+                    const SplitPoint& split,
+                    const SizeConstIter first,
+                    const SizeConstIter last) const {
 
-            /**
-             * Number of columns (features).
-             */
-            size_t ncols() const;
+                if (first == last) {
+                    return doubleNaN;
+                }
 
-            private:
-                size_t m_nrows = 0;
-                size_t m_ncols = 0;
-                FloatVec m_xs;
+                const auto avg = partitioned_mean(split, first, last);
+                const float yhat_l = avg.first;
+                const float yhat_r = avg.second;
 
-                size_t x_index(const size_t row, const size_t col) const;
+                if (std::isnan(yhat_l) || std::isnan(yhat_r)) {
+                    return doubleNaN;
+                }
 
+                const auto split_val = split.split_val();
+                const auto split_col = split.split_col();
+                double err = 0;
+                for (auto row = first; row != last; row = std::next(row)) {
+                    const auto x_j = m_xs(*row, split_col);
+                    const auto y_j = m_ys[*row];
+                    const auto yhat_j = x_j <= split_val ? yhat_l : yhat_r;
+                    err += pow((y_j - yhat_j), 2.0);
+                }
+                return err;
+            }
+
+        private:
+            MatrixType m_xs;
+            VectorType m_ys;
+
+            template<typename IteratorType>
+            std::pair<float, float>
+            partitioned_mean(
+                    const SplitPoint& split,
+                    const IteratorType first,
+                    const IteratorType last) const {
+
+                SizeVec part(first, last);
+                const auto pivot = split.partition_idx(m_xs, part);
+
+                auto first_p = part.begin();
+                auto last_p = part.end();
+                // std::optional would be good here, but not at C++ 17 yet
+                // for this install
+                if (first_p == last_p || pivot == first_p || pivot == last_p) {
+                    return std::make_pair(floatNaN, floatNaN);
+                }
+
+                const float yhat_l = mean(m_ys, first_p, pivot);
+                if (std::isnan(yhat_l)) {
+                    return std::make_pair(floatNaN, floatNaN);
+                }
+
+                const float yhat_r = mean(m_ys, pivot, last_p);
+                if (std::isnan(yhat_r)) {
+                    return std::make_pair(floatNaN, floatNaN);
+                }
+                return std::make_pair(yhat_l, yhat_r);
+            }
     };
 }
-#endif //KMBNW_TRAIN_DATA_H
+#endif //KMBNW_DATASET_H
