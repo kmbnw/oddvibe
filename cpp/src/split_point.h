@@ -18,6 +18,7 @@
 
 #include <cstddef>
 #include <limits>
+#include <algorithm>
 #include "defs_x.h"
 #include "dataset.h"
 
@@ -40,8 +41,17 @@ namespace oddvibe {
 
             bool is_valid() const;
 
+
+            template<typename MatrixType>
             SizeIter
-            partition_idx(const FloatMatrix& mat, SizeVec& rows) const;
+            partition_idx(const MatrixType& mat, SizeVec& rows) const {
+                return std::partition(
+                    rows.begin(),
+                    rows.end(),
+                    [self = this, &mat](const auto & row){
+                        return mat(row, self->m_split_col) <= self->m_split_val;
+                    });
+            }
 
             double calc_total_err(
                 const FloatMatrix& mat,

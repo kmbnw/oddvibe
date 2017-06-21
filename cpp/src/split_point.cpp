@@ -15,7 +15,6 @@
  */
 
 #include <cmath>
-#include <algorithm>
 #include "split_point.h"
 
 namespace oddvibe {
@@ -34,14 +33,6 @@ namespace oddvibe {
 
     size_t SplitPoint::split_col() const {
         return m_split_col;
-    }
-
-    SizeIter
-    SplitPoint::partition_idx(const FloatMatrix& mat, SizeVec& rows) const {
-        return std::partition(rows.begin(), rows.end(),
-            [col = m_split_col, val = m_split_val, &mat](const auto & row){
-                return mat(row, col) <= val;
-            });
     }
 
     // total squared error for left and right side of split_val
