@@ -98,16 +98,14 @@ namespace oddvibe {
 
     FloatVec
     Booster::fit(
-            const FloatMatrix& mat,
-            const FloatVec& ys,
+            Dataset<FloatMatrix, FloatVec> dataset,
             const size_t nrounds) const {
-        const auto nrows = mat.nrows();
+        const auto nrows = dataset.nrows();
 
         // set up initial uniform distribution over all instances
         FloatVec pmf(nrows, 1.0 / nrows);
         SizeVec counts(nrows, 0);
 
-        Dataset<FloatMatrix, FloatVec> dataset(mat, ys);
         for (size_t k = 0; k != nrounds; ++k) {
             update_one(dataset, pmf, counts);
 
