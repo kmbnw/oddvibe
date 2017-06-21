@@ -57,7 +57,7 @@ namespace oddvibe {
         RTree tree;
 
         Dataset<FloatMatrix, FloatVec> dataset(mat, ys);
-        const auto split = tree.best_split(dataset, seq.begin(), seq.end());
+        const auto split = tree.best_split(dataset, seq);
 
         CPPUNIT_ASSERT_EQUAL(false, split.is_valid());
     }
@@ -85,7 +85,7 @@ namespace oddvibe {
         const auto seq = sequential_ints(ys.size());
 
         Dataset<FloatMatrix, FloatVec> dataset(mat, ys);
-        const auto split = tree.best_split(dataset, seq.begin(), seq.end());
+        const auto split = tree.best_split(dataset, seq);
         const auto col = split.split_col();
         const auto value = split.split_val();
 
@@ -119,7 +119,7 @@ namespace oddvibe {
         const auto seq = sequential_ints(ys.size());
 
         Dataset<FloatMatrix, FloatVec> dataset(mat, ys);
-        const auto split = tree.best_split(dataset, seq.begin(), seq.end());
+        const auto split = tree.best_split(dataset, seq);
         const auto col = split.split_col();
         const auto value = split.split_val();
 
@@ -160,7 +160,7 @@ namespace oddvibe {
         const auto seq = sequential_ints(ys.size());
 
         Dataset<FloatMatrix, FloatVec> dataset(mat, ys);
-        const auto split = tree.best_split(dataset, seq.begin(), seq.end());
+        const auto split = tree.best_split(dataset, seq);
         const auto col = split.split_col();
         const auto value = split.split_val();
 

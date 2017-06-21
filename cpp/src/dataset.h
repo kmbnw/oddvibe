@@ -32,30 +32,16 @@ namespace oddvibe {
 
             // TODO explicit defaults
 
-            template <typename IteratorType>
-            std::unordered_set<float> unique_x(
-                    const size_t col,
-                    const IteratorType first,
-                    const IteratorType last) const {
-                std::unordered_set<float> uniques;
-
-                for (auto row = first; row != last; row = std::next(row)) {
-                    uniques.insert(m_xs(*row, col));
-                }
-                return uniques;
-            }
-
             // total squared error for left and right side of split_val
             double calc_total_err(
                     const SplitPoint& split,
-                    const SizeConstIter first,
-                    const SizeConstIter last) const {
+                    const SizeVec& filter) const {
 
-                if (first == last) {
+                if (filter.empty()) {
                     return doubleNaN;
                 }
 
-                const auto avg = partitioned_mean(split, first, last);
+                const auto avg = partitioned_mean(split, filter);
                 const float yhat_l = avg.first;
                 const float yhat_r = avg.second;
 
@@ -66,9 +52,9 @@ namespace oddvibe {
                 const auto split_val = split.split_val();
                 const auto split_col = split.split_col();
                 double err = 0;
-                for (auto row = first; row != last; row = std::next(row)) {
-                    const auto x_j = m_xs(*row, split_col);
-                    const auto y_j = m_ys[*row];
+                for (const auto & row : filter) {
+                    const auto x_j = m_xs(row, split_col);
+                    const auto y_j = m_ys[row];
                     const auto yhat_j = x_j <= split_val ? yhat_l : yhat_r;
                     err += pow((y_j - yhat_j), 2.0);
                 }
@@ -95,14 +81,12 @@ namespace oddvibe {
             MatrixType m_xs;
             VectorType m_ys;
 
-            template<typename IteratorType>
             std::pair<float, float>
             partitioned_mean(
                     const SplitPoint& split,
-                    const IteratorType first,
-                    const IteratorType last) const {
+                    const SizeVec& filter) const {
 
-                SizeVec part(first, last);
+                SizeVec part(filter);
                 const auto pivot = split.partition_idx(m_xs, part);
 
                 auto first_p = part.begin();

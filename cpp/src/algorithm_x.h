@@ -22,5 +22,19 @@
 
 namespace oddvibe {
     SizeVec sequential_ints(const size_t len);
+
+
+    template <typename MatrixType, typename VectorType>
+    std::unordered_set<float> unique_x(
+            const MatrixType& mat,
+            const size_t col,
+            const VectorType indices) {
+        std::unordered_set<float> uniques;
+
+        for (const auto & row : indices) {
+            uniques.insert(mat(row, col));
+        }
+        return uniques;
+    }
 }
 #endif //KMBNW_ALGORITHM_X

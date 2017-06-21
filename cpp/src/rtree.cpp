@@ -26,19 +26,19 @@
 namespace oddvibe {
     void RTree::predict(
             const FloatMatrix& mat,
-            const SizeConstIter first,
-            const SizeConstIter last,
+            SizeVec& filter,
             FloatVec& yhat) const {
         if (m_is_leaf) {
-            for (auto row = first; row != last; row = std::next(row)) {
-                yhat[*row] = m_yhat;
+            for (const auto & row : filter) {
+                yhat[row] = m_yhat;
             }
         } else {
-            SizeVec part(first, last);
-            const auto pivot = m_split.partition_idx(mat, part);
+            const auto pivot = m_split.partition_idx(mat, filter);
+            SizeVec lsplit(filter.begin(), pivot);
+            SizeVec rsplit(pivot, filter.end());
 
-            m_left->predict(mat, part.begin(), pivot, yhat);
-            m_right->predict(mat, pivot, part.end(), yhat);
+            m_left->predict(mat, lsplit, yhat);
+            m_right->predict(mat, rsplit, yhat);
         }
     }
 
@@ -47,7 +47,7 @@ namespace oddvibe {
         FloatVec yhats(nrows, floatNaN);
         auto filter = sequential_ints(nrows);
 
-        predict(mat, filter.begin(), filter.end(), yhats);
+        predict(mat, filter, yhats);
 
         return yhats;
     }
@@ -55,18 +55,19 @@ namespace oddvibe {
     void RTree::fit(
             const Dataset<FloatMatrix, FloatVec>& dataset,
             const SizeVec& filter) {
-        fit(dataset, filter.begin(), filter.end());
+
+        SizeVec defensive_copy(filter);
+        fit(dataset, defensive_copy);
     }
 
     void RTree::fit(
             const Dataset<FloatMatrix, FloatVec>& dataset,
-            const SizeConstIter first,
-            const SizeConstIter last) {
-        if (first == last) {
+            SizeVec& filter) {
+        if (filter.empty()) {
             throw std::invalid_argument("Must have at least one entry in filter");
         }
 
-        const auto yhat = mean(dataset.ys(), first, last);
+        const auto yhat = mean(dataset.ys(), filter.begin(), filter.end());
         if (std::isnan(yhat)) {
             throw std::logic_error("Prediction cannot be NaN");
         }
@@ -76,20 +77,21 @@ namespace oddvibe {
         std::unique_ptr<RTree> left;
         std::unique_ptr<RTree> right;
 
-        if (variance(dataset.ys(), first, last) > 1e-6) {
-            split = best_split(dataset, first, last);
+        if (variance(dataset.ys(), filter.begin(), filter.end()) > 1e-6) {
+            split = best_split(dataset, filter);
 
             if (split.is_valid()) {
                 is_leaf = false;
 
-                SizeVec part(first, last);
-                const auto pivot = split.partition_idx(dataset.xs(), part);
+                const auto pivot = split.partition_idx(dataset.xs(), filter);
+                SizeVec lsplit(filter.begin(), pivot);
+                SizeVec rsplit(pivot, filter.end());
 
                 left = std::make_unique<RTree>();
                 right = std::make_unique<RTree>();
 
-                left->fit(dataset, part.begin(), pivot);
-                right->fit(dataset, pivot, part.end());
+                left->fit(dataset, lsplit);
+                right->fit(dataset, rsplit);
             }
         }
 
@@ -112,18 +114,18 @@ namespace oddvibe {
 
     SplitPoint RTree::best_split(
             const Dataset<FloatMatrix, FloatVec>& dataset,
-            const SizeConstIter first,
-            const SizeConstIter last) const {
+            const SizeVec& filter) const {
         SplitPoint best;
 
-        if (first == last) {
+        // TODO min size guard
+        if (filter.empty()) {
             return best;
         }
         double best_err = doubleNaN;
 
         const auto ncols = dataset.ncols();
         for (size_t split_col = 0; split_col != ncols; ++split_col) {
-            auto uniques = dataset.unique_x(split_col, first, last);
+            auto uniques = unique_x(dataset.xs(), split_col, filter);
 
             if (uniques.size() < 2) {
                 continue;
@@ -133,7 +135,7 @@ namespace oddvibe {
                 SplitPoint split(split_val, split_col);
 
                 // total squared error for left and right side of split_val
-                const auto err = dataset.calc_total_err(split, first, last);
+                const auto err = dataset.calc_total_err(split, filter);
 
                 // TODO randomly allow the same error as best to 'win'
                 if (!std::isnan(err) && (std::isnan(best_err) || err < best_err)) {

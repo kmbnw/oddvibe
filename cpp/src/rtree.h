@@ -49,8 +49,7 @@ namespace oddvibe {
 
             SplitPoint best_split(
                 const Dataset<FloatMatrix, FloatVec>& dataset,
-                const SizeConstIter first,
-                const SizeConstIter last) const;
+                const SizeVec& filter) const;
 
         private:
             float m_yhat = floatNaN;
@@ -62,13 +61,11 @@ namespace oddvibe {
 
             void fit(
                 const Dataset<FloatMatrix, FloatVec>& dataset,
-                const SizeConstIter first,
-                const SizeConstIter last);
+                SizeVec& filter);
 
             void predict(
                 const FloatMatrix& mat,
-                const SizeConstIter first,
-                const SizeConstIter last,
+                SizeVec& filter,
                 FloatVec& yhat) const;
     };
 }
