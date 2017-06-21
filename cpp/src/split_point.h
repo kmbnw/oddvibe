@@ -13,8 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#ifndef KMBNW_SPLIT_POINT_H
-#define KMBNW_SPLIT_POINT_H
+#ifndef KMBNW_ODVB_SPLITPOINT_H
+#define KMBNW_ODVB_SPLITPOINT_H
 
 #include <cstddef>
 #include <limits>
@@ -59,4 +59,4 @@ namespace oddvibe {
             size_t m_split_col = 0;
     };
 }
-#endif //KMBNW_SPLIT_POINT_H
+#endif //KMBNW_ODVB_SPLITPOINT_H

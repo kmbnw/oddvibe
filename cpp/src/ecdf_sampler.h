@@ -16,6 +16,7 @@
 #include <vector>
 #include <random>
 #include "defs_x.h"
+#include "sampling_dist.h"
 
 #ifndef KMBNW_ODVB_ECDF_SAMPLER_H
 #define KMBNW_ODVB_ECDF_SAMPLER_H
@@ -24,7 +25,7 @@ namespace oddvibe {
     class EmpiricalSampler {
         public:
             // pmf == probability mass function
-            EmpiricalSampler(const size_t seed, const std::vector<float>& pmf);
+            EmpiricalSampler(const size_t seed, const SamplingDist& pmf);
 
             size_t next_sample();
 

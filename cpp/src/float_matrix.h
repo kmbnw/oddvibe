@@ -16,8 +16,8 @@
 
 #include "defs_x.h"
 
-#ifndef KMBNW_FLOAT_MATRIX_H
-#define KMBNW_FLOAT_MATRIX_H
+#ifndef KMBNW_ODVB_FLOAT_MATRIX_H
+#define KMBNW_ODVB_FLOAT_MATRIX_H
 
 namespace oddvibe {
     // follow R's NumericVector API where necessary to facilitate easier use
@@ -61,4 +61,4 @@ namespace oddvibe {
                 size_t x_index(const size_t row, const size_t col) const;
     };
 }
-#endif //KMBNW_FLOAT_MATRIX_H
+#endif //KMBNW_ODVB_FLOAT_MATRIX_H

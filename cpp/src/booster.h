@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 #include <vector>
-#include <unordered_map>
-#include <functional>
 #include "float_matrix.h"
 #include "dataset.h"
+#include "ecdf_sampler.h"
+#include "rtree.h"
+#include "sampling_dist.h"
 
 #ifndef KMBNW_ODVB_BOOSTER_H
 #define KMBNW_ODVB_BOOSTER_H
@@ -42,7 +43,7 @@ namespace oddvibe {
                 const auto nrows = dataset.nrows();
 
                 // set up initial uniform distribution over all instances
-                FloatVec pmf(nrows, 1.0 / nrows);
+                SamplingDist pmf(nrows);
                 SizeVec counts(nrows, 0);
 
                 for (size_t k = 0; k != nrounds; ++k) {
@@ -66,11 +67,26 @@ namespace oddvibe {
       private:
             size_t m_seed;
 
+            template<typename MatrixT, typename VectorT>
             void update_one(
-                const Dataset<FloatMatrix, FloatVec>& dataset,
-                FloatVec &pmf,
-                SizeVec &counts)
-            const;
+                    const Dataset<MatrixT, VectorT>& dataset,
+                    SamplingDist& pmf,
+                    SizeVec& counts)
+                const {
+                    const size_t nrows = dataset.nrows();
+
+                    EmpiricalSampler sampler(m_seed, pmf);
+
+                    const auto active = sampler.gen_samples(nrows);
+                    update_counts(active, counts);
+
+                    RTree tree;
+                    tree.fit(dataset, active);
+                    const auto yhats = tree.predict(dataset.xs());
+
+                    auto loss = loss_seq(dataset.ys(), yhats);
+                    pmf.adjust_for_loss(loss);
+                }
     };
 }
 #endif //KMBNW_ODVB_BOOSTER_H

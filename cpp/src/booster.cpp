@@ -20,8 +20,6 @@
 #include <cmath>
 #include <functional>
 #include "booster.h"
-#include "rtree.h"
-#include "ecdf_sampler.h"
 #include "math_x.h"
 
 namespace oddvibe {
@@ -34,47 +32,4 @@ namespace oddvibe {
 
     Booster::Booster(const size_t &seed) : m_seed(seed)
     { }
-
-    void Booster::update_one(
-        const Dataset<FloatMatrix, FloatVec>& dataset,
-        FloatVec& pmf,
-        SizeVec& counts)
-    const {
-        const size_t nrows = dataset.nrows();
-
-        EmpiricalSampler sampler(m_seed, pmf);
-
-        const auto active = sampler.gen_samples(nrows);
-        update_counts(active, counts);
-
-        RTree tree;
-        tree.fit(dataset, active);
-        const auto yhats = tree.predict(dataset.xs());
-
-        auto loss = loss_seq(dataset.ys(), yhats);
-        const double max_loss = *std::max_element(loss.begin(), loss.end());
-
-        double epsilon = 0.0;
-        for (size_t k = 0; k != loss.size(); ++k) {
-            epsilon += pmf[k] * loss[k];
-        }
-
-        const double beta = epsilon / (max_loss - epsilon);
-
-        if (epsilon < 0.5 * max_loss) {
-            std::transform(
-                pmf.begin(),
-                pmf.end(),
-                loss.begin(),
-                pmf.begin(),
-                [beta = beta, max_loss = max_loss](float pmf_k, double loss_k) {
-                    return (float) (pow(beta, 1 - loss_k / max_loss) * pmf_k);
-                });
-        } else {
-            std::cout << "RESET" << std::endl;
-            // reset to uniform distribution
-            std::fill(pmf.begin(), pmf.end(), 1.0 / nrows);
-        }
-        normalize(pmf);
-    }
 }

@@ -18,8 +18,8 @@
 #include "math_x.h"
 #include "split_point.h"
 
-#ifndef KMBNW_DATASET_H
-#define KMBNW_DATASET_H
+#ifndef KMBNW_ODVB_DATASET_H
+#define KMBNW_ODVB_DATASET_H
 
 namespace oddvibe {
     template<typename MatrixT, typename VectorT>
@@ -122,4 +122,4 @@ namespace oddvibe {
             }
     };
 }
-#endif //KMBNW_DATASET_H
+#endif //KMBNW_ODVB_DATASET_H

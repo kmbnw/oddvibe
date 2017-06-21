@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef KMBNW_RTREE_H
-#define KMBNW_RTREE_H
+#ifndef KMBNW_ODVB_RTREE_H
+#define KMBNW_ODVB_RTREE_H
 
 #include <vector>
 #include <memory>
@@ -69,4 +69,4 @@ namespace oddvibe {
                 FloatVec& yhat) const;
     };
 }
-#endif //KMBNW_RTREE_H
+#endif //KMBNW_ODVB_RTREE_H

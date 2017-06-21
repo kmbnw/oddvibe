@@ -13,28 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+#include <vector>
+#include <random>
+#include "float_matrix.h"
+#include "dataset.h"
 
-#ifndef KMBNW_ODVB_ALGORITHM_X
-#define KMBNW_ODVB_ALGORITHM_X
-
-#include <unordered_set>
-#include "defs_x.h"
+#ifndef KMBNW_ODVB_SAMPLING_DIST_H
+#define KMBNW_ODVB_SAMPLING_DIST_H
 
 namespace oddvibe {
-    SizeVec sequential_ints(const size_t len);
+    class SamplingDist {
+        public:
+            SamplingDist(const size_t nrows);
 
+            SamplingDist(const FloatVec& pmf);
 
-    template <typename MatrixT, typename VectorT>
-    std::unordered_set<float> unique_x(
-            const MatrixT& mat,
-            const size_t col,
-            const VectorT indices) {
-        std::unordered_set<float> uniques;
+            void adjust_for_loss(const DoubleVec& loss);
 
-        for (const auto & row : indices) {
-            uniques.insert(mat(row, col));
-        }
-        return uniques;
-    }
+            std::discrete_distribution<size_t> empirical_dist() const;
+
+      private:
+
+            FloatVec m_pmf;
+
+            void reset();
+    };
 }
-#endif //KMBNW_ODVB_ALGORITHM_X
+#endif //KMBNW_ODVB_SAMPLING_DIST_H
