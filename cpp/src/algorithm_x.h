@@ -23,18 +23,16 @@
 namespace oddvibe {
     SizeVec sequential_ints(const size_t len);
 
-    template <typename MatrixType>
+    template <typename MatrixType, typename IteratorType>
     std::unordered_set<float> unique_x(
             const MatrixType& mat,
             const size_t col,
-            const SizeConstIter first,
-            const SizeConstIter last) {
+            const IteratorType first,
+            const IteratorType last) {
         std::unordered_set<float> uniques;
 
-        if (first != last) {
-            for (auto row = first; row != last; row = std::next(row)) {
-                uniques.insert(mat(*row, col));
-            }
+        for (auto row = first; row != last; row = std::next(row)) {
+            uniques.insert(mat(*row, col));
         }
         return uniques;
     }
