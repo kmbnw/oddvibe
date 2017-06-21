@@ -23,6 +23,8 @@ namespace oddvibe {
     // follow R's NumericVector API where necessary to facilitate easier use
     class FloatMatrix {
         public:
+            FloatMatrix() = default;
+
             /**
              * Create new instance.
              * @param[in] ncols: Number of columns/features.
@@ -32,9 +34,11 @@ namespace oddvibe {
             FloatMatrix(const size_t ncols, FloatVec&& xs);
 
             FloatMatrix(FloatMatrix&& other) = default;
+            FloatMatrix& operator=(FloatMatrix&& other) = default;
+
             FloatMatrix(const FloatMatrix& other) = default;
             FloatMatrix& operator=(const FloatMatrix& other) = default;
-            FloatMatrix& operator=(FloatMatrix&& other) = default;
+
             ~FloatMatrix() = default;
 
             float operator() (const size_t row, const size_t col) const;

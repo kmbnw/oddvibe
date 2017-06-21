@@ -92,7 +92,7 @@ namespace oddvibe {
 
         const size_t nrounds = 5000;
 
-        const FloatMatrix mat(nfeatures, std::move(xs));
+        FloatMatrix mat(nfeatures, std::move(xs));
 
         const Booster booster(seed);
 

@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+#include <stdexcept>
 #include "defs_x.h"
 #include "math_x.h"
 #include "split_point.h"
@@ -24,10 +25,20 @@ namespace oddvibe {
     template<typename MatrixType, typename VectorType>
     class Dataset {
         public:
-            Dataset(const MatrixType& xs, const VectorType& ys):
-                m_xs(xs),
-                m_ys(ys) {
+            Dataset(const MatrixType& xs, const VectorType& ys) {
+                if (xs.nrows() != ys.size()) {
+                    throw std::invalid_argument("Mismatched number of rows");
+                }
+                m_xs = xs;
+                m_ys = ys;
+            }
 
+            Dataset(MatrixType&& xs, VectorType&& ys) {
+                if (xs.nrows() != ys.size()) {
+                    throw std::invalid_argument("Mismatched number of rows");
+                }
+                m_xs = std::move(xs);
+                m_ys = std::move(ys);
             }
 
             // TODO explicit defaults
