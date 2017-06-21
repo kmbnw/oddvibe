@@ -33,9 +33,11 @@ namespace oddvibe {
         public:
             RTree() = default;
             RTree(RTree&& other) = default;
-            RTree(const RTree& other) = default;
-            RTree& operator=(const RTree& other) = default;
             RTree& operator=(RTree&& other) = default;
+
+            RTree(const RTree& other) = delete;
+            RTree& operator=(const RTree& other) = delete;
+
             ~RTree() = default;
 
             FloatVec predict(const FloatMatrix& mat) const;
