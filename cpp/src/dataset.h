@@ -22,10 +22,10 @@
 #define KMBNW_DATASET_H
 
 namespace oddvibe {
-    template<typename MatrixType, typename VectorType>
+    template<typename MatrixT, typename VectorT>
     class Dataset {
         public:
-            Dataset(const MatrixType& xs, const VectorType& ys) {
+            Dataset(const MatrixT& xs, const VectorT& ys) {
                 if (xs.nrows() != ys.size()) {
                     throw std::invalid_argument("Mismatched number of rows");
                 }
@@ -33,7 +33,7 @@ namespace oddvibe {
                 m_ys = ys;
             }
 
-            Dataset(MatrixType&& xs, VectorType&& ys) {
+            Dataset(MatrixT&& xs, VectorT&& ys) {
                 if (xs.nrows() != ys.size()) {
                     throw std::invalid_argument("Mismatched number of rows");
                 }
@@ -44,9 +44,10 @@ namespace oddvibe {
             // TODO explicit defaults
 
             // total squared error for left and right side of split_val
+            template<typename IndexSeqT>
             double calc_total_err(
                     const SplitPoint& split,
-                    const SizeVec& filter) const {
+                    const IndexSeqT& filter) const {
 
                 if (filter.empty()) {
                     return doubleNaN;
@@ -80,17 +81,17 @@ namespace oddvibe {
                 return m_xs.ncols();
             }
 
-            const MatrixType& xs() const {
+            const MatrixT& xs() const {
                 return m_xs;
             }
 
-            const VectorType& ys() const {
+            const VectorT& ys() const {
                 return m_ys;
             }
 
         private:
-            MatrixType m_xs;
-            VectorType m_ys;
+            MatrixT m_xs;
+            VectorT m_ys;
 
             std::pair<float, float>
             partitioned_mean(

@@ -43,12 +43,12 @@ namespace oddvibe {
             bool is_valid() const;
 
 
-            template<typename MatrixType>
-            SizeIter
-            partition_idx(const MatrixType& mat, SizeVec& rows) const {
+            template<typename MatrixT, typename IndexSeqT>
+            typename IndexSeqT::iterator
+            partition_idx(const MatrixT& mat, IndexSeqT& filter) const {
                 return std::partition(
-                    rows.begin(),
-                    rows.end(),
+                    filter.begin(),
+                    filter.end(),
                     [self = this, &mat](const auto & row){
                         return mat(row, self->m_split_col) <= self->m_split_val;
                     });

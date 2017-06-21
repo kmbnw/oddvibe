@@ -24,11 +24,11 @@ namespace oddvibe {
     SizeVec sequential_ints(const size_t len);
 
 
-    template <typename MatrixType, typename VectorType>
+    template <typename MatrixT, typename VectorT>
     std::unordered_set<float> unique_x(
-            const MatrixType& mat,
+            const MatrixT& mat,
             const size_t col,
-            const VectorType indices) {
+            const VectorT indices) {
         std::unordered_set<float> uniques;
 
         for (const auto & row : indices) {
