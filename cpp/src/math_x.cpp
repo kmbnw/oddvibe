@@ -84,4 +84,22 @@ namespace oddvibe {
             rmse_loss);
         return loss;
     }
+
+    FloatVec normalize_counts(const SizeVec& counts, const size_t nrounds) {
+        const auto f_nrounds = (1.0f * nrounds) + 1;
+        FloatVec norm_counts(counts.size(), 0);
+
+        std::transform(
+            counts.begin(),
+            counts.end(),
+            norm_counts.begin(),
+            [f_nrounds = f_nrounds](const size_t count) {
+                const auto norm_count = (1.0 * count) / f_nrounds;
+                if (std::isnan(norm_count)) {
+                    throw std::logic_error("NaN for normalized count");
+                }
+                return norm_count;
+            });
+        return norm_counts;
+    }
 }

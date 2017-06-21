@@ -39,5 +39,7 @@ namespace oddvibe {
         const SizeConstIter last);
 
     DoubleVec loss_seq(const FloatVec& ys, const FloatVec& yhats);
+
+    FloatVec normalize_counts(const SizeVec &counts, const size_t nrounds);
 }
 #endif //KMBNW_ODVB_MATHX_H

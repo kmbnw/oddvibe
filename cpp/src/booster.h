@@ -25,8 +25,6 @@
 namespace oddvibe {
     void update_counts(const SizeVec& src, SizeVec& counts);
 
-    FloatVec normalize_counts(const SizeVec &counts, const size_t nrounds);
-
     /**
      * Provides boosting capabilities to other models.
      */
@@ -37,9 +35,33 @@ namespace oddvibe {
             Booster(const Booster &other) = delete;
             Booster &operator=(const Booster &other) = delete;
 
-            FloatVec fit(
-                Dataset<FloatMatrix, FloatVec> dataset,
-                const size_t nrounds) const;
+
+            template<typename MatrixT, typename VectorT>
+            FloatVec
+            fit(Dataset<MatrixT, VectorT> dataset, const size_t nrounds) const {
+                const auto nrows = dataset.nrows();
+
+                // set up initial uniform distribution over all instances
+                FloatVec pmf(nrows, 1.0 / nrows);
+                SizeVec counts(nrows, 0);
+
+                for (size_t k = 0; k != nrounds; ++k) {
+                    update_one(dataset, pmf, counts);
+
+                    /*if (k == (nrounds - 2)) {
+                        for (size_t j = 0; j != nrows; ++j) {
+                            const auto avg_count = 1.0 * counts[j] / (k + 1);
+                            std::cout << std::setw(4) << std::left << j;
+                            std::cout << std::fixed << std::setprecision(2);
+                            std::cout << std::setw(7) << std::left << pmf[j];
+                            std::cout << "avg_count[x] = " << std::setw(7) << std::left;
+                            std::cout << avg_count << std::endl;
+                        }
+                    }*/
+                }
+
+                return normalize_counts(counts, nrounds);
+            }
 
       private:
             size_t m_seed;
