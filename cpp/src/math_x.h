@@ -39,5 +39,31 @@ namespace oddvibe {
         const SizeConstIter last);
 
     DoubleVec loss_seq(const FloatVec& ys, const FloatVec& yhats);
+
+    template<typename VectorType, typename IteratorType>
+    std::pair<float, float>
+    partitioned_mean(
+            const VectorType& ys,
+            const IteratorType first,
+            const IteratorType pivot,
+            const IteratorType last) {
+
+        // std::optional would be good here, but not at C++ 17 yet
+        // for this install
+        if (first == last || pivot == first || pivot == last) {
+            return std::make_pair(floatNaN, floatNaN);
+        }
+
+        const float yhat_l = mean(ys, first, pivot);
+        if (std::isnan(yhat_l)) {
+            return std::make_pair(floatNaN, floatNaN);
+        }
+
+        const float yhat_r = mean(ys, pivot, last);
+        if (std::isnan(yhat_r)) {
+            return std::make_pair(floatNaN, floatNaN);
+        }
+        return std::make_pair(yhat_l, yhat_r);
+    }
 }
 #endif //KMBNW_ODVB_MATHX_H

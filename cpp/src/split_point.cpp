@@ -50,19 +50,14 @@ namespace oddvibe {
         SizeVec part(first, last);
         const auto pivot = partition_idx(mat, part);
 
-        if (pivot == part.begin() || pivot == part.end()) {
+        const auto avg = partitioned_mean(ys, part.begin(), pivot, part.end());
+        const float yhat_l = avg.first;
+        const float yhat_r = avg.second;
+
+        if (std::isnan(yhat_l) || std::isnan(yhat_r)) {
             return doubleNaN;
         }
 
-        const float yhat_l = mean(ys, part.begin(), pivot);
-        if (std::isnan(yhat_l)) {
-            return doubleNaN;
-        }
-
-        const float yhat_r = mean(ys, pivot, part.end());
-        if (std::isnan(yhat_r)) {
-            return doubleNaN;
-        }
 
         double err = 0;
         for (auto row = first; row != last; row = std::next(row)) {
