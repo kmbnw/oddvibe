@@ -53,22 +53,20 @@ namespace oddvibe {
     }
 
     void RTree::fit(
-            const FloatMatrix& mat,
-            const FloatVec& ys,
+            const Dataset<FloatMatrix, FloatVec>& dataset,
             const SizeVec& filter) {
-        fit(mat, ys, filter.begin(), filter.end());
+        fit(dataset, filter.begin(), filter.end());
     }
 
     void RTree::fit(
-            const FloatMatrix& mat,
-            const FloatVec& ys,
+            const Dataset<FloatMatrix, FloatVec>& dataset,
             const SizeConstIter first,
             const SizeConstIter last) {
         if (first == last) {
             throw std::invalid_argument("Must have at least one entry in filter");
         }
 
-        const auto yhat = mean(ys, first, last);
+        const auto yhat = mean(dataset.ys(), first, last);
         if (std::isnan(yhat)) {
             throw std::logic_error("Prediction cannot be NaN");
         }
@@ -78,20 +76,20 @@ namespace oddvibe {
         std::unique_ptr<RTree> left;
         std::unique_ptr<RTree> right;
 
-        if (variance(ys, first, last) > 1e-6) {
-            split = best_split(mat, ys, first, last);
+        if (variance(dataset.ys(), first, last) > 1e-6) {
+            split = best_split(dataset, first, last);
 
             if (split.is_valid()) {
                 is_leaf = false;
 
                 SizeVec part(first, last);
-                const auto pivot = split.partition_idx(mat, part);
+                const auto pivot = split.partition_idx(dataset.xs(), part);
 
                 left = std::make_unique<RTree>();
                 right = std::make_unique<RTree>();
 
-                left->fit(mat, ys, part.begin(), pivot);
-                right->fit(mat, ys, pivot, part.end());
+                left->fit(dataset, part.begin(), pivot);
+                right->fit(dataset, pivot, part.end());
             }
         }
 
@@ -113,8 +111,7 @@ namespace oddvibe {
     }
 
     SplitPoint RTree::best_split(
-            const FloatMatrix& mat,
-            const FloatVec& ys,
+            const Dataset<FloatMatrix, FloatVec>& dataset,
             const SizeConstIter first,
             const SizeConstIter last) const {
         SplitPoint best;
@@ -122,14 +119,11 @@ namespace oddvibe {
         if (first == last) {
             return best;
         }
-
-        Dataset<FloatMatrix, FloatVec> dataset(mat, ys);
-
         double best_err = doubleNaN;
 
-        const auto ncols = mat.ncols();
+        const auto ncols = dataset.ncols();
         for (size_t split_col = 0; split_col != ncols; ++split_col) {
-            auto uniques = unique_x(mat, split_col, first, last);
+            auto uniques = dataset.unique_x(split_col, first, last);
 
             if (uniques.size() < 2) {
                 continue;

@@ -54,12 +54,11 @@ namespace oddvibe {
     { }
 
     void Booster::update_one(
-        const FloatMatrix& mat,
-        const FloatVec& ys,
+        const Dataset<FloatMatrix, FloatVec>& dataset,
         FloatVec& pmf,
         SizeVec& counts)
     const {
-        const size_t nrows = mat.nrows();
+        const size_t nrows = dataset.nrows();
 
         EmpiricalSampler sampler(m_seed, pmf);
 
@@ -67,10 +66,10 @@ namespace oddvibe {
         update_counts(active, counts);
 
         RTree tree;
-        tree.fit(mat, ys, active);
-        const auto yhats = tree.predict(mat);
+        tree.fit(dataset, active);
+        const auto yhats = tree.predict(dataset.xs());
 
-        auto loss = loss_seq(ys, yhats);
+        auto loss = loss_seq(dataset.ys(), yhats);
         const double max_loss = *std::max_element(loss.begin(), loss.end());
 
         double epsilon = 0.0;
@@ -108,8 +107,9 @@ namespace oddvibe {
         FloatVec pmf(nrows, 1.0 / nrows);
         SizeVec counts(nrows, 0);
 
+        Dataset<FloatMatrix, FloatVec> dataset(mat, ys);
         for (size_t k = 0; k != nrounds; ++k) {
-            update_one(mat, ys, pmf, counts);
+            update_one(dataset, pmf, counts);
 
             /*if (k == (nrounds - 2)) {
                 for (size_t j = 0; j != nrows; ++j) {

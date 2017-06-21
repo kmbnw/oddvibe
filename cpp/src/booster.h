@@ -17,7 +17,7 @@
 #include <unordered_map>
 #include <functional>
 #include "float_matrix.h"
-#include "defs_x.h"
+#include "dataset.h"
 
 #ifndef KMBNW_ODVB_BOOSTER_H
 #define KMBNW_ODVB_BOOSTER_H
@@ -46,8 +46,7 @@ namespace oddvibe {
             size_t m_seed;
 
             void update_one(
-                const FloatMatrix& mat,
-                const FloatVec& ys,
+                const Dataset<FloatMatrix, FloatVec>& dataset,
                 FloatVec &pmf,
                 SizeVec &counts)
             const;

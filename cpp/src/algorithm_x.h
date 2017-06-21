@@ -22,19 +22,5 @@
 
 namespace oddvibe {
     SizeVec sequential_ints(const size_t len);
-
-    template <typename MatrixType, typename IteratorType>
-    std::unordered_set<float> unique_x(
-            const MatrixType& mat,
-            const size_t col,
-            const IteratorType first,
-            const IteratorType last) {
-        std::unordered_set<float> uniques;
-
-        for (auto row = first; row != last; row = std::next(row)) {
-            uniques.insert(mat(*row, col));
-        }
-        return uniques;
-    }
 }
 #endif //KMBNW_ALGORITHM_X

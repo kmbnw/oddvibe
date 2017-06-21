@@ -23,6 +23,7 @@
 #include <limits>
 #include "split_point.h"
 #include "float_matrix.h"
+#include "dataset.h"
 
 namespace oddvibe {
 
@@ -43,13 +44,11 @@ namespace oddvibe {
             FloatVec predict(const FloatMatrix& mat) const;
 
             void fit(
-                const FloatMatrix& mat,
-                const FloatVec& ys,
+                const Dataset<FloatMatrix, FloatVec>& dataset,
                 const SizeVec& filter);
 
             SplitPoint best_split(
-                const FloatMatrix& mat,
-                const FloatVec& ys,
+                const Dataset<FloatMatrix, FloatVec>& dataset,
                 const SizeConstIter first,
                 const SizeConstIter last) const;
 
@@ -62,8 +61,7 @@ namespace oddvibe {
             std::unique_ptr<RTree> m_right;
 
             void fit(
-                const FloatMatrix& mat,
-                const FloatVec& ys,
+                const Dataset<FloatMatrix, FloatVec>& dataset,
                 const SizeConstIter first,
                 const SizeConstIter last);
 

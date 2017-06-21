@@ -32,6 +32,19 @@ namespace oddvibe {
 
             // TODO explicit defaults
 
+            template <typename IteratorType>
+            std::unordered_set<float> unique_x(
+                    const size_t col,
+                    const IteratorType first,
+                    const IteratorType last) const {
+                std::unordered_set<float> uniques;
+
+                for (auto row = first; row != last; row = std::next(row)) {
+                    uniques.insert(m_xs(*row, col));
+                }
+                return uniques;
+            }
+
             // total squared error for left and right side of split_val
             double calc_total_err(
                     const SplitPoint& split,
@@ -60,6 +73,22 @@ namespace oddvibe {
                     err += pow((y_j - yhat_j), 2.0);
                 }
                 return err;
+            }
+
+            size_t nrows() const {
+                return m_xs.nrows();
+            }
+
+            size_t ncols() const {
+                return m_xs.ncols();
+            }
+
+            const MatrixType& xs() const {
+                return m_xs;
+            }
+
+            const VectorType& ys() const {
+                return m_ys;
             }
 
         private:
