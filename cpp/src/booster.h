@@ -31,7 +31,7 @@ namespace oddvibe {
      */
     class Booster {
         public:
-            Booster(const size_t &seed);
+            Booster(const size_t &seed) : m_seed(seed) {}
 
             Booster(const Booster &other) = delete;
             Booster &operator=(const Booster &other) = delete;

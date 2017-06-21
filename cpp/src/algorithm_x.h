@@ -23,6 +23,7 @@
 namespace oddvibe {
     SizeVec sequential_ints(const size_t len);
 
+    void update_counts(const SizeVec& src, SizeVec& counts);
 
     template <typename MatrixT, typename VectorT>
     std::unordered_set<float> unique_x(

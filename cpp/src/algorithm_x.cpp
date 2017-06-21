@@ -23,4 +23,11 @@ namespace oddvibe {
         std::iota(seq.begin(), seq.end(), 0);
         return seq;
     }
+
+    void
+    update_counts(const SizeVec& src, SizeVec& counts) {
+        for (const auto & idx : src) {
+            ++counts[idx];
+        }
+    }
 }
