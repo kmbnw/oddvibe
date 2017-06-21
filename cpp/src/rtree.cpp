@@ -122,7 +122,6 @@ namespace oddvibe {
         }
 
         double best_err = doubleNaN;
-        bool init = false;
 
         const auto ncols = mat.ncols();
         for (size_t split_col = 0; split_col != ncols; ++split_col) {
@@ -139,8 +138,7 @@ namespace oddvibe {
                 const auto err = split.calc_total_err(mat, ys, first, last);
 
                 // TODO randomly allow the same error as best to 'win'
-                if (!init || (!std::isnan(err) && err < best_err)) {
-                    init = true;
+                if (!std::isnan(err) && (std::isnan(best_err) || err < best_err)) {
                     best = std::move(split);
                     best_err = err;
                 }

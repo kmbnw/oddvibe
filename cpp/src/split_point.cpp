@@ -50,6 +50,10 @@ namespace oddvibe {
         SizeVec part(first, last);
         const auto pivot = partition_idx(mat, part);
 
+        if (pivot == part.begin() || pivot == part.end()) {
+            return doubleNaN;
+        }
+
         const float yhat_l = mean(ys, part.begin(), pivot);
         if (std::isnan(yhat_l)) {
             return doubleNaN;
