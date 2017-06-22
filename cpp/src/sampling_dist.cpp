@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+#include <algorithm>
 #include "sampling_dist.h"
 #include "math_x.h"
 

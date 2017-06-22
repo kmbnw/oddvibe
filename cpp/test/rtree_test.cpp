@@ -55,10 +55,9 @@ namespace oddvibe {
 
         const FloatMatrix mat(nfeatures, std::move(xs));
         const auto seq = sequential_ints(ys.size());
-        RTree tree;
 
-        Dataset<FloatMatrix, FloatVec> dataset(mat, ys);
-        const auto split = tree.best_split(dataset, seq);
+        Dataset<FloatMatrix, FloatVec> data(mat, ys);
+        const auto split = best_split(data.xs(), data.ys(), seq);
 
         CPPUNIT_ASSERT_EQUAL(false, split.is_valid());
     }
@@ -82,11 +81,10 @@ namespace oddvibe {
         const size_t nfeatures = 2;
 
         const FloatMatrix mat(nfeatures, std::move(xs));
-        RTree tree;
         const auto seq = sequential_ints(ys.size());
 
-        Dataset<FloatMatrix, FloatVec> dataset(mat, ys);
-        const auto split = tree.best_split(dataset, seq);
+        Dataset<FloatMatrix, FloatVec> data(mat, ys);
+        const auto split = best_split(data.xs(), data.ys(), seq);
         const auto col = split.split_col();
         const auto value = split.split_val();
 
@@ -116,11 +114,10 @@ namespace oddvibe {
         const size_t nfeatures = 2;
 
         const FloatMatrix mat(nfeatures, std::move(xs));
-        RTree tree;
         const auto seq = sequential_ints(ys.size());
 
-        Dataset<FloatMatrix, FloatVec> dataset(mat, ys);
-        const auto split = tree.best_split(dataset, seq);
+        Dataset<FloatMatrix, FloatVec> data(mat, ys);
+        const auto split = best_split(data.xs(), data.ys(), seq);
         const auto col = split.split_col();
         const auto value = split.split_val();
 
@@ -157,11 +154,10 @@ namespace oddvibe {
         const size_t nfeatures = 3;
 
         const FloatMatrix mat(nfeatures, std::move(xs));
-        RTree tree;
         const auto seq = sequential_ints(ys.size());
 
-        Dataset<FloatMatrix, FloatVec> dataset(mat, ys);
-        const auto split = tree.best_split(dataset, seq);
+        Dataset<FloatMatrix, FloatVec> data(mat, ys);
+        const auto split = best_split(data.xs(), data.ys(), seq);
         const auto col = split.split_col();
         const auto value = split.split_val();
 

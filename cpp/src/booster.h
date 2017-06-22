@@ -79,8 +79,7 @@ namespace oddvibe {
                     const auto active = sampler.gen_samples(nrows);
                     update_counts(active, counts);
 
-                    RTree tree;
-                    tree.fit(dataset, active);
+                    RTree tree(dataset, active);
                     const auto yhats = tree.predict(dataset.xs());
 
                     auto loss = loss_seq(dataset.ys(), yhats);

@@ -32,7 +32,6 @@ namespace oddvibe {
      */
     class RTree {
         public:
-            RTree() = default;
             RTree(RTree&& other) = default;
             RTree& operator=(RTree&& other) = default;
 
@@ -42,47 +41,44 @@ namespace oddvibe {
             ~RTree() = default;
 
             template<typename MatrixT, typename VectorT>
-            SplitPoint best_split(
-                    const Dataset<MatrixT, VectorT>& dataset,
-                    const SizeVec& filter) const {
-                SplitPoint best;
-
-                // TODO min size guard
-                if (filter.empty()) {
-                    return best;
+            RTree(const Dataset<MatrixT, VectorT>& data, const SizeVec& rows) {
+                if (rows.empty()) {
+                    throw std::invalid_argument("Must have at least one entry");
                 }
-                double best_err = doubleNaN;
 
-                const auto ncols = dataset.ncols();
-                for (size_t split_col = 0; split_col != ncols; ++split_col) {
-                    auto uniques = unique_x(dataset.xs(), split_col, filter);
+                // defensive copy
+                SizeVec filter(rows);
 
-                    if (uniques.size() < 2) {
-                        continue;
-                    }
+                m_yhat = mean(data.ys(), filter.begin(), filter.end());
+                if (std::isnan(m_yhat)) {
+                    throw std::logic_error("Prediction cannot be NaN");
+                }
 
-                    for (const auto & split_val : uniques) {
-                        SplitPoint split(split_val, split_col);
+                SplitPoint split;
+                if (variance(data.ys(), filter.begin(), filter.end()) > 1e-6) {
+                    split = best_split(data.xs(), data.ys(), filter);
 
-                        // total squared error for left and right side of split_val
-                        const auto err = dataset.calc_total_err(split, filter);
+                    if (split.is_valid()) {
+                        m_split = split;
+                        m_is_leaf = false;
 
-                        // TODO randomly allow the same error as best to 'win'
-                        if (!std::isnan(err) && (std::isnan(best_err) || err < best_err)) {
-                            best = std::move(split);
-                            best_err = err;
-                        }
+                        const auto pivot = m_split.partition_idx(data.xs(), filter);
+                        SizeVec lsplit(filter.begin(), pivot);
+                        SizeVec rsplit(pivot, filter.end());
+
+                        m_left = std::make_unique<RTree>(data, lsplit);
+                        m_right = std::make_unique<RTree>(data, rsplit);
                     }
                 }
-                return best;
-            }
 
-            template<typename MatrixT, typename VectorT>
-            void fit(
-                    const Dataset<MatrixT, VectorT>& dataset,
-                    const SizeVec& filter) {
-                SizeVec defensive_copy(filter);
-                fit_r(dataset, defensive_copy);
+                if (!m_is_leaf) {
+                    if (!m_left) {
+                        throw std::logic_error("Cannot have a null left child node");
+                    }
+                    if (!m_right) {
+                        throw std::logic_error("Cannot have a null right child node");
+                    }
+                }
             }
 
             template<typename MatrixT>
@@ -103,59 +99,6 @@ namespace oddvibe {
 
             std::unique_ptr<RTree> m_left;
             std::unique_ptr<RTree> m_right;
-
-            template<typename MatrixT, typename VectorT>
-            void fit_r(
-                    const Dataset<MatrixT, VectorT>& dataset,
-                    SizeVec& filter) {
-                if (filter.empty()) {
-                    throw std::invalid_argument("Must have at least one entry in filter");
-                }
-
-                const auto yhat = mean(dataset.ys(), filter.begin(), filter.end());
-                if (std::isnan(yhat)) {
-                    throw std::logic_error("Prediction cannot be NaN");
-                }
-
-                auto is_leaf = true;
-                SplitPoint split;
-                std::unique_ptr<RTree> left;
-                std::unique_ptr<RTree> right;
-
-                if (variance(dataset.ys(), filter.begin(), filter.end()) > 1e-6) {
-                    split = best_split(dataset, filter);
-
-                    if (split.is_valid()) {
-                        is_leaf = false;
-
-                        const auto pivot = split.partition_idx(dataset.xs(), filter);
-                        SizeVec lsplit(filter.begin(), pivot);
-                        SizeVec rsplit(pivot, filter.end());
-
-                        left = std::make_unique<RTree>();
-                        right = std::make_unique<RTree>();
-
-                        left->fit_r(dataset, lsplit);
-                        right->fit_r(dataset, rsplit);
-                    }
-                }
-
-                if (!is_leaf) {
-                    if (!left) {
-                        throw std::logic_error("Cannot have a null left child node");
-                    }
-                    if (!right) {
-                        throw std::logic_error("Cannot have a null right child node");
-                    }
-
-                    m_split = split;
-                    m_left = std::move(left);
-                    m_right = std::move(right);
-                }
-
-                m_yhat = yhat;
-                m_is_leaf = is_leaf;
-            }
 
             template<typename MatrixT>
             void
