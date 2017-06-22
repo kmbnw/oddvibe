@@ -15,7 +15,6 @@
  */
 #include <vector>
 #include <random>
-#include "float_matrix.h"
 #include "dataset.h"
 
 #ifndef KMBNW_ODVB_SAMPLING_DIST_H

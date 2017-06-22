@@ -22,7 +22,6 @@
 #include <cmath>
 #include <limits>
 #include "split_point.h"
-#include "float_matrix.h"
 #include "algorithm_x.h"
 #include "dataset.h"
 
@@ -78,11 +77,12 @@ namespace oddvibe {
                 return best;
             }
 
+            template<typename MatrixT, typename VectorT>
             void fit(
-                    const Dataset<FloatMatrix, FloatVec>& dataset,
+                    const Dataset<MatrixT, VectorT>& dataset,
                     const SizeVec& filter) {
                 SizeVec defensive_copy(filter);
-                fit(dataset, defensive_copy);
+                fit_r(dataset, defensive_copy);
             }
 
             template<typename MatrixT>
@@ -105,7 +105,7 @@ namespace oddvibe {
             std::unique_ptr<RTree> m_right;
 
             template<typename MatrixT, typename VectorT>
-            void fit(
+            void fit_r(
                     const Dataset<MatrixT, VectorT>& dataset,
                     SizeVec& filter) {
                 if (filter.empty()) {
@@ -135,8 +135,8 @@ namespace oddvibe {
                         left = std::make_unique<RTree>();
                         right = std::make_unique<RTree>();
 
-                        left->fit(dataset, lsplit);
-                        right->fit(dataset, rsplit);
+                        left->fit_r(dataset, lsplit);
+                        right->fit_r(dataset, rsplit);
                     }
                 }
 

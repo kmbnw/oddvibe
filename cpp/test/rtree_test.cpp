@@ -21,6 +21,7 @@
 #include "rtree.h"
 #include "rtree_test.h"
 #include "algorithm_x.h"
+#include "float_matrix.h"
 
 #include <cppunit/extensions/TestFactoryRegistry.h>
 #include <cppunit/ui/text/TestRunner.h>

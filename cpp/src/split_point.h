@@ -21,7 +21,6 @@
 #include <algorithm>
 #include <utility>
 #include "defs_x.h"
-#include "float_matrix.h"
 
 namespace oddvibe {
     class SplitPoint {
