@@ -44,11 +44,8 @@ namespace oddvibe {
             // TODO explicit defaults
 
             // total squared error for left and right side of split_val
-            template<typename IndexSeqT>
-            double calc_total_err(
-                    const SplitPoint& split,
-                    const IndexSeqT& filter) const {
-
+            double
+            calc_total_err(const SplitPoint& split, const SizeVec& filter) const {
                 if (filter.empty()) {
                     return doubleNaN;
                 }

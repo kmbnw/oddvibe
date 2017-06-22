@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 #include <vector>
-#include "float_matrix.h"
 #include "dataset.h"
 #include "ecdf_sampler.h"
 #include "rtree.h"
