@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 #include <vector>
-#include "dataset.h"
 #include "ecdf_sampler.h"
 #include "rtree.h"
 #include "sampling_dist.h"
@@ -36,17 +35,17 @@ namespace oddvibe {
             Booster &operator=(const Booster &other) = delete;
 
 
-            template<typename MatrixT, typename VectorT>
+            template <typename MatrixT, typename VectorT>
             FloatVec
-            fit(Dataset<MatrixT, VectorT> dataset, const size_t nrounds) const {
-                const auto nrows = dataset.nrows();
+            fit(const MatrixT& xs, const VectorT& ys, const size_t nrounds) const {
+                const auto nrows = xs.nrows();
 
                 // set up initial uniform distribution over all instances
                 SamplingDist pmf(nrows);
                 SizeVec counts(nrows, 0);
 
                 for (size_t k = 0; k != nrounds; ++k) {
-                    update_one(dataset, pmf, counts);
+                    update_one(xs, ys, pmf, counts);
 
                     /*if (k == (nrounds - 2)) {
                         for (size_t j = 0; j != nrows; ++j) {
@@ -66,23 +65,24 @@ namespace oddvibe {
       private:
             size_t m_seed;
 
-            template<typename MatrixT, typename VectorT>
+            template <typename MatrixT, typename VectorT>
             void update_one(
-                    const Dataset<MatrixT, VectorT>& dataset,
+                    const MatrixT& xs,
+                    const VectorT& ys,
                     SamplingDist& pmf,
                     SizeVec& counts)
                 const {
-                    const size_t nrows = dataset.nrows();
+                    const size_t nrows = xs.nrows();
 
                     EmpiricalSampler sampler(m_seed, pmf);
 
                     const auto active = sampler.gen_samples(nrows);
                     update_counts(active, counts);
 
-                    RTree tree(dataset, active);
-                    const auto yhats = tree.predict(dataset.xs());
+                    RTree tree(xs, ys, active);
+                    const auto yhats = tree.predict(xs);
 
-                    auto loss = loss_seq(dataset.ys(), yhats);
+                    auto loss = loss_seq(ys, yhats);
                     pmf.adjust_for_loss(loss);
                 }
     };

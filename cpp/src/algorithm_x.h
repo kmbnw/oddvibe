@@ -25,15 +25,15 @@ namespace oddvibe {
 
     void update_counts(const SizeVec& src, SizeVec& counts);
 
-    template <typename MatrixT, typename VectorT>
+    template <typename MatrixT>
     std::unordered_set<float> unique_x(
-            const MatrixT& mat,
+            const MatrixT& xs,
             const size_t col,
-            const VectorT indices) {
+            const SizeVec& indices) {
         std::unordered_set<float> uniques;
 
         for (const auto & row : indices) {
-            uniques.insert(mat(row, col));
+            uniques.insert(xs(row, col));
         }
         return uniques;
     }

@@ -22,6 +22,7 @@
 #include <utility>
 #include "defs_x.h"
 #include "math_x.h"
+#include "algorithm_x.h"
 
 namespace oddvibe {
     class SplitPoint {
@@ -43,7 +44,7 @@ namespace oddvibe {
             bool is_valid() const;
 
 
-            template<typename MatrixT, typename IndexSeqT>
+            template <typename MatrixT, typename IndexSeqT>
             typename IndexSeqT::iterator
             partition_idx(const MatrixT& mat, IndexSeqT& filter) const {
                 return std::partition(
@@ -55,7 +56,7 @@ namespace oddvibe {
             }
 
             // total squared error for left and right side of split_val
-            template<typename MatrixT, typename VectorT>
+            template <typename MatrixT, typename VectorT>
             double calc_total_err(
                     const MatrixT& xs,
                     const VectorT& ys,
@@ -86,7 +87,7 @@ namespace oddvibe {
             float m_split_val = floatNaN;
             size_t m_split_col = 0;
 
-            template<typename MatrixT, typename VectorT>
+            template <typename MatrixT, typename VectorT>
             std::pair<float, float>
             partitioned_mean(
                     const MatrixT& xs,
@@ -116,7 +117,7 @@ namespace oddvibe {
             }
     };
 
-    template<typename MatrixT, typename VectorT>
+    template <typename MatrixT, typename VectorT>
     SplitPoint
     best_split(const MatrixT& xs, const VectorT& ys, const SizeVec& filter) {
         SplitPoint best;

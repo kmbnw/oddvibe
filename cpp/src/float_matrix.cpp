@@ -18,7 +18,6 @@
 #include <cmath>
 #include <algorithm>
 #include "float_matrix.h"
-#include "dataset.h"
 
 namespace oddvibe {
     FloatMatrix::FloatMatrix(const size_t ncols, FloatVec&& xs) {

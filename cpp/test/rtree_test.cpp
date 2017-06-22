@@ -56,8 +56,7 @@ namespace oddvibe {
         const FloatMatrix mat(nfeatures, std::move(xs));
         const auto seq = sequential_ints(ys.size());
 
-        Dataset<FloatMatrix, FloatVec> data(mat, ys);
-        const auto split = best_split(data.xs(), data.ys(), seq);
+        const auto split = best_split(mat, ys, seq);
 
         CPPUNIT_ASSERT_EQUAL(false, split.is_valid());
     }
@@ -83,8 +82,7 @@ namespace oddvibe {
         const FloatMatrix mat(nfeatures, std::move(xs));
         const auto seq = sequential_ints(ys.size());
 
-        Dataset<FloatMatrix, FloatVec> data(mat, ys);
-        const auto split = best_split(data.xs(), data.ys(), seq);
+        const auto split = best_split(mat, ys, seq);
         const auto col = split.split_col();
         const auto value = split.split_val();
 
@@ -116,8 +114,7 @@ namespace oddvibe {
         const FloatMatrix mat(nfeatures, std::move(xs));
         const auto seq = sequential_ints(ys.size());
 
-        Dataset<FloatMatrix, FloatVec> data(mat, ys);
-        const auto split = best_split(data.xs(), data.ys(), seq);
+        const auto split = best_split(mat, ys, seq);
         const auto col = split.split_col();
         const auto value = split.split_val();
 
@@ -156,8 +153,7 @@ namespace oddvibe {
         const FloatMatrix mat(nfeatures, std::move(xs));
         const auto seq = sequential_ints(ys.size());
 
-        Dataset<FloatMatrix, FloatVec> data(mat, ys);
-        const auto split = best_split(data.xs(), data.ys(), seq);
+        const auto split = best_split(mat, ys, seq);
         const auto col = split.split_col();
         const auto value = split.split_val();
 

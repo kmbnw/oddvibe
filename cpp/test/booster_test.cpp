@@ -96,8 +96,7 @@ namespace oddvibe {
 
         const Booster booster(seed);
 
-        Dataset<FloatMatrix, FloatVec> dataset(std::move(mat), std::move(ys));
-        const auto counts = booster.fit(dataset, nrounds);
+        const auto counts = booster.fit(mat, ys, nrounds);
 
         for (size_t j = 0; j != nrows; ++j) {
             std::cout << std::setw(4) << std::left << j;
