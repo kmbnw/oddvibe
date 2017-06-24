@@ -40,17 +40,14 @@ namespace oddvibe {
             ~RTree() = default;
 
             template <typename MatrixT, typename VectorT>
-            RTree(const MatrixT& xs, const VectorT& ys, const SizeVec& rows) {
-                if (rows.empty()) {
+            RTree(const MatrixT& xs, const VectorT& ys, const SizeVec& filter) {
+                if (filter.empty()) {
                     throw std::invalid_argument("Must have at least one entry");
                 }
 
-                // defensive copy
-                SizeVec filter(rows);
-
                 m_yhat = mean(ys, filter.begin(), filter.end());
                 if (std::isnan(m_yhat)) {
-                    throw std::logic_error("Prediction cannot be NaN");
+                    throw std::logic_error("Prediction is NaN");
                 }
 
                 SplitPoint split;
@@ -61,9 +58,10 @@ namespace oddvibe {
                         m_split = split;
                         m_is_leaf = false;
 
-                        const auto pivot = m_split.partition_idx(xs, filter);
-                        SizeVec lsplit(filter.begin(), pivot);
-                        SizeVec rsplit(pivot, filter.end());
+                        SizeVec part(filter);
+                        const auto pivot = m_split.partition_idx(xs, part);
+                        SizeVec lsplit(part.begin(), pivot);
+                        SizeVec rsplit(pivot, part.end());
 
                         m_left = std::make_unique<RTree>(xs, ys, lsplit);
                         m_right = std::make_unique<RTree>(xs, ys, rsplit);
