@@ -48,7 +48,7 @@ namespace oddvibe {
                 m_pmf.end(),
                 loss.begin(),
                 m_pmf.begin(),
-                [beta = beta, max_loss = max_loss](float pmf_k, double loss_k) {
+                [beta, max_loss](float pmf_k, double loss_k) {
                     return (float) (pow(beta, 1 - loss_k / max_loss) * pmf_k);
                 });
         }  else {

@@ -25,7 +25,7 @@ namespace oddvibe {
             std::begin(pmf),
             std::end(pmf),
             std::begin(pmf),
-            [norm = norm](float f) { return f / norm; });
+            [norm](float f) { return f / norm; });
     }
 
     double rmse_loss(const float predicted, const float observed) {
@@ -93,7 +93,7 @@ namespace oddvibe {
             counts.begin(),
             counts.end(),
             norm_counts.begin(),
-            [f_nrounds = f_nrounds](const size_t count) {
+            [f_nrounds](const size_t count) {
                 const auto norm_count = (1.0 * count) / f_nrounds;
                 if (std::isnan(norm_count)) {
                     throw std::logic_error("NaN for normalized count");

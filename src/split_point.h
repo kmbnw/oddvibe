@@ -50,8 +50,8 @@ namespace oddvibe {
                 return std::partition(
                     filter.begin(),
                     filter.end(),
-                    [self = this, &mat](const auto & row){
-                        return mat(row, self->m_split_col) <= self->m_split_val;
+                    [this, &mat](const size_t row){
+                        return mat(row, this->m_split_col) <= this->m_split_val;
                     });
             }
 

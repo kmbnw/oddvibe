@@ -1,10 +1,10 @@
 include Makefile.inc
 
 all:
-	cd src; make all
+	cd main; make all
 
 clean:
-	cd src; make clean
+	cd main; make clean
 	cd test; make clean
 
 tests: all

@@ -5,20 +5,21 @@
 
 using namespace Rcpp;
 
-// MySqrt
-Rcpp::NumericVector MySqrt(const Rcpp::NumericVector& xs);
-RcppExport SEXP oddvibe_MySqrt(SEXP xsSEXP) {
+// MyRMSELoss
+Rcpp::NumericVector MyRMSELoss(const Rcpp::NumericVector& ys, const Rcpp::NumericVector& yhats);
+RcppExport SEXP oddvibe_MyRMSELoss(SEXP ysSEXP, SEXP yhatsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type xs(xsSEXP);
-    rcpp_result_gen = Rcpp::wrap(MySqrt(xs));
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type ys(ysSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type yhats(yhatsSEXP);
+    rcpp_result_gen = Rcpp::wrap(MyRMSELoss(ys, yhats));
     return rcpp_result_gen;
 END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"oddvibe_MySqrt", (DL_FUNC) &oddvibe_MySqrt, 1},
+    {"oddvibe_MyRMSELoss", (DL_FUNC) &oddvibe_MyRMSELoss, 2},
     {NULL, NULL, 0}
 };
 
