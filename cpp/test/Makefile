@@ -1,6 +1,6 @@
 include ../Makefile.inc
 
-TARGET := $(BINDIR)$(PROJECT)_test
+TARGET=$(BINDIR)$(PROJECT)_test
 
 all: $(TARGET)
 

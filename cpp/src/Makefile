@@ -1,6 +1,6 @@
 include ../Makefile.inc
 
-TARGET := ../$(LIBDIR)lib$(PROJECT).so
+TARGET=../$(LIBDIR)lib$(PROJECT).so
 
 all: $(TARGET)
 
