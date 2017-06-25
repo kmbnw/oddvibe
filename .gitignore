@@ -11,3 +11,6 @@ TestResult.xml
 core
 *.bak
 .vscode
+.Rproj.user
+.Rhistory
+.RData
