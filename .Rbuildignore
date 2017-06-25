@@ -1,7 +1,5 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^\.vscode$
-^docs$
-^doxygen\.cfg$
 ^README\.txt$
 ^cpp$

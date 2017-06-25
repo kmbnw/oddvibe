@@ -1,8 +1,8 @@
 CC=g++
 CFLAGS=-Wall -std=c++14 -O3
 SHAREDCFLAGS=-shared -fPIC
-LIBDIR=lib/
-BINDIR=bin/
+LIBDIR=../inst/lib/
+BINDIR=../inst/bin/
 PROJECT=oddvibe
 
 define cc-command
