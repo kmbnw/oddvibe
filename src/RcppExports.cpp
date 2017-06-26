@@ -5,22 +5,22 @@
 
 using namespace Rcpp;
 
-// set.seed
-//' @examples //' tmp.seed <- 1480561820 //' set.seed(tmp.seed) //' nrows <- 50 //' nfeatures <- 2 //' intercept <- 0.75 //' beta.one <- 2.0 //' beta.two <- 5.8 //' xnoise.one <- rnorm(nrows) //' xnoise.two <- rnorm(nrows) //' threshold <- 0.7 * nrows * nfeatures //' //' # Two features //' xs.one <- rnorm(threshold, 5.0, 1.0) //' xs.two <- rnorm((nrows * nfeatures) - threshold, 5.0, 1.0) //' xs <- c(beta.one * xs.one, beta.two * xs.two) //' mat <- matrix(xs, ncol);
-RcppExport SEXP oddvibe_set.seed(SEXP ncolSEXP) {
+// FindOutlierWeights
+NumericVector FindOutlierWeights(const NumericMatrix& xs, const NumericVector& ys, const size_t nrounds, const size_t seed);
+RcppExport SEXP oddvibe_FindOutlierWeights(SEXP xsSEXP, SEXP ysSEXP, SEXP nroundsSEXP, SEXP seedSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< tmp.seed) //' nrows <- 50 //' nfeatures <- 2 //' intercept <- 0.75 //' beta.one <- 2.0 //' beta.two <- 5.8 //' xnoise.one <- rnorm(nrows) //' xnoise.two <- rnorm(nrows) //' threshold <- 0.7 * nrows * nfeatures //' //' # Two features //' xs.one <- rnorm(threshold, 5.0, 1.0) //' xs.two <- rnorm((nrows * nfeatures) - threshold, 5.0, 1.0) //' xs <- c(beta.one * xs.one, beta.two * xs.two) //' mat <- matrix(xs, >::type ncol(ncolSEXP);
-    rcpp_result_gen = Rcpp::wrap(set.seed(ncol));
+    Rcpp::traits::input_parameter< const NumericMatrix& >::type xs(xsSEXP);
+    Rcpp::traits::input_parameter< const NumericVector& >::type ys(ysSEXP);
+    Rcpp::traits::input_parameter< const size_t >::type nrounds(nroundsSEXP);
+    Rcpp::traits::input_parameter< const size_t >::type seed(seedSEXP);
+    rcpp_result_gen = Rcpp::wrap(FindOutlierWeights(xs, ys, nrounds, seed));
     return rcpp_result_gen;
 END_RCPP
 }
 
-RcppExport SEXP oddvibe_FindOutlierWeights(SEXP, SEXP, SEXP, SEXP);
-
 static const R_CallMethodDef CallEntries[] = {
-    {"oddvibe_set.seed", (DL_FUNC) &oddvibe_set.seed, 1},
     {"oddvibe_FindOutlierWeights", (DL_FUNC) &oddvibe_FindOutlierWeights, 4},
     {NULL, NULL, 0}
 };

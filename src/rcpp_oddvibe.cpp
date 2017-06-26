@@ -8,6 +8,21 @@ using NumericMatrix = Rcpp::NumericMatrix;
 
 // [[Rcpp::plugins(cpp11)]]
 
+//' Use boosting to find outliers
+//'
+//' Call this repeatedly after removing outliers from the inputs to better find
+//' outliers
+//'
+//' @param xs NumericMatrix of features
+//' @param ys NumericVector for response variable
+//' @param nrounds Number of rounds of boosting
+//' @param seed Random seed to initialize boosting with
+//' @return Normalized counts of training instances chosen for all rounds of
+//' boosting.  The largest relative value(s) are the potential outliers.
+//' For example, if the return value is \code{c(0.3, 2.3, 0.5, 6.4)}, then
+//' the last row / instance is the most likely possible outlier, with the
+//' second row being another possible (though less likely) outlier.
+//'
 //' @examples
 //' tmp.seed <- 1480561820
 //' set.seed(tmp.seed)
