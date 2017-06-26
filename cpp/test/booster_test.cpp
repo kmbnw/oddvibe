@@ -22,9 +22,9 @@
 #include <algorithm>
 #include <iterator>
 #include <functional>
-#include "float_matrix.h"
-#include "ecdf_sampler.h"
-#include "booster.h"
+#include "../../src/float_matrix.h"
+#include "../../src/ecdf_sampler.h"
+#include "../../src/booster.h"
 #include "booster_test.h"
 
 #include <cppunit/extensions/TestFactoryRegistry.h>

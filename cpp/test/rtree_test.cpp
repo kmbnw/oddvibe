@@ -18,10 +18,10 @@
 #include <random>
 #include <cmath>
 #include <vector>
-#include "rtree.h"
+#include "../../src/rtree.h"
+#include "../../src/algorithm_x.h"
+#include "../../src/float_matrix.h"
 #include "rtree_test.h"
-#include "algorithm_x.h"
-#include "float_matrix.h"
 
 #include <cppunit/extensions/TestFactoryRegistry.h>
 #include <cppunit/ui/text/TestRunner.h>

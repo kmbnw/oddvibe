@@ -13,7 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#include <unordered_set>
+#include <algorithm>
+#include <stdexcept>
 #include "defs_x.h"
 
 #ifndef KMBNW_ODVB_MATHX_H

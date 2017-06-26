@@ -16,8 +16,8 @@
 
 #include <iostream>
 #include <vector>
-#include "ecdf_sampler.h"
-#include "sampling_dist.h"
+#include "../../src/ecdf_sampler.h"
+#include "../../src/sampling_dist.h"
 #include "ecdf_sampler_test.h"
 
 #include <cppunit/extensions/TestFactoryRegistry.h>

@@ -18,7 +18,7 @@
 #include <cmath>
 #include <vector>
 #include <unordered_map>
-#include "math_x.h"
+#include "../../src/math_x.h"
 #include "math_x_test.h"
 
 #include <cppunit/extensions/TestFactoryRegistry.h>
