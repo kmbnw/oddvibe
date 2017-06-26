@@ -71,12 +71,15 @@ namespace oddvibe {
 
         size_t threshold = (size_t) (0.7 * nrows);
 
-        for (size_t k = 0; k != xs.size(); ++k) {
-            if (k < (threshold * 2)) {
-                xs[k] = feature_x1_dist(rand_engine);
-            } else {
-                xs[k] = feature_x2_dist(rand_engine);
-            }
+        // do these in two steps to be consistent with how it is generated in R
+        const auto pivot = (threshold * 2);
+        for (size_t k = 0; k != pivot; ++k) {
+            xs[k] = feature_x1_dist(rand_engine);
+            //std::cout << "xs[" << k << "] = " << xs[k] << std::endl;
+        }
+
+        for (size_t k = pivot; k != xs.size(); ++k) {
+            xs[k] = feature_x2_dist(rand_engine);
             //std::cout << "xs[" << k << "] = " << xs[k] << std::endl;
         }
 
@@ -87,6 +90,9 @@ namespace oddvibe {
                     ys[k] = ys[k] * 1000 * row_idx;
                 }
             }
+            /*std::cout << k << ": " << intercept << " + " << beta_1 << " * ";
+            std::cout << xs[row_idx] << " + " << beta_2 << " * ";
+            std::cout << xs[row_idx + 1] << " = " << ys[k] << std::endl;*/
         }
 
         std::transform(xs.begin(), xs.end(), xs_noise.begin(), xs.begin(), std::plus<float>());

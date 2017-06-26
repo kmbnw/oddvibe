@@ -40,7 +40,7 @@ using NumericMatrix = Rcpp::NumericMatrix;
 //' xs.one <- rnorm(x.threshold, 5.0, 1.0)
 //' xs.two <- rnorm((nrows * nfeatures) - x.threshold, 4000.3, 90.0)
 //' xs <- c(xs.one, xs.two)
-//' mat <- matrix(xs, ncol = 2)
+//' mat <- t(matrix(xs, nrow = 2))
 //' ys <- intercept + beta.one * mat[, 1] + beta.two * mat[, 2]
 //'
 //' # Generate some obvious outliers every 5 rows
@@ -55,9 +55,9 @@ using NumericMatrix = Rcpp::NumericMatrix;
 //'
 //' outliers <- FindOutlierWeights(mat, ys, 5000, tmp.seed)
 //' print (max(outliers))
-//' # 7.80204
+//' # 5.657069
 //' print (which(max(outliers) == outliers))
-//' # 24
+//' # 26
 // [[Rcpp::export]]
 NumericVector FindOutlierWeights(
         const NumericMatrix& xs,
