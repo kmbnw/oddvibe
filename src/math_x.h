@@ -26,19 +26,62 @@ namespace oddvibe {
      */
     void normalize(FloatVec& pmf);
 
-    double rmse_loss(const float predicted, const float observed);
-
+    template <typename VectorT>
     double mean(
-        const FloatVec seq,
-        const SizeConstIter first,
-        const SizeConstIter last);
+            const VectorT& seq,
+            const SizeConstIter first,
+            const SizeConstIter last) {
+        if (first == last) {
+            return 0;
+        }
 
+        size_t count = 0;
+        double total = 0;
+
+        for (auto row = first; row != last; row = std::next(row)) {
+            total += seq[*row];
+            ++count;
+        }
+        return (count < 1 ? 0 : total / count);
+    }
+
+    template <typename VectorT>
     double variance(
-        const FloatVec seq,
-        const SizeConstIter first,
-        const SizeConstIter last);
+            const VectorT& seq,
+            const SizeConstIter first,
+            const SizeConstIter last) {
+        if (first == last) {
+            return doubleNaN;
+        }
 
-    DoubleVec loss_seq(const FloatVec& ys, const FloatVec& yhats);
+        size_t count = 0;
+        double total = 0;
+        const auto avg_x = mean(seq, first, last);
+
+        for (auto row = first; row != last; row = std::next(row)) {
+            total += pow(seq[*row] - avg_x, 2);
+            ++count;
+        }
+
+        return (count < 1 ? doubleNaN : total / count);
+    }
+
+    template <typename VectorTLeft, typename VectorTRight>
+    DoubleVec loss_seq(const VectorTLeft& ys, const VectorTRight& yhats) {
+        if (ys.size() != yhats.size()) {
+            throw std::logic_error("Observed and predicted must be same size");
+        }
+        DoubleVec loss(yhats.size(), 0);
+        std::transform(
+            yhats.begin(),
+            yhats.end(),
+            ys.begin(),
+            loss.begin(),
+            [](const double predicted, const double observed) {
+                return pow(predicted - observed, 2);
+            });
+        return loss;
+    }
 
     FloatVec normalize_counts(const SizeVec &counts, const size_t nrounds);
 }

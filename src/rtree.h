@@ -63,8 +63,10 @@ namespace oddvibe {
                         SizeVec lsplit(part.begin(), pivot);
                         SizeVec rsplit(pivot, part.end());
 
-                        m_left = std::make_unique<RTree>(xs, ys, lsplit);
-                        m_right = std::make_unique<RTree>(xs, ys, rsplit);
+                        // stuck on C++ 11 b/c the Debian Rcpp build forces it?
+                        // TODO I would like to fix that
+                        m_left.reset(new RTree(xs, ys, lsplit));
+                        m_right.reset(new RTree(xs, ys, rsplit));
                     }
                 }
 
@@ -80,7 +82,7 @@ namespace oddvibe {
 
             template <typename MatrixT>
             FloatVec predict(const MatrixT& xs) const {
-                const auto nrows = xs.nrows();
+                const auto nrows = xs.nrow();
                 FloatVec yhats(nrows, floatNaN);
                 auto filter = sequential_ints(nrows);
 

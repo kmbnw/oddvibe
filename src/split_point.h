@@ -128,7 +128,7 @@ namespace oddvibe {
         }
         double best_err = doubleNaN;
 
-        const auto ncols = xs.ncols();
+        const auto ncols = xs.ncol();
         for (size_t split_col = 0; split_col != ncols; ++split_col) {
             auto uniques = unique_x(xs, split_col, filter);
 

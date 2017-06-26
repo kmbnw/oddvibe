@@ -39,11 +39,11 @@ namespace oddvibe {
         return m_xs[x_index(row, col)];
     }
 
-    size_t FloatMatrix::nrows() const {
+    size_t FloatMatrix::nrow() const {
         return m_nrows;
     }
 
-    size_t FloatMatrix::ncols() const {
+    size_t FloatMatrix::ncol() const {
         return m_ncols;
     }
 

@@ -46,12 +46,12 @@ namespace oddvibe {
             /**
              * Number of rows.
              */
-            size_t nrows() const;
+            size_t nrow() const;
 
             /**
              * Number of columns (features).
              */
-            size_t ncols() const;
+            size_t ncol() const;
 
             private:
                 size_t m_nrows = 0;

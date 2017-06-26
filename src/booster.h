@@ -38,7 +38,7 @@ namespace oddvibe {
             template <typename MatrixT, typename VectorT>
             FloatVec
             fit(const MatrixT& xs, const VectorT& ys, const size_t nrounds) const {
-                const auto nrows = xs.nrows();
+                const auto nrows = xs.nrow();
 
                 // set up initial uniform distribution over all instances
                 SamplingDist pmf(nrows);
@@ -72,7 +72,7 @@ namespace oddvibe {
                     SamplingDist& pmf,
                     SizeVec& counts)
                 const {
-                    const size_t nrows = xs.nrows();
+                    const size_t nrows = xs.nrow();
 
                     EmpiricalSampler sampler(m_seed, pmf);
 

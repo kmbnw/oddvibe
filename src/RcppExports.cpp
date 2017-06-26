@@ -5,21 +5,23 @@
 
 using namespace Rcpp;
 
-// MyRMSELoss
-Rcpp::NumericVector MyRMSELoss(const Rcpp::NumericVector& ys, const Rcpp::NumericVector& yhats);
-RcppExport SEXP oddvibe_MyRMSELoss(SEXP ysSEXP, SEXP yhatsSEXP) {
+// set.seed
+//' @examples //' tmp.seed <- 1480561820 //' set.seed(tmp.seed) //' nrows <- 50 //' nfeatures <- 2 //' intercept <- 0.75 //' beta.one <- 2.0 //' beta.two <- 5.8 //' xnoise.one <- rnorm(nrows) //' xnoise.two <- rnorm(nrows) //' threshold <- 0.7 * nrows * nfeatures //' //' # Two features //' xs.one <- rnorm(threshold, 5.0, 1.0) //' xs.two <- rnorm((nrows * nfeatures) - threshold, 5.0, 1.0) //' xs <- c(beta.one * xs.one, beta.two * xs.two) //' mat <- matrix(xs, ncol);
+RcppExport SEXP oddvibe_set.seed(SEXP ncolSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type ys(ysSEXP);
-    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type yhats(yhatsSEXP);
-    rcpp_result_gen = Rcpp::wrap(MyRMSELoss(ys, yhats));
+    Rcpp::traits::input_parameter< tmp.seed) //' nrows <- 50 //' nfeatures <- 2 //' intercept <- 0.75 //' beta.one <- 2.0 //' beta.two <- 5.8 //' xnoise.one <- rnorm(nrows) //' xnoise.two <- rnorm(nrows) //' threshold <- 0.7 * nrows * nfeatures //' //' # Two features //' xs.one <- rnorm(threshold, 5.0, 1.0) //' xs.two <- rnorm((nrows * nfeatures) - threshold, 5.0, 1.0) //' xs <- c(beta.one * xs.one, beta.two * xs.two) //' mat <- matrix(xs, >::type ncol(ncolSEXP);
+    rcpp_result_gen = Rcpp::wrap(set.seed(ncol));
     return rcpp_result_gen;
 END_RCPP
 }
 
+RcppExport SEXP oddvibe_FindOutlierWeights(SEXP, SEXP, SEXP, SEXP);
+
 static const R_CallMethodDef CallEntries[] = {
-    {"oddvibe_MyRMSELoss", (DL_FUNC) &oddvibe_MyRMSELoss, 2},
+    {"oddvibe_set.seed", (DL_FUNC) &oddvibe_set.seed, 1},
+    {"oddvibe_FindOutlierWeights", (DL_FUNC) &oddvibe_FindOutlierWeights, 4},
     {NULL, NULL, 0}
 };
 
