@@ -77,10 +77,8 @@ namespace oddvibe {
             } else {
                 xs[k] = feature_x2_dist(rand_engine);
             }
-            std::cout << xs[k] << std::endl;
+            //std::cout << "xs[" << k << "] = " << xs[k] << std::endl;
         }
-
-        std::cout << "==============";
 
         for (size_t k = 0, row_idx = 0; k != ys.size(); ++k, row_idx += nfeatures) {
             ys[k] = intercept + beta_1 * xs[row_idx] + beta_2 * xs[row_idx + 1];
