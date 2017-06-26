@@ -47,9 +47,9 @@
 #'
 #' outliers <- FindOutlierWeights(mat, ys, 5000, tmp.seed)
 #' print (max(outliers))
-#' # 5.140986
+#' # 8.662468
 #' print (which(max(outliers) == outliers))
-#' # 25
+#' # 43
 FindOutlierWeights <- function(xs, ys, nrounds, seed = 1480561820L) {
     .Call('oddvibe_FindOutlierWeights', PACKAGE = 'oddvibe', xs, ys, nrounds, seed)
 }

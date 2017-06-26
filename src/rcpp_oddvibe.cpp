@@ -54,9 +54,9 @@ using NumericMatrix = Rcpp::NumericMatrix;
 //'
 //' outliers <- FindOutlierWeights(mat, ys, 5000, tmp.seed)
 //' print (max(outliers))
-//' # 5.140986
+//' # 8.662468
 //' print (which(max(outliers) == outliers))
-//' # 25
+//' # 43
 // [[Rcpp::export]]
 NumericVector FindOutlierWeights(
         const NumericMatrix& xs,
