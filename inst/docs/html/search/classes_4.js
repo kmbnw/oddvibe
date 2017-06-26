@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['rtree',['RTree',['../classoddvibe_1_1RTree.html',1,'oddvibe']]],
-  ['rtreetest',['RTreeTest',['../classoddvibe_1_1RTreeTest.html',1,'oddvibe']]]
+  ['samplingdist',['SamplingDist',['../classoddvibe_1_1SamplingDist.html',1,'oddvibe']]],
+  ['splitpoint',['SplitPoint',['../classoddvibe_1_1SplitPoint.html',1,'oddvibe']]]
 ];

@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.8"/>
-<title>oddvibe: src/defs_x.h Source File</title>
+<title>oddvibe: src/float_matrix.h Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -84,7 +84,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- top -->
 <div class="header">
   <div class="headertitle">
-<div class="title">defs_x.h</div>  </div>
+<div class="title">float_matrix.h</div>  </div>
 </div><!--header-->
 <div class="contents">
 <div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">/*</span></div>
@@ -102,26 +102,47 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="comment"> * See the License for the specific language governing permissions and</span></div>
 <div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="comment"> * limitations under the License.</span></div>
 <div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="comment"> */</span></div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="preprocessor">#include &lt;vector&gt;</span></div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="preprocessor">#include &lt;limits&gt;</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="preprocessor">#include &quot;defs_x.h&quot;</span></div>
 <div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="preprocessor">#ifndef KMBNW_ODVB_DEFSX_H</span></div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="preprocessor">#define KMBNW_ODVB_DEFSX_H</span></div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="preprocessor">#ifndef KMBNW_ODVB_FLOAT_MATRIX_H</span></div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="preprocessor">#define KMBNW_ODVB_FLOAT_MATRIX_H</span></div>
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;</div>
 <div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespaceoddvibe.html">oddvibe</a> {</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;    <span class="keyword">using</span> FloatVec = std::vector&lt;float&gt;;</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;    <span class="keyword">using</span> DoubleVec = std::vector&lt;double&gt;;</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;    <span class="keyword">using</span> BoolVec = std::vector&lt;bool&gt;;</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;    <span class="keyword">using</span> SizeVec = std::vector&lt;size_t&gt;;</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;    <span class="comment">// follow R&#39;s NumericVector API where necessary to facilitate easier use</span></div>
+<div class="line"><a name="l00024"></a><span class="lineno"><a class="line" href="classoddvibe_1_1FloatMatrix.html">   24</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classoddvibe_1_1FloatMatrix.html">FloatMatrix</a> {</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;        <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;            <a class="code" href="classoddvibe_1_1FloatMatrix.html">FloatMatrix</a>() = <span class="keywordflow">default</span>;</div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;    <span class="keyword">using</span> SizeIter = std::vector&lt;size_t&gt;::iterator;</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;    <span class="keyword">using</span> SizeConstIter = std::vector&lt;size_t&gt;::const_iterator;</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    <span class="keyword">const</span> <span class="keywordtype">float</span> floatNaN = std::numeric_limits&lt;float&gt;::quiet_NaN();</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    <span class="keyword">const</span> <span class="keywordtype">double</span> doubleNaN = std::numeric_limits&lt;double&gt;::quiet_NaN();</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;}</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="preprocessor">#endif //KMBNW_ODVB_DEFSX_H</span></div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;            <a class="code" href="classoddvibe_1_1FloatMatrix.html">FloatMatrix</a>(<span class="keyword">const</span> <span class="keywordtype">size_t</span> ncols, FloatVec&amp;&amp; xs);</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;            <a class="code" href="classoddvibe_1_1FloatMatrix.html">FloatMatrix</a>(<a class="code" href="classoddvibe_1_1FloatMatrix.html">FloatMatrix</a>&amp;&amp; other) = <span class="keywordflow">default</span>;</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;            <a class="code" href="classoddvibe_1_1FloatMatrix.html">FloatMatrix</a>&amp; operator=(<a class="code" href="classoddvibe_1_1FloatMatrix.html">FloatMatrix</a>&amp;&amp; other) = <span class="keywordflow">default</span>;</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;            <a class="code" href="classoddvibe_1_1FloatMatrix.html">FloatMatrix</a>(<span class="keyword">const</span> <a class="code" href="classoddvibe_1_1FloatMatrix.html">FloatMatrix</a>&amp; other) = <span class="keywordflow">default</span>;</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;            <a class="code" href="classoddvibe_1_1FloatMatrix.html">FloatMatrix</a>&amp; operator=(<span class="keyword">const</span> <a class="code" href="classoddvibe_1_1FloatMatrix.html">FloatMatrix</a>&amp; other) = <span class="keywordflow">default</span>;</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;            ~<a class="code" href="classoddvibe_1_1FloatMatrix.html">FloatMatrix</a>() = <span class="keywordflow">default</span>;</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;            <span class="keywordtype">float</span> operator() (<span class="keyword">const</span> <span class="keywordtype">size_t</span> row, <span class="keyword">const</span> <span class="keywordtype">size_t</span> col) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;            <span class="keywordtype">size_t</span> <a class="code" href="classoddvibe_1_1FloatMatrix.html#a01f499fd98be18eee9d8b49eece7ea4d">nrow</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;            <span class="keywordtype">size_t</span> <a class="code" href="classoddvibe_1_1FloatMatrix.html#a37b0f289c00f511fcca289391bdbb111">ncol</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;            <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;                <span class="keywordtype">size_t</span> m_nrows = 0;</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;                <span class="keywordtype">size_t</span> m_ncols = 0;</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;                FloatVec m_xs;</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;                <span class="keywordtype">size_t</span> x_index(<span class="keyword">const</span> <span class="keywordtype">size_t</span> row, <span class="keyword">const</span> <span class="keywordtype">size_t</span> col) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    };</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;}</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;<span class="preprocessor">#endif //KMBNW_ODVB_FLOAT_MATRIX_H</span></div>
+<div class="ttc" id="classoddvibe_1_1FloatMatrix_html"><div class="ttname"><a href="classoddvibe_1_1FloatMatrix.html">oddvibe::FloatMatrix</a></div><div class="ttdef"><b>Definition:</b> float_matrix.h:24</div></div>
 <div class="ttc" id="namespaceoddvibe_html"><div class="ttname"><a href="namespaceoddvibe.html">oddvibe</a></div><div class="ttdef"><b>Definition:</b> algorithm_x.cpp:20</div></div>
+<div class="ttc" id="classoddvibe_1_1FloatMatrix_html_a37b0f289c00f511fcca289391bdbb111"><div class="ttname"><a href="classoddvibe_1_1FloatMatrix.html#a37b0f289c00f511fcca289391bdbb111">oddvibe::FloatMatrix::ncol</a></div><div class="ttdeci">size_t ncol() const </div><div class="ttdef"><b>Definition:</b> float_matrix.cpp:46</div></div>
+<div class="ttc" id="classoddvibe_1_1FloatMatrix_html_a01f499fd98be18eee9d8b49eece7ea4d"><div class="ttname"><a href="classoddvibe_1_1FloatMatrix.html#a01f499fd98be18eee9d8b49eece7ea4d">oddvibe::FloatMatrix::nrow</a></div><div class="ttdeci">size_t nrow() const </div><div class="ttdef"><b>Definition:</b> float_matrix.cpp:42</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

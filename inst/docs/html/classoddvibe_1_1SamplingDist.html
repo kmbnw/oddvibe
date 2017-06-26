@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.8"/>
-<title>oddvibe: oddvibe::Booster Class Reference</title>
+<title>oddvibe: oddvibe::SamplingDist Class Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -81,7 +81,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><b>oddvibe</b></li><li class="navelem"><a class="el" href="classoddvibe_1_1Booster.html">Booster</a></li>  </ul>
+<li class="navelem"><b>oddvibe</b></li><li class="navelem"><a class="el" href="classoddvibe_1_1SamplingDist.html">SamplingDist</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
@@ -89,47 +89,50 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="#pri-attribs">Private Attributes</a> &#124;
-<a href="classoddvibe_1_1Booster-members.html">List of all members</a>  </div>
+<a href="classoddvibe_1_1SamplingDist-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">oddvibe::Booster Class Reference</div>  </div>
+<div class="title">oddvibe::SamplingDist Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-
-<p><code>#include &lt;<a class="el" href="booster_8h_source.html">booster.h</a>&gt;</code></p>
+<div class="dynheader">
+Collaboration diagram for oddvibe::SamplingDist:</div>
+<div class="dyncontent">
+<div class="center"><img src="classoddvibe_1_1SamplingDist__coll__graph.png" border="0" usemap="#oddvibe_1_1SamplingDist_coll__map" alt="Collaboration graph"/></div>
+<map name="oddvibe_1_1SamplingDist_coll__map" id="oddvibe_1_1SamplingDist_coll__map">
+</map>
+<center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a7a7b75d3f86dcc76fc0cafc4e3595789"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7a7b75d3f86dcc76fc0cafc4e3595789"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Booster</b> (const size_t &amp;seed)</td></tr>
-<tr class="separator:a7a7b75d3f86dcc76fc0cafc4e3595789"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abeb51b49e9ac2453d3e63a68c8d62247"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="abeb51b49e9ac2453d3e63a68c8d62247"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Booster</b> (const <a class="el" href="classoddvibe_1_1Booster.html">Booster</a> &amp;other)=delete</td></tr>
-<tr class="separator:abeb51b49e9ac2453d3e63a68c8d62247"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abd5f9406f0646a7bba02db82ed41e7a5"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="abd5f9406f0646a7bba02db82ed41e7a5"></a>
-<a class="el" href="classoddvibe_1_1Booster.html">Booster</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (const <a class="el" href="classoddvibe_1_1Booster.html">Booster</a> &amp;other)=delete</td></tr>
-<tr class="separator:abd5f9406f0646a7bba02db82ed41e7a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a91d42a57845b148ec7162c9279652400"><td class="memTemplParams" colspan="2"><a class="anchor" id="a91d42a57845b148ec7162c9279652400"></a>
-template&lt;typename MatrixT , typename VectorT &gt; </td></tr>
-<tr class="memitem:a91d42a57845b148ec7162c9279652400"><td class="memTemplItemLeft" align="right" valign="top">FloatVec&#160;</td><td class="memTemplItemRight" valign="bottom"><b>fit</b> (const MatrixT &amp;xs, const VectorT &amp;ys, const size_t nrounds) const </td></tr>
-<tr class="separator:a91d42a57845b148ec7162c9279652400"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1fa31117f2477d808925069ff0251b2e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1fa31117f2477d808925069ff0251b2e"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>SamplingDist</b> (const size_t nrows)</td></tr>
+<tr class="separator:a1fa31117f2477d808925069ff0251b2e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad765a3ed31b1225a1c9e365dc2a50bd9"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad765a3ed31b1225a1c9e365dc2a50bd9"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>SamplingDist</b> (const FloatVec &amp;pmf)</td></tr>
+<tr class="separator:ad765a3ed31b1225a1c9e365dc2a50bd9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1e435f4d12e18da88f5a6fe79b040fca"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1e435f4d12e18da88f5a6fe79b040fca"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>adjust_for_loss</b> (const DoubleVec &amp;loss)</td></tr>
+<tr class="separator:a1e435f4d12e18da88f5a6fe79b040fca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae313f1621e4d02ea80baba4f0a69bcad"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae313f1621e4d02ea80baba4f0a69bcad"></a>
+std::discrete_distribution<br class="typebreak" />
+&lt; size_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>empirical_dist</b> () const </td></tr>
+<tr class="separator:ae313f1621e4d02ea80baba4f0a69bcad"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
-<tr class="memitem:a23d98333d23ebe957359d8f052bd15e1"><td class="memTemplParams" colspan="2"><a class="anchor" id="a23d98333d23ebe957359d8f052bd15e1"></a>
-template&lt;typename MatrixT , typename VectorT &gt; </td></tr>
-<tr class="memitem:a23d98333d23ebe957359d8f052bd15e1"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>update_one</b> (const MatrixT &amp;xs, const VectorT &amp;ys, <a class="el" href="classoddvibe_1_1SamplingDist.html">SamplingDist</a> &amp;pmf, SizeVec &amp;counts) const </td></tr>
-<tr class="separator:a23d98333d23ebe957359d8f052bd15e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a221f7a1d6b0b6c10ec8c618d4370aacb"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a221f7a1d6b0b6c10ec8c618d4370aacb"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>reset</b> ()</td></tr>
+<tr class="separator:a221f7a1d6b0b6c10ec8c618d4370aacb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
-<tr class="memitem:a5c37064999e5cd2bc9c345c1221f1158"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5c37064999e5cd2bc9c345c1221f1158"></a>
-size_t&#160;</td><td class="memItemRight" valign="bottom"><b>m_seed</b></td></tr>
-<tr class="separator:a5c37064999e5cd2bc9c345c1221f1158"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a375cc1aa1e6157e85b47e2b9f0cc6ca6"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a375cc1aa1e6157e85b47e2b9f0cc6ca6"></a>
+FloatVec&#160;</td><td class="memItemRight" valign="bottom"><b>m_pmf</b></td></tr>
+<tr class="separator:a375cc1aa1e6157e85b47e2b9f0cc6ca6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Provides boosting capabilities to other models. </p>
-</div><hr/>The documentation for this class was generated from the following file:<ul>
-<li>src/<a class="el" href="booster_8h_source.html">booster.h</a></li>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>src/<a class="el" href="sampling__dist_8h_source.html">sampling_dist.h</a></li>
+<li>src/sampling_dist.cpp</li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->

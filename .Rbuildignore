@@ -2,4 +2,5 @@
 ^\.Rproj\.user$
 ^\.vscode$
 ^README\.txt$
+^doxygen\.cfg$
 ^cpp$

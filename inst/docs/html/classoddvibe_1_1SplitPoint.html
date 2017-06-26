@@ -62,7 +62,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
     <ul class="tablist">
       <li><a href="annotated.html"><span>Class&#160;List</span></a></li>
       <li><a href="classes.html"><span>Class&#160;Index</span></a></li>
-      <li><a href="inherits.html"><span>Class&#160;Hierarchy</span></a></li>
       <li><a href="functions.html"><span>Class&#160;Members</span></a></li>
     </ul>
   </div>
@@ -88,6 +87,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="classoddvibe_1_1SplitPoint-members.html">List of all members</a>  </div>
   <div class="headertitle">
@@ -121,24 +121,39 @@ size_t&#160;</td><td class="memItemRight" valign="bottom"><b>split_col</b> () co
 <tr class="memitem:a9a81f08b8d6bf47baff2c39c251eaee4"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9a81f08b8d6bf47baff2c39c251eaee4"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_valid</b> () const </td></tr>
 <tr class="separator:a9a81f08b8d6bf47baff2c39c251eaee4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abdcb5ebc8512ab61f8b63191df42a053"><td class="memTemplParams" colspan="2"><a class="anchor" id="abdcb5ebc8512ab61f8b63191df42a053"></a>
+template&lt;typename MatrixT , typename IndexSeqT &gt; </td></tr>
+<tr class="memitem:abdcb5ebc8512ab61f8b63191df42a053"><td class="memTemplItemLeft" align="right" valign="top">IndexSeqT::iterator&#160;</td><td class="memTemplItemRight" valign="bottom"><b>partition_idx</b> (const MatrixT &amp;mat, IndexSeqT &amp;filter) const </td></tr>
+<tr class="separator:abdcb5ebc8512ab61f8b63191df42a053"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a22d970eec6e8ca6120708e66e9124451"><td class="memTemplParams" colspan="2"><a class="anchor" id="a22d970eec6e8ca6120708e66e9124451"></a>
+template&lt;typename MatrixT , typename VectorT &gt; </td></tr>
+<tr class="memitem:a22d970eec6e8ca6120708e66e9124451"><td class="memTemplItemLeft" align="right" valign="top">double&#160;</td><td class="memTemplItemRight" valign="bottom"><b>calc_total_err</b> (const MatrixT &amp;xs, const VectorT &amp;ys, const SizeVec &amp;filter) const </td></tr>
+<tr class="separator:a22d970eec6e8ca6120708e66e9124451"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
+Private Member Functions</h2></td></tr>
+<tr class="memitem:a088b5db0ea8c76cd0c3a1c4c2e509fcb"><td class="memTemplParams" colspan="2"><a class="anchor" id="a088b5db0ea8c76cd0c3a1c4c2e509fcb"></a>
+template&lt;typename MatrixT , typename VectorT &gt; </td></tr>
+<tr class="memitem:a088b5db0ea8c76cd0c3a1c4c2e509fcb"><td class="memTemplItemLeft" align="right" valign="top">std::pair&lt; float, float &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>partitioned_mean</b> (const MatrixT &amp;xs, const VectorT &amp;ys, const SizeVec &amp;rows) const </td></tr>
+<tr class="separator:a088b5db0ea8c76cd0c3a1c4c2e509fcb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
 <tr class="memitem:a3ae30d86c32b9f9fd29b7a0b9fdc77cd"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3ae30d86c32b9f9fd29b7a0b9fdc77cd"></a>
-float&#160;</td><td class="memItemRight" valign="bottom"><b>m_split_val</b> = std::numeric_limits&lt;float&gt;::quiet_NaN()</td></tr>
+float&#160;</td><td class="memItemRight" valign="bottom"><b>m_split_val</b> = floatNaN</td></tr>
 <tr class="separator:a3ae30d86c32b9f9fd29b7a0b9fdc77cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a53494e3352fe86d8fcb6009b008b0320"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a53494e3352fe86d8fcb6009b008b0320"></a>
 size_t&#160;</td><td class="memItemRight" valign="bottom"><b>m_split_col</b> = 0</td></tr>
 <tr class="separator:a53494e3352fe86d8fcb6009b008b0320"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <hr/>The documentation for this class was generated from the following files:<ul>
-<li>cpp/src/<a class="el" href="split__point_8h_source.html">split_point.h</a></li>
-<li>cpp/src/split_point.cpp</li>
+<li>src/<a class="el" href="split__point_8h_source.html">split_point.h</a></li>
+<li>src/split_point.cpp</li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat Jun 17 2017 00:09:00 for oddvibe by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sun Jun 25 2017 19:34:11 for oddvibe by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.8
 </small></address>

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['dataset',['DataSet',['../classoddvibe_1_1DataSet.html',1,'oddvibe']]]
+  ['empiricalsampler',['EmpiricalSampler',['../classoddvibe_1_1EmpiricalSampler.html',1,'oddvibe']]]
 ];
