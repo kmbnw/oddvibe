@@ -58,7 +58,7 @@ mat[, 2] <- mat[, 2] + xnoise.two
 
 outliers <- FindOutlierWeights(mat, ys, 5000, tmp.seed)
 print (max(outliers))
-# 7.763247
+# 7.80204
 print (which(max(outliers) == outliers))
-# 50
+# 24
 }
