@@ -119,9 +119,9 @@ namespace oddvibe {
         const size_t actual_row = std::distance(counts.begin(), max_elem);
         const auto actual_count = *max_elem;
 
-        const size_t expected_row = 27;
+        const size_t expected_row = 25;
 
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(5.63f, actual_count, 1e-3);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(5.316f, actual_count, 1e-3);
         CPPUNIT_ASSERT_EQUAL(expected_row, actual_row);
     }
 }
