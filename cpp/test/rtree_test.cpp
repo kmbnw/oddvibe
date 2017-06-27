@@ -38,13 +38,11 @@ namespace oddvibe {
     }
 
     void RTreeTest::test_best_split_none() {
-        // odd numbers are feature 1, even are feature 2
         std::vector<float> xs {
-            1.2f, 12.2f,
-            1.2f, 12.2f,
-            1.2f, 12.2f,
-            1.2f, 12.2f
+            1.2f,  1.2f,  1.2f,  1.2f,
+            12.2f, 12.2f, 12.2f, 12.2f
         };
+
         const std::vector<float> ys {
             8.0f,
             2.5f,
@@ -53,7 +51,7 @@ namespace oddvibe {
         };
         const size_t nfeatures = 2;
 
-        const FloatMatrix mat(nfeatures, std::move(xs));
+        const FloatMatrix<float> mat(nfeatures, std::move(xs));
         const auto seq = sequential_ints(ys.size());
 
         const auto split = best_split(mat, ys, seq);
@@ -63,14 +61,13 @@ namespace oddvibe {
 
     // perfect split on second feature; first is uninformative
     void RTreeTest::test_best_split_perfect() {
-        // odd numbers are feature 1, even are feature 2
         const float split_val = 2.6f;
+
         std::vector<float> xs {
-            1.2f, 12.2f,
-            1.2f, split_val,
-            1.2f, 12.2f,
-            1.2f, split_val
+            1.2f,  1.2f,      1.2f,  1.2f,
+            12.2f, split_val, 12.2f, split_val
         };
+
         const std::vector<float> ys {
             8.0f,
             2.5f,
@@ -79,7 +76,7 @@ namespace oddvibe {
         };
         const size_t nfeatures = 2;
 
-        const FloatMatrix mat(nfeatures, std::move(xs));
+        const FloatMatrix<float> mat(nfeatures, std::move(xs));
         const auto seq = sequential_ints(ys.size());
 
         const auto split = best_split(mat, ys, seq);
@@ -95,14 +92,12 @@ namespace oddvibe {
 
     // perfect split on second feature; first is less informative
     void RTreeTest::test_best_split_near_perfect() {
-        // odd numbers are feature 1, even are feature 2
         const float split_val = 2.6f;
         std::vector<float> xs {
-            1.2f, 12.2f,
-            3.4f, split_val,
-            1.2f, 12.2f,
-            1.2f, split_val
+            1.2f,  3.4f,      1.2f,  1.2f,
+            12.2f, split_val, 12.2f, split_val
         };
+
         const std::vector<float> ys {
             8.0f,
             2.5f,
@@ -111,7 +106,7 @@ namespace oddvibe {
         };
         const size_t nfeatures = 2;
 
-        const FloatMatrix mat(nfeatures, std::move(xs));
+        const FloatMatrix<float> mat(nfeatures, std::move(xs));
         const auto seq = sequential_ints(ys.size());
 
         const auto split = best_split(mat, ys, seq);
@@ -130,7 +125,11 @@ namespace oddvibe {
         std::default_random_engine generator;
         std::uniform_real_distribution<float> dist(0.0f, 10.0f);
         const size_t nrolls = 1000;
-        std::vector<float> xs(nrolls * 3);
+
+        std::vector<float> xs1(nrolls);
+        std::vector<float> xs2(nrolls);
+        std::vector<float> xs3(nrolls);
+
         std::vector<float> ys(nrolls);
 
         const float beta1 = 0;
@@ -142,15 +141,21 @@ namespace oddvibe {
             auto x1 = dist(generator);
             auto x2 = dist(generator);
             auto x3 = dist(generator);
-            xs.push_back(x1);
-            xs.push_back(x2);
-            xs.push_back(x3);
+            xs1.push_back(x1);
+            xs2.push_back(x2);
+            xs3.push_back(x3);
             ys.push_back(intercept + beta1 * x1 + beta2 * x2 + beta3 * x3);
         }
 
+        // lay out the resulting flattened matrix
+        std::vector<float> xs(nrolls * 3);
+        std::copy(xs1.begin(), xs1.end(), std::back_inserter(xs));
+        std::copy(xs2.begin(), xs2.end(), std::back_inserter(xs));
+        std::copy(xs3.begin(), xs3.end(), std::back_inserter(xs));
+
         const size_t nfeatures = 3;
 
-        const FloatMatrix mat(nfeatures, std::move(xs));
+        const FloatMatrix<float> mat(nfeatures, std::move(xs));
         const auto seq = sequential_ints(ys.size());
 
         const auto split = best_split(mat, ys, seq);
