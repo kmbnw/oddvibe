@@ -58,6 +58,7 @@ using NumericMatrix = Rcpp::NumericMatrix;
 //' # 5.657069
 //' print (which(max(outliers) == outliers))
 //' # 26
+//' @export
 // [[Rcpp::export]]
 NumericVector FindOutlierWeights(
         const NumericMatrix& xs,

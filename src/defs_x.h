@@ -28,7 +28,9 @@ namespace oddvibe {
     using SizeIter = std::vector<size_t>::iterator;
     using SizeConstIter = std::vector<size_t>::const_iterator;
 
-    const float floatNaN = std::numeric_limits<float>::quiet_NaN();
-    const double doubleNaN = std::numeric_limits<double>::quiet_NaN();
+    constexpr float floatNaN = std::numeric_limits<float>::quiet_NaN();
+    constexpr double doubleNaN = std::numeric_limits<double>::quiet_NaN();
+
+    constexpr double doubleMax = std::numeric_limits<double>::max();
 }
 #endif //KMBNW_ODVB_DEFSX_H

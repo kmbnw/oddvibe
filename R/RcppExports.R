@@ -51,6 +51,7 @@
 #' # 5.657069
 #' print (which(max(outliers) == outliers))
 #' # 26
+#' @export
 FindOutlierWeights <- function(xs, ys, nrounds, seed = 1480561820L) {
     .Call('oddvibe_FindOutlierWeights', PACKAGE = 'oddvibe', xs, ys, nrounds, seed)
 }

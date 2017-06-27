@@ -18,9 +18,9 @@
 #include "split_point.h"
 
 namespace oddvibe {
-    SplitPoint::SplitPoint(const float split_val, const size_t split_col):
-        m_split_val(split_val),
-        m_split_col(split_col) {
+    SplitPoint::SplitPoint(const size_t split_col, const float split_val):
+        m_split_col(split_col),
+        m_split_val(split_val) {
     }
 
     bool SplitPoint::is_valid() const {

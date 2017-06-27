@@ -29,7 +29,7 @@ namespace oddvibe {
         public:
             SplitPoint() = default;
 
-            SplitPoint(const float split_val, const size_t split_col);
+            SplitPoint(const size_t split_col, const float split_val);
 
             SplitPoint(SplitPoint&& other) = default;
             SplitPoint(const SplitPoint& other) = default;
@@ -55,101 +55,79 @@ namespace oddvibe {
                     });
             }
 
-            // total squared error for left and right side of split_val
-            template <typename MatrixT, typename VectorT>
-            double calc_total_err(
-                    const MatrixT& xs,
-                    const VectorT& ys,
-                    const SizeVec& filter) const {
-                if (filter.empty()) {
-                    return doubleNaN;
-                }
-
-                const auto avg = partitioned_mean(xs, ys, filter);
-                const float yhat_l = avg.first;
-                const float yhat_r = avg.second;
-
-                if (std::isnan(yhat_l) || std::isnan(yhat_r)) {
-                    return doubleNaN;
-                }
-
-                double err = 0;
-                for (const auto & row : filter) {
-                    const auto x_j = xs(row, m_split_col);
-                    const auto y_j = ys[row];
-                    const auto yhat_j = x_j <= m_split_val ? yhat_l : yhat_r;
-                    err += pow((y_j - yhat_j), 2.0);
-                }
-                return err;
-            }
-
         private:
-            float m_split_val = floatNaN;
             size_t m_split_col = 0;
-
-            template <typename MatrixT, typename VectorT>
-            std::pair<float, float>
-            partitioned_mean(
-                    const MatrixT& xs,
-                    const VectorT& ys,
-                    const SizeVec& rows) const {
-                SizeVec part(rows);
-                const auto pivot = partition_idx(xs, part);
-
-                auto first_p = part.begin();
-                auto last_p = part.end();
-                // std::optional would be good here, but not at C++ 17 yet
-                // for this install
-                if (first_p == last_p || pivot == first_p || pivot == last_p) {
-                    return std::make_pair(floatNaN, floatNaN);
-                }
-
-                const float yhat_l = mean(ys, first_p, pivot);
-                if (std::isnan(yhat_l)) {
-                    return std::make_pair(floatNaN, floatNaN);
-                }
-
-                const float yhat_r = mean(ys, pivot, last_p);
-                if (std::isnan(yhat_r)) {
-                    return std::make_pair(floatNaN, floatNaN);
-                }
-                return std::make_pair(yhat_l, yhat_r);
-            }
+            float m_split_val = floatNaN;
     };
+
+    // total squared error for left and right side of split_val
+    template <typename MatrixT, typename VectorT>
+    double calc_total_err(
+            const size_t split_col,
+            const float split_val,
+            const MatrixT& xs,
+            const VectorT& ys,
+            const SizeVec& filter) {
+        size_t count_l = 0;
+        size_t count_r = 0;
+        double yhat_l = 0;
+        double yhat_r = 0;
+        for (const auto & row : filter) {
+            if (xs(row, split_col) <= split_val) {
+                yhat_l += ys[row];
+                ++count_l;
+            } else {
+                yhat_r += ys[row];
+                ++count_r;
+            }
+        }
+
+        if (count_l == 0 || count_r == 0) {
+            return doubleMax;
+        }
+        yhat_l /= count_l;
+        yhat_r /= count_r;
+
+        double err = 0;
+        for (const auto & row : filter) {
+            const auto xval = xs(row, split_col);
+            const auto yval = ys[row];
+            const auto yhat = xval <= split_val ? yhat_l : yhat_r;
+            err += pow((yval - yhat), 2.0);
+        }
+
+        return (std::isnan(err) ? doubleMax : err);
+    }
 
     template <typename MatrixT, typename VectorT>
     SplitPoint
     best_split(const MatrixT& xs, const VectorT& ys, const SizeVec& filter) {
-        SplitPoint best;
-
         // TODO min size guard
-        if (filter.empty()) {
-            return best;
-        }
-        double best_err = doubleNaN;
+        size_t best_col = 0;
+        float best_val = floatNaN;
+        double best_err = doubleMax;
 
         const auto ncols = xs.ncol();
-        for (size_t split_col = 0; split_col != ncols; ++split_col) {
-            auto uniques = unique_x(xs, split_col, filter);
+        for (size_t col = 0; col != ncols; ++col) {
+            auto uniques = unique_x(xs, col, filter);
 
             if (uniques.size() < 2) {
                 continue;
             }
 
-            for (const auto & split_val : uniques) {
-                SplitPoint split(split_val, split_col);
-
+            for (const auto & value : uniques) {
                 // total squared error for left and right side of split_val
-                const auto err = split.calc_total_err(xs, ys, filter);
+                const auto err = calc_total_err(col, value, xs, ys, filter);
 
                 // TODO randomly allow the same error as best to 'win'
-                if (!std::isnan(err) && (std::isnan(best_err) || err < best_err)) {
-                    best = std::move(split);
+                if (err < best_err) {
+                    best_col = col;
+                    best_val = value;
                     best_err = err;
                 }
             }
         }
-        return best;
+        return SplitPoint(best_col, best_val);
     }
 }
 #endif //KMBNW_ODVB_SPLITPOINT_H
