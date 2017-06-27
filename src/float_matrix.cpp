@@ -20,34 +20,5 @@
 #include "float_matrix.h"
 
 namespace oddvibe {
-    FloatMatrix::FloatMatrix(const size_t ncols, FloatVec&& xs) {
-        if (xs.empty()) {
-            if (ncols > 0) {
-                throw std::invalid_argument("Cannot set ncols for empty vector");
-            }
-        } else {
-            if (xs.size() % ncols != 0) {
-                throw std::invalid_argument("Invalid shape for input vector");
-            }
-            m_ncols = ncols;
-            m_nrows = xs.size() / ncols;
-            m_xs = std::move(xs);
-        }
-    }
 
-    float FloatMatrix::operator() (const size_t row, const size_t col) const {
-        return m_xs[x_index(row, col)];
-    }
-
-    size_t FloatMatrix::nrow() const {
-        return m_nrows;
-    }
-
-    size_t FloatMatrix::ncol() const {
-        return m_ncols;
-    }
-
-    size_t FloatMatrix::x_index(const size_t row, const size_t col) const {
-        return (row * m_ncols) + col;
-    }
 }

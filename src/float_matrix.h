@@ -21,17 +21,56 @@
 
 namespace oddvibe {
     // follow R's NumericVector API where necessary to facilitate easier use
+    template <typename FloatT>
     class FloatMatrix {
         public:
             FloatMatrix() = default;
 
             /**
-             * Create new instance.
+             * Move construct new instance from flat matrix.
              * @param[in] ncols: Number of columns/features.
              * @param[in] xs: Flattened matrix of features: row0 followed by
              * row1, etc.
              */
-            FloatMatrix(const size_t ncols, FloatVec&& xs);
+            FloatMatrix(const size_t ncols, std::vector<FloatT>&& xs) {
+                if (xs.empty()) {
+                    if (ncols > 0) {
+                        throw std::invalid_argument(
+                            "Cannot set ncols for empty vector");
+                    }
+                } else {
+                    if (xs.size() % ncols != 0) {
+                        throw std::invalid_argument(
+                            "Invalid shape for input vector");
+                    }
+                    m_ncols = ncols;
+                    m_nrows = xs.size() / ncols;
+                    m_xs = std::move(xs);
+                }
+            }
+
+            /**
+             * Copy construct new instance from flat matrix.
+             * @param[in] ncols: Number of columns/features.
+             * @param[in] xs: Flattened matrix of features: row0 followed by
+             * row1, etc.
+             */
+            FloatMatrix(const size_t ncols, const std::vector<FloatT>& xs) {
+                if (xs.empty()) {
+                    if (ncols > 0) {
+                        throw std::invalid_argument(
+                            "Cannot set ncols for empty vector");
+                    }
+                } else {
+                    if (xs.size() % ncols != 0) {
+                        throw std::invalid_argument(
+                            "Invalid shape for input vector");
+                    }
+                    m_ncols = ncols;
+                    m_nrows = xs.size() / ncols;
+                    m_xs = xs;
+                }
+            }
 
             FloatMatrix(FloatMatrix&& other) = default;
             FloatMatrix& operator=(FloatMatrix&& other) = default;
@@ -41,24 +80,33 @@ namespace oddvibe {
 
             ~FloatMatrix() = default;
 
-            float operator() (const size_t row, const size_t col) const;
+            FloatT operator() (const size_t row, const size_t col) const {
+                return m_xs[x_index(row, col)];
+            }
 
             /**
              * Number of rows.
              */
-            size_t nrow() const;
+            size_t nrow() const {
+                return m_nrows;
+            }
 
             /**
              * Number of columns (features).
              */
-            size_t ncol() const;
+            size_t ncol() const {
+                return m_ncols;
+            }
 
             private:
                 size_t m_nrows = 0;
                 size_t m_ncols = 0;
-                FloatVec m_xs;
+                std::vector<FloatT> m_xs;
 
-                size_t x_index(const size_t row, const size_t col) const;
+                size_t x_index(const size_t row, const size_t col) const {
+                    //        return (row * m_ncols) + col;
+                    return (col * m_nrows) + row;
+                }
     };
 }
 #endif //KMBNW_ODVB_FLOAT_MATRIX_H

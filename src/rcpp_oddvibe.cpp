@@ -1,7 +1,9 @@
 #include <Rcpp.h>
 #include <cmath>
+#include <iostream>
 #include "math_x.h"
 #include "booster.h"
+#include "float_matrix.h"
 
 using NumericVector = Rcpp::NumericVector;
 using NumericMatrix = Rcpp::NumericMatrix;
@@ -65,8 +67,24 @@ NumericVector FindOutlierWeights(
         const NumericVector& ys,
         const size_t nrounds,
         const size_t seed = 1480561820L) {
+
+    const auto tmp_xs = Rcpp::as< std::vector<double> >(xs);
+    const auto tmp_ys = Rcpp::as< std::vector<double> >(ys);
+
+    const auto end = tmp_ys.size();
+
+    oddvibe::FloatMatrix<double> tmp_mat(xs.ncol(), tmp_xs);
+
+    /*for (size_t row = 0; row != end; ++row) {
+        std::cout << std::setw(7) << std::right
+            << tmp_mat(row, 0)
+            << " "
+            << tmp_mat(row, 1)
+            << "\n";
+    }*/
+
     oddvibe::Booster booster(seed);
-    const auto result = booster.fit(xs, ys, nrounds);
+    const auto result = booster.fit(tmp_mat, tmp_ys, nrounds);
 
     return Rcpp::wrap(result);
 }

@@ -141,17 +141,19 @@ namespace oddvibe {
             auto x1 = dist(generator);
             auto x2 = dist(generator);
             auto x3 = dist(generator);
-            xs1.push_back(x1);
-            xs2.push_back(x2);
-            xs3.push_back(x3);
-            ys.push_back(intercept + beta1 * x1 + beta2 * x2 + beta3 * x3);
+            xs1[j] = x1;
+            xs2[j] = x2;
+            xs3[j] = x3;
+            ys[j] = intercept + beta1 * x1 + beta2 * x2 + beta3 * x3;
         }
 
         // lay out the resulting flattened matrix
-        std::vector<float> xs(nrolls * 3);
+        std::vector<float> xs;
         std::copy(xs1.begin(), xs1.end(), std::back_inserter(xs));
         std::copy(xs2.begin(), xs2.end(), std::back_inserter(xs));
         std::copy(xs3.begin(), xs3.end(), std::back_inserter(xs));
+
+        CPPUNIT_ASSERT_EQUAL(nrolls * 3, xs.size());
 
         const size_t nfeatures = 3;
 
@@ -163,7 +165,7 @@ namespace oddvibe {
         const auto value = split.split_val();
 
         size_t expected_feature = 2;
-        float expected_val = 3.436f; // TODO hand-calc this
+        float expected_val = 4.885; // TODO hand-calc this
 
         CPPUNIT_ASSERT_EQUAL(true, split.is_valid());
         CPPUNIT_ASSERT_EQUAL(expected_feature, col);
