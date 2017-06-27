@@ -57,8 +57,12 @@ namespace oddvibe {
         std::mt19937 rand_engine(seed);
 
         auto gen = std::bind(noise_dist, rand_engine);
-        std::vector<float> xs_noise(nrows * 2);
-        std::generate(std::begin(xs_noise), std::end(xs_noise), gen);
+
+        std::vector<float> xs_noise1(nrows);
+        std::generate(std::begin(xs_noise1), std::end(xs_noise1), gen);
+
+        std::vector<float> xs_noise2(nrows);
+        std::generate(std::begin(xs_noise2), std::end(xs_noise2), gen);
 
         // nominally small x values are associated with small Y values
         // but we want to have this find the outliers
@@ -66,36 +70,58 @@ namespace oddvibe {
         std::normal_distribution<float> feature_x1_dist(5.0, 1.0);
         std::normal_distribution<float> feature_x2_dist(4000.3, 90.0);
 
-        std::vector<float> xs(nrows * nfeatures, 0);
         std::vector<float> ys(nrows, 0);
 
         size_t threshold = (size_t) (0.7 * nrows);
 
+        // TODO convert these to std::generate
+        std::vector<float> xs1;
         // do these in two steps to be consistent with how it is generated in R
         const auto pivot = (threshold * 2);
         for (size_t k = 0; k != pivot; ++k) {
-            xs[k] = feature_x1_dist(rand_engine);
-            //std::cout << "xs[" << k << "] = " << xs[k] << std::endl;
+            xs1.push_back(feature_x1_dist(rand_engine));
         }
 
-        for (size_t k = pivot; k != xs.size(); ++k) {
-            xs[k] = feature_x2_dist(rand_engine);
-            //std::cout << "xs[" << k << "] = " << xs[k] << std::endl;
+        std::vector<float> xs2;
+        const auto end = nrows * nfeatures;
+        for (size_t k = pivot; k != end; ++k) {
+            xs2.push_back(feature_x2_dist(rand_engine));
         }
 
-        for (size_t k = 0, row_idx = 0; k != ys.size(); ++k, row_idx += nfeatures) {
-            ys[k] = intercept + beta_1 * xs[row_idx] + beta_2 * xs[row_idx + 1];
+        // layout flattened matrix
+        std::vector<float> xs;
+        std::copy(xs1.begin(), xs1.end(), std::back_inserter(xs));
+        std::copy(xs2.begin(), xs2.end(), std::back_inserter(xs));
+
+        for (size_t k = 0; k != ys.size(); ++k) {
+            CPPUNIT_ASSERT_EQUAL(true, k + nrows < xs.size());
+
+            ys[k] = intercept + beta_1 * xs[k] + beta_2 * xs[k + nrows];
             if (k < threshold) {
                 if (k % 5 == 0) {
-                    ys[k] = ys[k] * 1000 * row_idx;
+                    ys[k] = ys[k] * 1000 * k;
                 }
             }
-            /*std::cout << k << ": " << intercept << " + " << beta_1 << " * ";
-            std::cout << xs[row_idx] << " + " << beta_2 << " * ";
-            std::cout << xs[row_idx + 1] << " = " << ys[k] << std::endl;*/
+            std::cout << std::setw(7) << std::right
+                << k << ": " << xs[k] << "     " << xs[k + nrows]
+                << "\n";
         }
 
-        std::transform(xs.begin(), xs.end(), xs_noise.begin(), xs.begin(), std::plus<float>());
+        {
+            std::vector<float> xs_noise;
+            std::copy(
+                xs_noise1.begin(), xs_noise1.end(), std::back_inserter(xs_noise));
+            std::copy(
+                xs_noise2.begin(), xs_noise2.end(), std::back_inserter(xs_noise));
+
+            // add noise
+            std::transform(
+                xs.begin(),
+                xs.end(),
+                xs_noise.begin(),
+                xs.begin(),
+                std::plus<float>());
+        }
 
         const size_t nrounds = 5000;
 
