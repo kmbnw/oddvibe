@@ -20,6 +20,7 @@
 #include <limits>
 #include <algorithm>
 #include <utility>
+#include <future>
 #include "defs_x.h"
 #include "math_x.h"
 #include "algorithm_x.h"
@@ -107,22 +108,38 @@ namespace oddvibe {
         float best_val = floatNaN;
         double best_err = doubleMax;
 
+        std::vector< std::future<double> > futures;
+
         const auto ncols = xs.ncol();
         for (size_t col = 0; col != ncols; ++col) {
-            auto uniques = unique_x(xs, col, filter);
-
-            if (uniques.size() < 2) {
+            const auto uniques = unique_x(xs, col, filter);
+            const auto uniq_sz = uniques.size();
+            if (uniq_sz < 2) {
                 continue;
             }
 
-            for (const auto & value : uniques) {
+            futures.clear();
+
+            std::transform(
+                uniques.begin(),
+                uniques.end(),
+                std::back_inserter(futures),
+                [col, &xs, &ys, &filter](const float value) {
+                    return std::async(
+                        std::launch::deferred,
+                        [col, &xs, &ys, &filter, value] () {
+                            return calc_total_err(col, value, xs, ys, filter);
+                        });
+                });
+
+            for (size_t idx = 0; idx != uniq_sz; ++idx) {
                 // total squared error for left and right side of split_val
-                const auto err = calc_total_err(col, value, xs, ys, filter);
+                const auto err = futures[idx].get();
 
                 // TODO randomly allow the same error as best to 'win'
                 if (err < best_err) {
                     best_col = col;
-                    best_val = value;
+                    best_val = uniques[idx];
                     best_err = err;
                 }
             }

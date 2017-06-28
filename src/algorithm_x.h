@@ -26,7 +26,7 @@ namespace oddvibe {
     void update_counts(const SizeVec& src, SizeVec& counts);
 
     template <typename MatrixT>
-    std::unordered_set<float> unique_x(
+    std::vector<float> unique_x(
             const MatrixT& xs,
             const size_t col,
             const SizeVec& indices) {
@@ -35,7 +35,7 @@ namespace oddvibe {
         for (const auto & row : indices) {
             uniques.insert(xs(row, col));
         }
-        return uniques;
+        return std::vector<float>(uniques.begin(), uniques.end());
     }
 }
 #endif //KMBNW_ODVB_ALGORITHM_X

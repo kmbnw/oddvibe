@@ -21,6 +21,7 @@
 #include <memory>
 #include <cmath>
 #include <limits>
+#include <future>
 #include "split_point.h"
 #include "algorithm_x.h"
 
@@ -40,7 +41,12 @@ namespace oddvibe {
             ~RTree() = default;
 
             template <typename MatrixT, typename VectorT>
-            RTree(const MatrixT& xs, const VectorT& ys, const SizeVec& filter) {
+            RTree(
+                    const MatrixT& xs,
+                    const VectorT& ys,
+                    const SizeVec& filter,
+                    const size_t depth,
+                    const size_t max_depth) {
                 if (filter.empty()) {
                     throw std::invalid_argument("Must have at least one entry");
                 }
@@ -50,9 +56,12 @@ namespace oddvibe {
                     throw std::logic_error("Prediction is NaN");
                 }
 
-                SplitPoint split;
-                if (variance(ys, filter.begin(), filter.end()) > 1e-6) {
-                    split = best_split(xs, ys, filter);
+                bool force_leaf = (
+                    depth >= max_depth ||
+                    variance(ys, filter.begin(), filter.end()) < 1e-6);
+
+                if (!force_leaf) {
+                    const auto split = best_split(xs, ys, filter);
 
                     if (split.is_valid()) {
                         m_split = split;
@@ -63,10 +72,24 @@ namespace oddvibe {
                         SizeVec lsplit(part.begin(), pivot);
                         SizeVec rsplit(pivot, part.end());
 
+                        const auto ndepth = depth + 1;
+                        auto left = std::async(
+                            std::launch::deferred,
+                            [&xs, &ys, &lsplit, ndepth, max_depth]() {
+                                return std::unique_ptr<RTree>(
+                                    new RTree(xs, ys, lsplit, ndepth, max_depth));
+                            });
+                        auto right = std::async(
+                            std::launch::deferred,
+                            [&xs, &ys, &rsplit, ndepth, max_depth]() {
+                                return std::unique_ptr<RTree>(
+                                    new RTree(xs, ys, rsplit, ndepth, max_depth));
+                            });
+
                         // stuck on C++ 11 b/c the Debian Rcpp build forces it?
                         // TODO I would like to fix that
-                        m_left.reset(new RTree(xs, ys, lsplit));
-                        m_right.reset(new RTree(xs, ys, rsplit));
+                        m_left = left.get();
+                        m_right = right.get();
                     }
                 }
 

@@ -57,7 +57,7 @@ using NumericMatrix = Rcpp::NumericMatrix;
 //'
 //' outliers <- FindOutlierWeights(mat, ys, 5000, tmp.seed)
 //' print (max(outliers))
-//' # 5.657069
+//' # 5.75065
 //' print (which(max(outliers) == outliers))
 //' # 26
 //' @export
@@ -71,11 +71,10 @@ NumericVector FindOutlierWeights(
     const auto tmp_xs = Rcpp::as< std::vector<double> >(xs);
     const auto tmp_ys = Rcpp::as< std::vector<double> >(ys);
 
-    const auto end = tmp_ys.size();
-
     oddvibe::FloatMatrix<double> tmp_mat(xs.ncol(), tmp_xs);
 
-    /*for (size_t row = 0; row != end; ++row) {
+    /*const auto end = tmp_ys.size();
+    for (size_t row = 0; row != end; ++row) {
         std::cout << std::setw(7) << std::right
             << tmp_mat(row, 0)
             << " "

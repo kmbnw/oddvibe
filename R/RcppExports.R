@@ -48,7 +48,7 @@
 #'
 #' outliers <- FindOutlierWeights(mat, ys, 5000, tmp.seed)
 #' print (max(outliers))
-#' # 5.657069
+#' # 5.75065
 #' print (which(max(outliers) == outliers))
 #' # 26
 #' @export
