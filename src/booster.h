@@ -22,6 +22,12 @@
 #define KMBNW_ODVB_BOOSTER_H
 
 namespace oddvibe {
+    void update_counts(const SizeVec& indexes, SizeVec& counts) {
+        for (const auto & idx : indexes) {
+            ++counts[idx];
+        }
+    }
+
     /**
      * Provides boosting capabilities to other models.
      */
@@ -46,9 +52,7 @@ namespace oddvibe {
                     EmpiricalSampler sampler(m_seed, pmf);
 
                     const auto active = sampler.gen_samples(nrows);
-                    for (const auto & idx : active) {
-                        ++counts[idx];
-                    }
+                    update_counts(active, counts);
 
                     RTree tree(xs, ys, active, 0, 6);
                     const auto loss = loss_seq(ys, tree.predict(xs));
