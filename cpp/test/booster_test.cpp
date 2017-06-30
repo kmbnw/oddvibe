@@ -74,24 +74,43 @@ namespace oddvibe {
 
         size_t threshold = (size_t) (0.7 * nrows);
 
-        // TODO convert these to std::generate
-        std::vector<float> xs1;
-        // do these in two steps to be consistent with how it is generated in R
-        const auto pivot = (threshold * 2);
-        for (size_t k = 0; k != pivot; ++k) {
-            xs1.push_back(feature_x1_dist(rand_engine));
+        std::vector<float> xs1(threshold * nfeatures);
+        std::vector<float> xs2(nrows * nfeatures - xs1.size());
+
+        {
+            // do these in two steps to be consistent with how it is generated in R
+            auto xs1_gen = std::bind(feature_x1_dist, rand_engine);
+            std::generate(xs1.begin(), xs1.end(), xs1_gen);
+
+            auto xs2_gen = std::bind(feature_x2_dist, rand_engine);
+            std::generate(xs2.begin(), xs2.end(), xs2_gen);
         }
 
-        std::vector<float> xs2;
-        const auto end = nrows * nfeatures;
-        for (size_t k = pivot; k != end; ++k) {
-            xs2.push_back(feature_x2_dist(rand_engine));
-        }
-
-        // layout flattened matrix
+        // layout flattened matrix; the first two columns up to
+        // row 'threshold' are the "small" X values
         std::vector<float> xs;
-        std::copy(xs1.begin(), xs1.end(), std::back_inserter(xs));
-        std::copy(xs2.begin(), xs2.end(), std::back_inserter(xs));
+        const auto offset = nrows - threshold;
+        // column 1
+        std::copy(
+            xs1.begin(),
+            std::next(xs1.begin(), threshold),
+            std::back_inserter(xs));
+        std::copy(
+            xs2.begin(),
+            std::next(xs2.begin(), offset),
+            std::back_inserter(xs));
+
+        // column 2
+        std::copy(
+            std::next(xs1.begin(), threshold),
+            xs1.end(),
+            std::back_inserter(xs));
+        std::copy(
+            std::next(xs2.begin(), offset),
+            xs2.end(),
+            std::back_inserter(xs));
+
+        CPPUNIT_ASSERT_EQUAL(nrows * nfeatures, xs.size());
 
         for (size_t k = 0; k != ys.size(); ++k) {
             CPPUNIT_ASSERT_EQUAL(true, k + nrows < xs.size());
@@ -102,9 +121,10 @@ namespace oddvibe {
                     ys[k] = ys[k] * 1000 * k;
                 }
             }
-            std::cout << std::setw(7) << std::right
+            /*std::cout << std::setw(7) << std::right
                 << k << ": " << xs[k] << "     " << xs[k + nrows]
-                << "\n";
+                << "     " << ys[k]
+                << "\n";*/
         }
 
         {
@@ -145,9 +165,9 @@ namespace oddvibe {
         const size_t actual_row = std::distance(counts.begin(), max_elem);
         const auto actual_count = *max_elem;
 
-        const size_t expected_row = 25;
+        const size_t expected_row = 30;
 
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(5.316f, actual_count, 1e-3);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(6.337f, actual_count, 1e-3);
         CPPUNIT_ASSERT_EQUAL(expected_row, actual_row);
     }
 }

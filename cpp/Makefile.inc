@@ -1,5 +1,5 @@
 CC=g++
-CFLAGS=-Wall -pedantic -std=c++11 -O3
+CFLAGS=-Wall -pedantic -std=c++11 -O3 -lpthread
 SHAREDCFLAGS=-shared -fPIC
 LIBDIR=lib/
 BINDIR=bin/
