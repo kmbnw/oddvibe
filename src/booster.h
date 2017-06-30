@@ -43,18 +43,17 @@ namespace oddvibe {
                 SizeVec counts(nrows, 0);
 
                 for (size_t k = 0; k != nrounds; ++k) {
-                    update_one(xs, ys, pmf, counts);
+                    EmpiricalSampler sampler(m_seed, pmf);
 
-                    /*if (k == (nrounds - 2)) {
-                        for (size_t j = 0; j != nrows; ++j) {
-                            const auto avg_count = 1.0 * counts[j] / (k + 1);
-                            std::cout << std::setw(4) << std::left << j;
-                            std::cout << std::fixed << std::setprecision(2);
-                            std::cout << std::setw(7) << std::left << pmf[j];
-                            std::cout << "avg_count[x] = " << std::setw(7) << std::left;
-                            std::cout << avg_count << std::endl;
-                        }
-                    }*/
+                    const auto active = sampler.gen_samples(nrows);
+                    for (const auto & idx : active) {
+                        ++counts[idx];
+                    }
+
+                    RTree tree(xs, ys, active, 0, 6);
+                    const auto loss = loss_seq(ys, tree.predict(xs));
+
+                    pmf.adjust_for_loss(loss);
                 }
 
                 return normalize_counts(counts, nrounds);
@@ -62,30 +61,6 @@ namespace oddvibe {
 
       private:
             size_t m_seed;
-
-            template <typename MatrixT, typename VectorT>
-            void update_one(
-                    const MatrixT& xs,
-                    const VectorT& ys,
-                    SamplingDist& pmf,
-                    SizeVec& counts)
-                const {
-                    const size_t nrows = xs.nrow();
-
-                    EmpiricalSampler sampler(m_seed, pmf);
-
-                    const auto active = sampler.gen_samples(nrows);
-
-                    for (const auto & idx : active) {
-                        ++counts[idx];
-                    }
-
-                    RTree tree(xs, ys, active, 0, 6);
-                    const auto yhats = tree.predict(xs);
-
-                    auto loss = loss_seq(ys, yhats);
-                    pmf.adjust_for_loss(loss);
-                }
     };
 }
 #endif //KMBNW_ODVB_BOOSTER_H
