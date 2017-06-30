@@ -29,9 +29,7 @@ namespace oddvibe {
 
             size_t next_sample();
 
-            SizeVec gen_samples(
-                const size_t nrows,
-                std::discrete_distribution<size_t>&& pmf);
+            SizeVec gen_samples(const size_t nrows, const SamplingDist& pmf);
 
         private:
             std::mt19937 m_rand_engine;

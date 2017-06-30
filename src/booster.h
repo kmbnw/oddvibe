@@ -47,13 +47,10 @@ namespace oddvibe {
                 // set up initial uniform distribution over all instances
                 SamplingDist pmf(nrows);
                 SizeVec counts(nrows, 0);
+                EmpiricalSampler sampler(m_seed);
 
                 for (size_t k = 0; k != nrounds; ++k) {
-                    EmpiricalSampler sampler(m_seed);
-
-                    const auto active = sampler.gen_samples(
-                        nrows,
-                        pmf.empirical_dist());
+                    const auto active = sampler.gen_samples(nrows, pmf);
                     update_counts(active, counts);
 
                     RTree tree(xs, ys, active, 0, 6);
