@@ -49,9 +49,11 @@ namespace oddvibe {
                 SizeVec counts(nrows, 0);
 
                 for (size_t k = 0; k != nrounds; ++k) {
-                    EmpiricalSampler sampler(m_seed, pmf);
+                    EmpiricalSampler sampler(m_seed);
 
-                    const auto active = sampler.gen_samples(nrows);
+                    const auto active = sampler.gen_samples(
+                        nrows,
+                        pmf.empirical_dist());
                     update_counts(active, counts);
 
                     RTree tree(xs, ys, active, 0, 6);

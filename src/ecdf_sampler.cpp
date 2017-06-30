@@ -23,23 +23,20 @@
 #include "ecdf_sampler.h"
 
 namespace oddvibe {
-    EmpiricalSampler::EmpiricalSampler(
-            const size_t seed,
-            const SamplingDist& pmf) :
-       m_rand_engine(std::mt19937(seed)),
-       m_dist(pmf.empirical_dist()) {
+    EmpiricalSampler::EmpiricalSampler(const size_t seed) :
+       m_rand_engine(std::mt19937(seed)) {
     }
 
-    size_t EmpiricalSampler::next_sample() {
-        return m_dist(m_rand_engine);
-    }
+    SizeVec
+    EmpiricalSampler::gen_samples(
+            const size_t nrows,
+            std::discrete_distribution<size_t>&& pmf) {
 
-    SizeVec EmpiricalSampler::gen_samples(const size_t nrows) {
         SizeVec seq(nrows, 0);
         std::generate(
             seq.begin(),
             seq.end(),
-            [&] { return this->next_sample(); });
+            [&] { return pmf(m_rand_engine); });
         return seq;
     }
 }

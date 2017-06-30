@@ -25,15 +25,16 @@ namespace oddvibe {
     class EmpiricalSampler {
         public:
             // pmf == probability mass function
-            EmpiricalSampler(const size_t seed, const SamplingDist& pmf);
+            EmpiricalSampler(const size_t seed);
 
             size_t next_sample();
 
-            SizeVec gen_samples(const size_t nrows);
+            SizeVec gen_samples(
+                const size_t nrows,
+                std::discrete_distribution<size_t>&& pmf);
 
         private:
             std::mt19937 m_rand_engine;
-            std::discrete_distribution<size_t> m_dist;
     };
 }
 #endif //KMBNW_ODVB_ECDF_SAMPLER_H
