@@ -27,8 +27,6 @@ namespace oddvibe {
             // pmf == probability mass function
             EmpiricalSampler(const size_t seed);
 
-            size_t next_sample();
-
             SizeVec gen_samples(const size_t nrows, const SamplingDist& pmf);
 
         private:
