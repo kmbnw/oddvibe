@@ -1,5 +1,6 @@
 target
 bin/
+inst/docs/
 TestResult.xml
 *.dll
 *.so
