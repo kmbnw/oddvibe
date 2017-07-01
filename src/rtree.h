@@ -23,7 +23,6 @@
 #include <limits>
 #include <future>
 #include "split_point.h"
-#include "algorithm_x.h"
 
 namespace oddvibe {
 
@@ -107,7 +106,8 @@ namespace oddvibe {
             FloatVec predict(const MatrixT& xs) const {
                 const auto nrows = xs.nrow();
                 FloatVec yhats(nrows, floatNaN);
-                auto filter = sequential_ints(nrows);
+                SizeVec filter(nrows);
+                std::iota(filter.begin(), filter.end(), 0);
 
                 predict(xs, filter, yhats);
 

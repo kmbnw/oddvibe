@@ -19,7 +19,6 @@
 #include <cmath>
 #include <vector>
 #include "../../src/rtree.h"
-#include "../../src/algorithm_x.h"
 #include "../../src/float_matrix.h"
 #include "rtree_test.h"
 
@@ -52,8 +51,8 @@ namespace oddvibe {
         const size_t nfeatures = 2;
 
         const FloatMatrix<float> mat(nfeatures, std::move(xs));
-        const auto seq = sequential_ints(ys.size());
-
+        SizeVec seq(ys.size());
+        std::iota(seq.begin(), seq.end(), 0);
         const auto split = best_split(mat, ys, seq);
 
         CPPUNIT_ASSERT_EQUAL(false, split.is_valid());
@@ -77,7 +76,8 @@ namespace oddvibe {
         const size_t nfeatures = 2;
 
         const FloatMatrix<float> mat(nfeatures, std::move(xs));
-        const auto seq = sequential_ints(ys.size());
+        SizeVec seq(ys.size());
+        std::iota(seq.begin(), seq.end(), 0);
 
         const auto split = best_split(mat, ys, seq);
         const auto col = split.split_col();
@@ -107,7 +107,8 @@ namespace oddvibe {
         const size_t nfeatures = 2;
 
         const FloatMatrix<float> mat(nfeatures, std::move(xs));
-        const auto seq = sequential_ints(ys.size());
+        SizeVec seq(ys.size());
+        std::iota(seq.begin(), seq.end(), 0);
 
         const auto split = best_split(mat, ys, seq);
         const auto col = split.split_col();
@@ -158,7 +159,8 @@ namespace oddvibe {
         const size_t nfeatures = 3;
 
         const FloatMatrix<float> mat(nfeatures, std::move(xs));
-        const auto seq = sequential_ints(ys.size());
+        SizeVec seq(ys.size());
+        std::iota(seq.begin(), seq.end(), 0);
 
         const auto split = best_split(mat, ys, seq);
         const auto col = split.split_col();

@@ -21,9 +21,9 @@
 #include <algorithm>
 #include <utility>
 #include <future>
+#include <unordered_set>
 #include "defs_x.h"
 #include "math_x.h"
-#include "algorithm_x.h"
 
 namespace oddvibe {
     class SplitPoint {
@@ -98,6 +98,19 @@ namespace oddvibe {
         }
 
         return (std::isnan(err) ? doubleMax : err);
+    }
+
+    template <typename MatrixT>
+    FloatVec unique_x(
+            const MatrixT& xs,
+            const size_t col,
+            const SizeVec& indices) {
+        std::unordered_set<float> uniques;
+
+        for (const auto & row : indices) {
+            uniques.insert(xs(row, col));
+        }
+        return FloatVec(uniques.begin(), uniques.end());
     }
 
     template <typename MatrixT, typename VectorT>
