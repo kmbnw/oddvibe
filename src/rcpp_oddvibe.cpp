@@ -59,7 +59,7 @@ using DoubleVector = std::vector<double>;
 //'
 //' outliers <- FindOutlierWeights(mat, ys, 5000, tmp.seed)
 //' print (max(outliers))
-//' # 5.75065
+//' # 5.815837
 //' print (which(max(outliers) == outliers))
 //' # 26
 //' @export
