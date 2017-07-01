@@ -41,8 +41,10 @@ namespace oddvibe {
 
             template <typename MatrixT, typename VectorT>
             FloatVec
-            fit(const MatrixT& xs, const VectorT& ys, const size_t nrounds) const {
-                const auto nrows = xs.nrow();
+            fit(const Dataset<MatrixT, VectorT>& data, const size_t nrounds) const {
+                const MatrixT& xs = data.xs();
+                const VectorT& ys = data.ys();
+                const auto nrows = data.nrow();
 
                 // set up initial uniform distribution over all instances
                 SamplingDist pmf(nrows);
@@ -53,7 +55,7 @@ namespace oddvibe {
                     const auto active = sampler.gen_samples(nrows, pmf);
                     update_counts(active, counts);
 
-                    RTree tree(xs, ys, active, 0, 6);
+                    RTree tree(data, active, 0, 6);
                     const auto loss = loss_seq(ys, tree.predict(xs));
 
                     pmf.adjust_for_loss(loss);

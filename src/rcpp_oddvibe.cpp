@@ -7,6 +7,8 @@
 
 using NumericVector = Rcpp::NumericVector;
 using NumericMatrix = Rcpp::NumericMatrix;
+using DoubleMatrix = oddvibe::FloatMatrix<double>;
+using DoubleVector = std::vector<double>;
 
 // [[Rcpp::plugins(cpp11)]]
 
@@ -68,22 +70,14 @@ NumericVector FindOutlierWeights(
         const size_t nrounds,
         const size_t seed = 1480561820L) {
 
-    const auto tmp_xs = Rcpp::as< std::vector<double> >(xs);
-    const auto tmp_ys = Rcpp::as< std::vector<double> >(ys);
-
-    oddvibe::FloatMatrix<double> tmp_mat(xs.ncol(), tmp_xs);
-
-    /*const auto end = tmp_ys.size();
-    for (size_t row = 0; row != end; ++row) {
-        std::cout << std::setw(7) << std::right
-            << tmp_mat(row, 0)
-            << " "
-            << tmp_mat(row, 1)
-            << "\n";
-    }*/
-
     oddvibe::Booster booster(seed);
-    const auto result = booster.fit(tmp_mat, tmp_ys, nrounds);
+
+    // move construct a Dataset
+    const oddvibe::Dataset< DoubleMatrix, DoubleVector > data(
+        DoubleMatrix(xs.ncol(), Rcpp::as<DoubleVector>(xs)),
+        Rcpp::as<DoubleVector>(ys));
+
+    const auto result = booster.fit(data, nrounds);
 
     return Rcpp::wrap(result);
 }

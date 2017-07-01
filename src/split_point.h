@@ -24,6 +24,7 @@
 #include <unordered_set>
 #include "defs_x.h"
 #include "math_x.h"
+#include "dataset.h"
 
 namespace oddvibe {
     class SplitPoint {
@@ -66,13 +67,15 @@ namespace oddvibe {
     double calc_total_err(
             const size_t split_col,
             const float split_val,
-            const MatrixT& xs,
-            const VectorT& ys,
+            const Dataset<MatrixT, VectorT>& data,
             const SizeVec& filter) {
         size_t count_l = 0;
         size_t count_r = 0;
         double yhat_l = 0;
         double yhat_r = 0;
+
+        const MatrixT& xs = data.xs();
+        const VectorT& ys = data.ys();
         for (const auto & row : filter) {
             if (xs(row, split_col) <= split_val) {
                 yhat_l += ys[row];
@@ -100,22 +103,9 @@ namespace oddvibe {
         return (std::isnan(err) ? doubleMax : err);
     }
 
-    template <typename MatrixT>
-    FloatVec unique_x(
-            const MatrixT& xs,
-            const size_t col,
-            const SizeVec& indices) {
-        std::unordered_set<float> uniques;
-
-        for (const auto & row : indices) {
-            uniques.insert(xs(row, col));
-        }
-        return FloatVec(uniques.begin(), uniques.end());
-    }
-
     template <typename MatrixT, typename VectorT>
     SplitPoint
-    best_split(const MatrixT& xs, const VectorT& ys, const SizeVec& filter) {
+    best_split(const Dataset<MatrixT, VectorT>& data, const SizeVec& filter) {
         // TODO min size guard
         size_t best_col = 0;
         float best_val = floatNaN;
@@ -123,9 +113,9 @@ namespace oddvibe {
 
         std::vector< std::future<double> > futures;
 
-        const auto ncols = xs.ncol();
+        const auto ncols = data.ncol();
         for (size_t col = 0; col != ncols; ++col) {
-            const auto uniques = unique_x(xs, col, filter);
+            const auto uniques = data.unique_x(col, filter);
             const auto uniq_sz = uniques.size();
             if (uniq_sz < 2) {
                 continue;
@@ -137,11 +127,11 @@ namespace oddvibe {
                 uniques.begin(),
                 uniques.end(),
                 std::back_inserter(futures),
-                [col, &xs, &ys, &filter](const float value) {
+                [col, &data, &filter](const float value) {
                     return std::async(
                         std::launch::deferred,
-                        [col, &xs, &ys, &filter, value] () {
-                            return calc_total_err(col, value, xs, ys, filter);
+                        [col, &data, &filter, value] () {
+                            return calc_total_err(col, value, data, filter);
                         });
                 });
 

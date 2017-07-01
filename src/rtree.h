@@ -40,9 +40,8 @@ namespace oddvibe {
             ~RTree() = default;
 
             template <typename MatrixT, typename VectorT>
-            RTree(
-                    const MatrixT& xs,
-                    const VectorT& ys,
+            explicit RTree(
+                    const Dataset<MatrixT, VectorT>& data,
                     const SizeVec& filter,
                     const size_t depth,
                     const size_t max_depth) {
@@ -50,6 +49,8 @@ namespace oddvibe {
                     throw std::invalid_argument("Must have at least one entry");
                 }
 
+                const MatrixT& xs = data.xs();
+                const VectorT& ys = data.ys();
                 m_yhat = mean(ys, filter.begin(), filter.end());
                 if (std::isnan(m_yhat)) {
                     throw std::logic_error("Prediction is NaN");
@@ -60,7 +61,7 @@ namespace oddvibe {
                     variance(ys, filter.begin(), filter.end()) < 1e-6);
 
                 if (!force_leaf) {
-                    const auto split = best_split(xs, ys, filter);
+                    const auto split = best_split(data, filter);
 
                     if (split.is_valid()) {
                         m_split = split;
@@ -74,15 +75,15 @@ namespace oddvibe {
                         const auto ndepth = depth + 1;
                         auto left = std::async(
                             std::launch::deferred,
-                            [&xs, &ys, &lsplit, ndepth, max_depth]() {
+                            [&data, &lsplit, ndepth, max_depth]() {
                                 return std::unique_ptr<RTree>(
-                                    new RTree(xs, ys, lsplit, ndepth, max_depth));
+                                    new RTree(data, lsplit, ndepth, max_depth));
                             });
                         auto right = std::async(
                             std::launch::deferred,
-                            [&xs, &ys, &rsplit, ndepth, max_depth]() {
+                            [&data, &rsplit, ndepth, max_depth]() {
                                 return std::unique_ptr<RTree>(
-                                    new RTree(xs, ys, rsplit, ndepth, max_depth));
+                                    new RTree(data, rsplit, ndepth, max_depth));
                             });
 
                         // stuck on C++ 11 b/c the Debian Rcpp build forces it?

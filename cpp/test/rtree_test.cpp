@@ -50,10 +50,14 @@ namespace oddvibe {
         };
         const size_t nfeatures = 2;
 
-        const FloatMatrix<float> mat(nfeatures, std::move(xs));
         SizeVec seq(ys.size());
         std::iota(seq.begin(), seq.end(), 0);
-        const auto split = best_split(mat, ys, seq);
+
+        const Dataset<FloatMatrix<float>, FloatVec> data(
+            FloatMatrix<float>(nfeatures, xs),
+            FloatVec(ys));
+
+        const auto split = best_split(data, seq);
 
         CPPUNIT_ASSERT_EQUAL(false, split.is_valid());
     }
@@ -75,11 +79,13 @@ namespace oddvibe {
         };
         const size_t nfeatures = 2;
 
-        const FloatMatrix<float> mat(nfeatures, std::move(xs));
         SizeVec seq(ys.size());
         std::iota(seq.begin(), seq.end(), 0);
 
-        const auto split = best_split(mat, ys, seq);
+        const Dataset<FloatMatrix<float>, FloatVec> data(
+            FloatMatrix<float>(nfeatures, xs),
+            FloatVec(ys));
+        const auto split = best_split(data, seq);
         const auto col = split.split_col();
         const auto value = split.split_val();
 
@@ -106,11 +112,13 @@ namespace oddvibe {
         };
         const size_t nfeatures = 2;
 
-        const FloatMatrix<float> mat(nfeatures, std::move(xs));
         SizeVec seq(ys.size());
         std::iota(seq.begin(), seq.end(), 0);
 
-        const auto split = best_split(mat, ys, seq);
+        const Dataset<FloatMatrix<float>, FloatVec> data(
+            FloatMatrix<float>(nfeatures, xs),
+            FloatVec(ys));
+        const auto split = best_split(data, seq);
         const auto col = split.split_col();
         const auto value = split.split_val();
 
@@ -158,11 +166,13 @@ namespace oddvibe {
 
         const size_t nfeatures = 3;
 
-        const FloatMatrix<float> mat(nfeatures, std::move(xs));
         SizeVec seq(ys.size());
         std::iota(seq.begin(), seq.end(), 0);
 
-        const auto split = best_split(mat, ys, seq);
+        const Dataset<FloatMatrix<float>, FloatVec> data(
+            FloatMatrix<float>(nfeatures, xs),
+            FloatVec(ys));
+        const auto split = best_split(data, seq);
         const auto col = split.split_col();
         const auto value = split.split_val();
 

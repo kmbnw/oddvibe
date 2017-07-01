@@ -145,11 +145,13 @@ namespace oddvibe {
 
         const size_t nrounds = 5000;
 
-        FloatMatrix<float> mat(nfeatures, std::move(xs));
+        const Dataset<FloatMatrix<float>, FloatVec> data(
+            FloatMatrix<float>(nfeatures, xs),
+            FloatVec(ys));
 
         const Booster booster(seed);
 
-        const auto counts = booster.fit(mat, ys, nrounds);
+        const auto counts = booster.fit(data, nrounds);
 
         for (size_t j = 0; j != nrows; ++j) {
             std::cout << std::setw(4) << std::left << j;

@@ -32,7 +32,7 @@ namespace oddvibe {
              * @param[in] xs: Flattened matrix of features: row0 followed by
              * row1, etc.
              */
-            FloatMatrix(const size_t ncols, std::vector<FloatT>&& xs) {
+            explicit FloatMatrix(const size_t ncols, std::vector<FloatT>&& xs) {
                 if (xs.empty()) {
                     if (ncols > 0) {
                         throw std::invalid_argument(
@@ -55,7 +55,7 @@ namespace oddvibe {
              * @param[in] xs: Flattened matrix of features: row0 followed by
              * row1, etc.
              */
-            FloatMatrix(const size_t ncols, const std::vector<FloatT>& xs) {
+            explicit FloatMatrix(const size_t ncols, const std::vector<FloatT>& xs) {
                 if (xs.empty()) {
                     if (ncols > 0) {
                         throw std::invalid_argument(
