@@ -74,9 +74,9 @@ namespace oddvibe {
                 for (const auto & row : filter) {
                     // rolling mean
                     if (is_left(row)) {
-                        yhat_l = yhat_l + (m_ys[row] - yhat_l) / (++count_l);
+                        yhat_l = rolling_mean(yhat_l, m_ys[row], count_l);
                     } else {
-                        yhat_r = yhat_r + (m_ys[row] - yhat_r) / (++count_r);
+                        yhat_r = rolling_mean(yhat_r, m_ys[row], count_r);
                     }
                 }
 
@@ -84,16 +84,14 @@ namespace oddvibe {
                     return doubleMax;
                 }
 
-                const double err =std::accumulate(
-                    filter.begin(),
-                    filter.end(),
-                    0,
-                    [&is_left, yhat_l, yhat_r, this](
-                            const double init, const size_t row) {
-                        const double yhat = is_left(row) ? yhat_l : yhat_r;
-                        return init + pow((m_ys[row] - yhat), 2.0);
-                    }
-                );
+                const auto acc_err = [&is_left, yhat_l, yhat_r, this](
+                        const double init, const size_t row) {
+                    const double yhat = is_left(row) ? yhat_l : yhat_r;
+                    return init + pow((m_ys[row] - yhat), 2.0);
+                };
+
+                const double err = std::accumulate(
+                    filter.begin(), filter.end(), 0, acc_err);
 
                 return (std::isnan(err) ? doubleMax : err);
             }

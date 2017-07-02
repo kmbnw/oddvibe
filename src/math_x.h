@@ -27,6 +27,8 @@ namespace oddvibe {
      */
     void normalize(FloatVec& pmf);
 
+    double rolling_mean(double current, double nextval, size_t& count);
+
     template <typename VectorT, typename IteratorT>
     double
     mean(const VectorT& seq, const IteratorT first, const IteratorT last) {
@@ -38,7 +40,7 @@ namespace oddvibe {
         double total = 0;
 
         for (auto row = first; row != last; row = std::next(row)) {
-            total = total + (seq[*row] - total) / (++count);
+            total = rolling_mean(total, seq[*row], count);
         }
         return total;
     }
