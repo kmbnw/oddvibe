@@ -63,26 +63,21 @@ namespace oddvibe {
                     const size_t split_col,
                     const float split_val,
                     const SizeVec& filter) const {
-                size_t count_l = 0;
-                size_t count_r = 0;
-                double yhat_l = 0;
-                double yhat_r = 0;
+                double yhat_l  = 0, yhat_r  = 0;
+                size_t count_l = 0, count_r = 0;
 
                 for (const auto & row : filter) {
+                    // rolling mean
                     if (m_xs(row, split_col) <= split_val) {
-                        yhat_l += m_ys[row];
-                        ++count_l;
+                        yhat_l = yhat_l + (m_ys[row] - yhat_l) / (++count_l);
                     } else {
-                        yhat_r += m_ys[row];
-                        ++count_r;
+                        yhat_r = yhat_r + (m_ys[row] - yhat_r) / (++count_r);
                     }
                 }
 
                 if (count_l == 0 || count_r == 0) {
                     return doubleMax;
                 }
-                yhat_l /= count_l;
-                yhat_r /= count_r;
 
                 const double err =std::accumulate(
                     filter.begin(),
