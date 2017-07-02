@@ -66,9 +66,14 @@ namespace oddvibe {
                 double yhat_l  = 0, yhat_r  = 0;
                 size_t count_l = 0, count_r = 0;
 
+                const auto is_left = [split_col, split_val, this](
+                        const size_t row) {
+                    return m_xs(row, split_col) <= split_val;
+                };
+
                 for (const auto & row : filter) {
                     // rolling mean
-                    if (m_xs(row, split_col) <= split_val) {
+                    if (is_left(row)) {
                         yhat_l = yhat_l + (m_ys[row] - yhat_l) / (++count_l);
                     } else {
                         yhat_r = yhat_r + (m_ys[row] - yhat_r) / (++count_r);
@@ -83,11 +88,9 @@ namespace oddvibe {
                     filter.begin(),
                     filter.end(),
                     0,
-                    [split_col, split_val, yhat_l, yhat_r, this](
+                    [&is_left, yhat_l, yhat_r, this](
                             const double init, const size_t row) {
-                        const double yhat = (m_xs(row, split_col) <= split_val)
-                            ? yhat_l
-                            : yhat_r;
+                        const double yhat = is_left(row) ? yhat_l : yhat_r;
                         return init + pow((m_ys[row] - yhat), 2.0);
                     }
                 );
