@@ -73,6 +73,12 @@ namespace oddvibe {
         std::vector< std::future<double> > futures;
 
         const auto ncols = data.ncol();
+
+        const auto err_fn = [&data, &filter] (
+                const size_t col, const float value) {
+            return data.calc_total_err(col, value, filter);
+        };
+
         for (size_t col = 0; col != ncols; ++col) {
             const auto uniques = data.unique_x(col, filter);
             const auto uniq_sz = uniques.size();
@@ -82,16 +88,12 @@ namespace oddvibe {
 
             futures.clear();
 
-            const auto async_err = [col, &data, &filter] (const float value) {
-                return data.calc_total_err(col, value, filter);
-            };
-
             std::transform(
                 uniques.begin(),
                 uniques.end(),
                 std::back_inserter(futures),
-                [&async_err](const float value) {
-                    return std::async(std::launch::deferred, async_err, value);
+                [&err_fn, col](const float value) {
+                    return std::async(std::launch::deferred, err_fn, col, value);
                 });
 
             for (size_t idx = 0; idx != uniq_sz; ++idx) {
