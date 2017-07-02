@@ -109,7 +109,6 @@ namespace oddvibe {
                 FloatVec yhats(nrows, floatNaN);
                 SizeVec filter(nrows);
                 std::iota(filter.begin(), filter.end(), 0);
-
                 predict(xs, filter, yhats);
 
                 return yhats;

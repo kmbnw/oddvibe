@@ -86,8 +86,8 @@ namespace oddvibe {
                     [split_col, split_val, yhat_l, yhat_r, this](
                             const double init, const size_t row) {
                         const double yhat = (m_xs(row, split_col) <= split_val)
-                        ? yhat_l
-                        : yhat_r;
+                            ? yhat_l
+                            : yhat_r;
                         return init + pow((m_ys[row] - yhat), 2.0);
                     }
                 );

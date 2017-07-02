@@ -58,10 +58,13 @@ using DoubleVector = std::vector<double>;
 //' mat[, 2] <- mat[, 2] + xnoise.two
 //'
 //' outliers <- FindOutlierWeights(mat, ys, 5000, tmp.seed)
-//' print (max(outliers))
-//' # 5.815837
-//' print (which(max(outliers) == outliers))
-//' # 26
+//'
+//' # look at the top 6 possible outliers vs the "top" 6 unlikely outliers
+//' df <- cbind(as.data.frame(mat), data.frame(ys, outliers))
+//' names(df) <- c('X1', 'X2', 'Y', 'Weight')
+//' df <- df[order(df$Weight, decreasing = TRUE), ]
+//' head(df)
+//' tail(df)
 //' @export
 // [[Rcpp::export]]
 NumericVector FindOutlierWeights(
