@@ -84,13 +84,18 @@ namespace oddvibe {
                 yhat_l /= count_l;
                 yhat_r /= count_r;
 
-                double err = 0;
-                for (const auto & row : filter) {
-                    const auto yhat = (m_xs(row, split_col) <= split_val)
+                const double err =std::accumulate(
+                    filter.begin(),
+                    filter.end(),
+                    0,
+                    [split_col, split_val, yhat_l, yhat_r, this](
+                            const double init, const size_t row) {
+                        const double yhat = (m_xs(row, split_col) <= split_val)
                         ? yhat_l
                         : yhat_r;
-                    err += pow((m_ys[row] - yhat), 2.0);
-                }
+                        return init + pow((m_ys[row] - yhat), 2.0);
+                    }
+                );
 
                 return (std::isnan(err) ? doubleMax : err);
             }
