@@ -82,16 +82,16 @@ namespace oddvibe {
 
             futures.clear();
 
+            const auto async_err = [col, &data, &filter] (const float value) {
+                return data.calc_total_err(col, value, filter);
+            };
+
             std::transform(
                 uniques.begin(),
                 uniques.end(),
                 std::back_inserter(futures),
-                [col, &data, &filter](const float value) {
-                    return std::async(
-                        std::launch::deferred,
-                        [col, &data, &filter, value] () {
-                            return data.calc_total_err(col, value, filter);
-                        });
+                [&async_err](const float value) {
+                    return std::async(std::launch::deferred, async_err, value);
                 });
 
             for (size_t idx = 0; idx != uniq_sz; ++idx) {
