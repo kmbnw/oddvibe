@@ -27,11 +27,9 @@ namespace oddvibe {
      */
     void normalize(FloatVec& pmf);
 
-    template <typename VectorT>
-    double mean(
-            const VectorT& seq,
-            const SizeConstIter first,
-            const SizeConstIter last) {
+    template <typename VectorT, typename IteratorT>
+    double
+    mean(const VectorT& seq, const IteratorT first, const IteratorT last) {
         if (first == last) {
             return 0;
         }
@@ -40,17 +38,14 @@ namespace oddvibe {
         double total = 0;
 
         for (auto row = first; row != last; row = std::next(row)) {
-            total += seq[*row];
-            ++count;
+            total = total + (seq[*row] - total) / (++count);
         }
-        return (count < 1 ? 0 : total / count);
+        return total;
     }
 
-    template <typename VectorT>
-    double variance(
-            const VectorT& seq,
-            const SizeConstIter first,
-            const SizeConstIter last) {
+    template <typename VectorT, typename IteratorT>
+    double
+    variance(const VectorT& seq, const IteratorT first, const IteratorT last) {
         if (first == last) {
             return doubleNaN;
         }
