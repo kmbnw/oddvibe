@@ -138,18 +138,18 @@ namespace oddvibe {
                     if (split.is_valid()) {
                         SizeVec part(filter);
                         const auto pivot = split.partition_idx(xs, part);
-                        SizeVec lpart(part.begin(), pivot);
-                        SizeVec rpart(pivot, part.end());
 
                         const auto ndepth = depth + 1;
                         auto left = std::async(
                             std::launch::deferred,
-                            [this, &data, &lpart, ndepth]() {
+                            [this, &data, &part, pivot, ndepth]() {
+                                SizeVec lpart(part.begin(), pivot);
                                 return fit(data, lpart, ndepth);
                             });
                         auto right = std::async(
                             std::launch::deferred,
-                            [this, &data, &rpart, ndepth]() {
+                            [this, &data, &part, pivot, ndepth]() {
+                                SizeVec rpart(pivot, part.end());
                                 return fit(data, rpart, ndepth);
                             });
 
