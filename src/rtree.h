@@ -42,7 +42,7 @@ namespace oddvibe {
             template <typename MatrixT, typename VectorT>
             explicit RTree(
                     const Dataset<MatrixT, VectorT>& data,
-                    const SizeVec& filter,
+                    SizeVec& filter,
                     const size_t depth,
                     const size_t max_depth) {
                 if (filter.empty()) {
@@ -67,10 +67,9 @@ namespace oddvibe {
                         m_split = split;
                         m_is_leaf = false;
 
-                        SizeVec part(filter);
-                        const auto pivot = m_split.partition_idx(xs, part);
-                        SizeVec lsplit(part.begin(), pivot);
-                        SizeVec rsplit(pivot, part.end());
+                        const auto pivot = m_split.partition_idx(xs, filter);
+                        SizeVec lsplit(filter.begin(), pivot);
+                        SizeVec rsplit(pivot, filter.end());
 
                         const auto ndepth = depth + 1;
                         auto left = std::async(

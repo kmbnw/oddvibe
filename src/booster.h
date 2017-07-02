@@ -52,7 +52,7 @@ namespace oddvibe {
                 EmpiricalSampler sampler(m_seed);
 
                 for (size_t k = 0; k != nrounds; ++k) {
-                    const auto active = sampler.gen_samples(nrows, pmf);
+                    auto active = sampler.gen_samples(nrows, pmf);
                     update_counts(active, counts);
 
                     RTree tree(data, active, 0, 6);
