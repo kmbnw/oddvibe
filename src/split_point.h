@@ -62,47 +62,6 @@ namespace oddvibe {
             float m_split_val = floatNaN;
     };
 
-    // total squared error for left and right side of split_val
-    template <typename MatrixT, typename VectorT>
-    double calc_total_err(
-            const size_t split_col,
-            const float split_val,
-            const Dataset<MatrixT, VectorT>& data,
-            const SizeVec& filter) {
-        size_t count_l = 0;
-        size_t count_r = 0;
-        double yhat_l = 0;
-        double yhat_r = 0;
-
-        const MatrixT& xs = data.xs();
-        const VectorT& ys = data.ys();
-        for (const auto & row : filter) {
-            if (xs(row, split_col) <= split_val) {
-                yhat_l += ys[row];
-                ++count_l;
-            } else {
-                yhat_r += ys[row];
-                ++count_r;
-            }
-        }
-
-        if (count_l == 0 || count_r == 0) {
-            return doubleMax;
-        }
-        yhat_l /= count_l;
-        yhat_r /= count_r;
-
-        double err = 0;
-        for (const auto & row : filter) {
-            const auto xval = xs(row, split_col);
-            const auto yval = ys[row];
-            const auto yhat = xval <= split_val ? yhat_l : yhat_r;
-            err += pow((yval - yhat), 2.0);
-        }
-
-        return (std::isnan(err) ? doubleMax : err);
-    }
-
     template <typename MatrixT, typename VectorT>
     SplitPoint
     best_split(const Dataset<MatrixT, VectorT>& data, const SizeVec& filter) {
@@ -131,7 +90,7 @@ namespace oddvibe {
                     return std::async(
                         std::launch::deferred,
                         [col, &data, &filter, value] () {
-                            return calc_total_err(col, value, data, filter);
+                            return data.calc_total_err(col, value, filter);
                         });
                 });
 

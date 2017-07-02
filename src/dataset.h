@@ -58,6 +58,43 @@ namespace oddvibe {
                 return FloatVec(uniques.begin(), uniques.end());
             }
 
+             // total squared error for left and right side of split_val
+            double calc_total_err(
+                    const size_t split_col,
+                    const float split_val,
+                    const SizeVec& filter) const {
+                size_t count_l = 0;
+                size_t count_r = 0;
+                double yhat_l = 0;
+                double yhat_r = 0;
+
+                for (const auto & row : filter) {
+                    if (m_xs(row, split_col) <= split_val) {
+                        yhat_l += m_ys[row];
+                        ++count_l;
+                    } else {
+                        yhat_r += m_ys[row];
+                        ++count_r;
+                    }
+                }
+
+                if (count_l == 0 || count_r == 0) {
+                    return doubleMax;
+                }
+                yhat_l /= count_l;
+                yhat_r /= count_r;
+
+                double err = 0;
+                for (const auto & row : filter) {
+                    const auto yhat = (m_xs(row, split_col) <= split_val)
+                        ? yhat_l
+                        : yhat_r;
+                    err += pow((m_ys[row] - yhat), 2.0);
+                }
+
+                return (std::isnan(err) ? doubleMax : err);
+            }
+
             size_t ncol() const {
                 return m_xs.ncol();
             }
