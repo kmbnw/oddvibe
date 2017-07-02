@@ -169,7 +169,7 @@ namespace oddvibe {
 
         const size_t expected_row = 30;
 
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(6.510f, actual_count, 1e-3);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(6.538f, actual_count, 1e-3);
         CPPUNIT_ASSERT_EQUAL(expected_row, actual_row);
     }
 }
