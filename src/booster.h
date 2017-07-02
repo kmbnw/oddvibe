@@ -51,12 +51,15 @@ namespace oddvibe {
                 SizeVec counts(nrows, 0);
                 EmpiricalSampler sampler(m_seed);
 
+                const RTree::Trainer trainer(6);
+
                 for (size_t k = 0; k != nrounds; ++k) {
                     auto active = sampler.gen_samples(nrows, pmf);
                     update_counts(active, counts);
 
-                    RTree tree(data, active, 0, 6);
-                    const auto loss = loss_seq(ys, tree.predict(xs));
+                    const auto tree = trainer.fit<MatrixT, VectorT>(
+                        data, active, 0);
+                    const auto loss = loss_seq(ys, tree->predict(xs));
 
                     pmf.adjust_for_loss(loss);
                 }

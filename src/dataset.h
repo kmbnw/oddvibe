@@ -63,7 +63,7 @@ namespace oddvibe {
                     const size_t split_col,
                     const float split_val,
                     const SizeVec& filter) const {
-                double yhat_l  = 0, yhat_r  = 0;
+                float yhat_l  = 0, yhat_r  = 0;
                 size_t count_l = 0, count_r = 0;
 
                 const auto is_left = [split_col, split_val, this](
