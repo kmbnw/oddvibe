@@ -33,7 +33,6 @@ namespace oddvibe {
             Booster(const Booster &other) = delete;
             Booster &operator=(const Booster &other) = delete;
 
-
             template <typename FloatT>
             std::vector<float>
             fit(const Dataset<FloatT>& data, const size_t nrounds) const {

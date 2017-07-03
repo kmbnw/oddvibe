@@ -20,19 +20,18 @@
 
 namespace oddvibe {
     SamplingDist::SamplingDist(const size_t nrows) {
-        m_pmf = FloatVec(nrows, 1.0 / nrows);
+        m_pmf = std::vector<float>(nrows, 1.0 / nrows);
     }
 
-    SamplingDist::SamplingDist(const FloatVec& pmf) {
+    SamplingDist::SamplingDist(const std::vector<float>& pmf) : m_pmf(pmf) {
         // TODO check for sum to 1
-        m_pmf = pmf;
     }
 
     void SamplingDist::reset() {
         std::fill(m_pmf.begin(), m_pmf.end(), 1.0 / m_pmf.size());
     }
 
-    void SamplingDist::adjust_for_loss(const DoubleVec& loss) {
+    void SamplingDist::adjust_for_loss(const std::vector<double>& loss) {
         const double max_loss = *std::max_element(loss.begin(), loss.end());
 
         double epsilon = 0.0;

@@ -18,7 +18,7 @@
 #include "math_x.h"
 
 namespace oddvibe {
-    void normalize(FloatVec& pmf) {
+    void normalize(std::vector<float>& pmf) {
         const auto norm = std::accumulate(std::begin(pmf), std::end(pmf), 0.0);
         std::transform(
             std::begin(pmf),
@@ -27,9 +27,10 @@ namespace oddvibe {
             [norm](float f) { return f / norm; });
     }
 
-    FloatVec normalize_counts(const SizeVec& counts, const size_t nrounds) {
+    std::vector<float>
+    normalize_counts(const std::vector<size_t>& counts, const size_t nrounds) {
         const auto f_nrounds = (1.0f * nrounds) + 1;
-        FloatVec norm_counts(counts.size(), 0);
+        std::vector<float> norm_counts(counts.size(), 0);
 
         std::transform(
             counts.begin(),

@@ -15,7 +15,6 @@
  */
 #include <vector>
 #include <random>
-#include "defs_x.h"
 
 #ifndef KMBNW_ODVB_SAMPLING_DIST_H
 #define KMBNW_ODVB_SAMPLING_DIST_H
@@ -25,14 +24,14 @@ namespace oddvibe {
         public:
             SamplingDist(const size_t nrows);
 
-            SamplingDist(const FloatVec& pmf);
+            SamplingDist(const std::vector<float>& pmf);
 
-            void adjust_for_loss(const DoubleVec& loss);
+            void adjust_for_loss(const std::vector<double>& loss);
 
             std::discrete_distribution<size_t> empirical_dist() const;
 
       private:
-            FloatVec m_pmf;
+            std::vector<float> m_pmf;
 
             void reset();
     };

@@ -15,7 +15,6 @@
  */
 #include <algorithm>
 #include <stdexcept>
-#include "defs_x.h"
 
 #ifndef KMBNW_ODVB_MATHX_H
 #define KMBNW_ODVB_MATHX_H
@@ -25,7 +24,7 @@ namespace oddvibe {
      * Normalize a vector to sum to 1 (e.g. proper probability mass function).
      * @param[inout] pmf The vector to normalize; overwritten in-place.
      */
-    void normalize(FloatVec& pmf);
+    void normalize(std::vector<float>& pmf);
 
     template <typename FloatT>
     FloatT rolling_mean(FloatT current, FloatT nextval, size_t& count) {
@@ -73,11 +72,12 @@ namespace oddvibe {
     }
 
     template <typename VectorTLeft, typename VectorTRight>
-    DoubleVec loss_seq(const VectorTLeft& ys, const VectorTRight& yhats) {
+    std::vector<double>
+    loss_seq(const VectorTLeft& ys, const VectorTRight& yhats) {
         if (ys.size() != yhats.size()) {
             throw std::logic_error("Observed and predicted must be same size");
         }
-        DoubleVec loss(yhats.size(), 0);
+        std::vector<double> loss(yhats.size(), 0);
         std::transform(
             yhats.begin(),
             yhats.end(),
@@ -89,6 +89,7 @@ namespace oddvibe {
         return loss;
     }
 
-    FloatVec normalize_counts(const SizeVec &counts, const size_t nrounds);
+    std::vector<float>
+    normalize_counts(const std::vector<size_t>& counts, const size_t nrounds);
 }
 #endif //KMBNW_ODVB_MATHX_H
