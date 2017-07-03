@@ -57,15 +57,14 @@ namespace oddvibe {
             ~SplitPoint<FloatT>() = default;
 
             /**
-             * \return The value at which this split point occurred.
+             * \return The value of the feature to split on.
              */
             FloatT split_val() const {
                 return m_split_val;
             }
 
             /**
-             * \return The zero based feature column at which this split point
-             * occurred.
+             * \return The zero-based index of the feature column to split on.
              */
             size_t split_col() const {
                 return m_split_col;
