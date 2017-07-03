@@ -34,13 +34,12 @@ namespace oddvibe {
             Booster &operator=(const Booster &other) = delete;
 
 
-            template <typename MatrixT, typename VectorT, typename FloatT>
-            FloatVec
-            fit(
-                    const Dataset<MatrixT, VectorT, FloatT>& data,
+            template <typename MatrixT, typename FloatT>
+            FloatVec fit(
+                    const Dataset<MatrixT, FloatT>& data,
                     const size_t nrounds) const {
                 const MatrixT& xs = data.xs();
-                const VectorT& ys = data.ys();
+                const std::vector<FloatT>& ys = data.ys();
                 const auto nrows = data.nrow();
 
                 // set up initial uniform distribution over all instances
@@ -48,7 +47,7 @@ namespace oddvibe {
                 SizeVec counts(nrows, 0);
                 EmpiricalSampler sampler(m_seed);
 
-                const RTree::Trainer trainer(6);
+                const typename RTree<FloatT>::Trainer trainer(6);
 
                 for (size_t k = 0; k != nrounds; ++k) {
                     auto active = sampler.gen_samples(nrows, pmf);
@@ -57,8 +56,7 @@ namespace oddvibe {
                         ++counts[idx];
                     }
 
-                    const auto tree = trainer.fit<MatrixT, VectorT>(
-                        data, active, 0);
+                    const auto tree = trainer.fit(data, active, 0);
                     const auto loss = loss_seq(ys, tree->predict(xs));
 
                     pmf.adjust_for_loss(loss);

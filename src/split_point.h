@@ -112,10 +112,10 @@ namespace oddvibe {
      * If no such split could be found (due to lack of unique values, etc)
      * then the value of is_valid() from the returned SplitPoint will be false.
      */
-    template <typename MatrixT, typename VectorT, typename FloatT>
+    template <typename MatrixT, typename FloatT>
     SplitPoint
     best_split(
-            const Dataset<MatrixT, VectorT, FloatT>& data,
+            const Dataset<MatrixT, FloatT>& data,
             const std::vector<size_t>& filter) {
         // TODO min size guard
         size_t best_col = 0;

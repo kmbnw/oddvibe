@@ -44,8 +44,4 @@ namespace oddvibe {
             });
         return norm_counts;
     }
-
-    double rolling_mean(double current, double nextval, size_t& count) {
-        return current + (nextval - current) / (++count);
-    }
 }

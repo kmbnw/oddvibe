@@ -26,7 +26,7 @@ namespace oddvibe {
      * When training we require both input features and the response values;
      * this class exists to simplify use of them inside of models.
      */
-    template <typename MatrixT, typename VectorT, typename FloatT>
+    template <typename MatrixT, typename FloatT>
     class Dataset {
         public:
             /**
@@ -37,7 +37,9 @@ namespace oddvibe {
              * \param xs Feature matrix
              * \param ys Response vector.
              */
-            explicit Dataset<MatrixT, VectorT, FloatT>(MatrixT& xs, VectorT& ys) {
+            explicit Dataset<MatrixT, FloatT>(
+                    const MatrixT& xs,
+                    const std::vector<FloatT>& ys) {
                 if (xs.nrow() != ys.size()) {
                     throw std::logic_error("X and Y row counts do not match");
                 }
@@ -53,7 +55,9 @@ namespace oddvibe {
              * \param xs Feature matrix
              * \param ys Response vector.
              */
-            explicit Dataset<MatrixT, VectorT, FloatT>(MatrixT&& xs, VectorT&& ys) {
+            explicit Dataset<MatrixT, FloatT>(
+                    MatrixT&& xs,
+                    std::vector<FloatT>&& ys) {
                 if (xs.nrow() != ys.size()) {
                     throw std::logic_error("X and Y row counts do not match");
                 }
@@ -61,15 +65,15 @@ namespace oddvibe {
                 m_ys = std::move(ys);
             }
 
-            Dataset<MatrixT, VectorT, FloatT>(
-                Dataset<MatrixT, VectorT, FloatT>&& other) = default;
-            Dataset<MatrixT, VectorT, FloatT>(
-                const Dataset<MatrixT, VectorT, FloatT>& other) = default;
-            Dataset<MatrixT, VectorT, FloatT>& operator=(
-                const Dataset<MatrixT, VectorT, FloatT>& other) = default;
-            Dataset<MatrixT, VectorT, FloatT>& operator=(
-                Dataset<MatrixT, VectorT, FloatT>&& other) = default;
-            ~Dataset<MatrixT, VectorT, FloatT>() = default;
+            Dataset<MatrixT, FloatT>(
+                Dataset<MatrixT, FloatT>&& other) = default;
+            Dataset<MatrixT, FloatT>(
+                const Dataset<MatrixT, FloatT>& other) = default;
+            Dataset<MatrixT, FloatT>& operator=(
+                const Dataset<MatrixT, FloatT>& other) = default;
+            Dataset<MatrixT, FloatT>& operator=(
+                Dataset<MatrixT, FloatT>&& other) = default;
+            ~Dataset<MatrixT, FloatT>() = default;
 
             /**
              * Find all unique values for a given feature column.
@@ -120,10 +124,10 @@ namespace oddvibe {
             template <typename ForwardIterator>
             double calc_total_err(
                     const size_t split_col,
-                    const float split_val,
+                    const FloatT split_val,
                     const ForwardIterator first,
                     const ForwardIterator last) const {
-                float yhat_l  = 0, yhat_r  = 0;
+                FloatT yhat_l  = 0, yhat_r  = 0;
                 size_t count_l = 0, count_r = 0;
 
                 const auto is_left = [split_col, split_val, this](
@@ -179,13 +183,13 @@ namespace oddvibe {
             /**
              * \return Response vector.
              */
-            const VectorT& ys() const {
+            const std::vector<FloatT>& ys() const {
                 return m_ys;
             }
 
         private:
             MatrixT m_xs;
-            VectorT m_ys;
+            std::vector<FloatT> m_ys;
     };
 }
 #endif //KMBNW_ODVB_DATASET_H

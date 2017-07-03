@@ -145,7 +145,7 @@ namespace oddvibe {
 
         const size_t nrounds = 5000;
 
-        const Dataset<FloatMatrix<float>, FloatVec, float> data(
+        const Dataset<FloatMatrix<float>, float> data(
             FloatMatrix<float>(nfeatures, xs),
             FloatVec(ys));
 

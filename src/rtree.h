@@ -29,22 +29,23 @@ namespace oddvibe {
     /**
      * Regression decision tree
      */
+    template <typename FloatT>
     class RTree {
         public:
             class Trainer;
 
-            RTree(RTree&& other) = default;
-            RTree& operator=(RTree&& other) = default;
+            RTree<FloatT>(RTree<FloatT>&& other) = default;
+            RTree<FloatT>& operator=(RTree<FloatT>&& other) = default;
 
-            RTree(const RTree& other) = delete;
-            RTree& operator=(const RTree& other) = delete;
+            RTree<FloatT>(const RTree<FloatT>& other) = delete;
+            RTree<FloatT>& operator=(const RTree<FloatT>& other) = delete;
 
-            ~RTree() = default;
+            ~RTree<FloatT>() = default;
 
             template <typename MatrixT>
             FloatVec predict(const MatrixT& xs) const {
                 const auto nrows = xs.nrow();
-                FloatVec yhats(nrows, floatNaN);
+                FloatVec yhats(nrows, std::numeric_limits<FloatT>::quiet_NaN());
                 SizeVec filter(nrows);
                 std::iota(filter.begin(), filter.end(), 0);
                 predict(xs, filter, yhats);
@@ -53,20 +54,20 @@ namespace oddvibe {
             }
 
         private:
-            float m_yhat = floatNaN;
+            FloatT m_yhat = std::numeric_limits<FloatT>::quiet_NaN();
             bool m_is_leaf = true;
             SplitPoint m_split;
 
-            std::unique_ptr<RTree> m_left;
-            std::unique_ptr<RTree> m_right;
+            std::unique_ptr<RTree<FloatT>> m_left;
+            std::unique_ptr<RTree<FloatT>> m_right;
 
-            RTree(const float yhat) : m_yhat(yhat) { };
+            RTree<FloatT>(const FloatT yhat) : m_yhat(yhat) { };
 
-            RTree(
-                    const float yhat,
+            RTree<FloatT>(
+                    const FloatT yhat,
                     const SplitPoint& split,
-                    std::unique_ptr<RTree> left,
-                    std::unique_ptr<RTree> right) :
+                    std::unique_ptr<RTree<FloatT>> left,
+                    std::unique_ptr<RTree<FloatT>> right) :
                 m_yhat(yhat),
                 m_is_leaf(false),
                 m_split(split),
@@ -101,7 +102,8 @@ namespace oddvibe {
             }
     };
 
-    class RTree::Trainer {
+    template <typename FloatT>
+    class RTree<FloatT>::Trainer {
         public:
             Trainer(const size_t max_depth) : m_max_depth(max_depth) {}
 
@@ -113,9 +115,9 @@ namespace oddvibe {
 
             ~Trainer() = default;
 
-            template <typename MatrixT, typename VectorT, typename FloatT>
-            std::unique_ptr<RTree> fit(
-                    const Dataset<MatrixT, VectorT, FloatT>& data,
+            template <typename MatrixT>
+            std::unique_ptr<RTree<FloatT>> fit(
+                    const Dataset<MatrixT, FloatT>& data,
                     const SizeVec& filter,
                     const size_t depth) const {
                 if (filter.empty()) {
@@ -123,15 +125,15 @@ namespace oddvibe {
                 }
 
                 const MatrixT& xs = data.xs();
-                const VectorT& ys = data.ys();
-                const auto yhat = mean(ys, filter.begin(), filter.end());
+                const std::vector<FloatT>& ys = data.ys();
+                const auto yhat = mean<FloatT>(ys, filter.begin(), filter.end());
                 if (std::isnan(yhat)) {
                     throw std::logic_error("Prediction is NaN");
                 }
 
                 bool force_leaf = (
                     depth >= m_max_depth ||
-                    variance(ys, filter.begin(), filter.end()) < 1e-6);
+                    variance<FloatT>(ys, filter.begin(), filter.end()) < 1e-6);
 
                 if (!force_leaf) {
                     const auto split = best_split(data, filter);
@@ -160,8 +162,8 @@ namespace oddvibe {
 
                         auto ltree = left.get();
                         auto rtree = right.get();
-                        return std::unique_ptr<RTree>(
-                            new RTree(
+                        return std::unique_ptr<RTree<FloatT>>(
+                            new RTree<FloatT>(
                                 yhat,
                                 split,
                                 std::move(ltree),
@@ -169,7 +171,7 @@ namespace oddvibe {
                     }
                 }
                 // leaf
-                return std::unique_ptr<RTree>(new RTree(yhat));
+                return std::unique_ptr<RTree<FloatT>>(new RTree<FloatT>(yhat));
             }
         private:
             size_t m_max_depth;

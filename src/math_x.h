@@ -27,17 +27,22 @@ namespace oddvibe {
      */
     void normalize(FloatVec& pmf);
 
-    double rolling_mean(double current, double nextval, size_t& count);
+    template <typename FloatT>
+    FloatT rolling_mean(FloatT current, FloatT nextval, size_t& count) {
+        return current + (nextval - current) / (++count);
+    }
 
-    template <typename VectorT, typename IteratorT>
-    double
-    mean(const VectorT& seq, const IteratorT first, const IteratorT last) {
+    template <typename FloatT, typename InputIterator>
+    FloatT mean(
+            const std::vector<FloatT>& seq,
+            const InputIterator first,
+            const InputIterator last) {
         if (first == last) {
             return 0;
         }
 
         size_t count = 0;
-        double total = 0;
+        FloatT total = 0;
 
         for (auto row = first; row != last; row = std::next(row)) {
             total = rolling_mean(total, seq[*row], count);
@@ -45,23 +50,26 @@ namespace oddvibe {
         return total;
     }
 
-    template <typename VectorT, typename IteratorT>
-    double
-    variance(const VectorT& seq, const IteratorT first, const IteratorT last) {
+    template <typename FloatT, typename IteratorT>
+    FloatT variance(
+            const std::vector<FloatT>& seq,
+            const IteratorT first,
+            const IteratorT last) {
+        const auto nan_val = std::numeric_limits<FloatT>::quiet_NaN();
         if (first == last) {
-            return doubleNaN;
+            return nan_val;
         }
 
         size_t count = 0;
-        double total = 0;
-        const auto avg_x = mean(seq, first, last);
+        FloatT total = 0;
+        const auto avg_x = mean<FloatT>(seq, first, last);
 
         for (auto row = first; row != last; row = std::next(row)) {
             total += pow(seq[*row] - avg_x, 2);
             ++count;
         }
 
-        return (count < 1 ? doubleNaN : total / count);
+        return (count < 1 ? nan_val : total / count);
     }
 
     template <typename VectorTLeft, typename VectorTRight>
