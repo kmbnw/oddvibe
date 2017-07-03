@@ -118,7 +118,7 @@ namespace oddvibe {
 
             std::unique_ptr<RTree<FloatT>> fit(
                     const Dataset<FloatT>& data,
-                    const std::vector<size_t>& filter,
+                    std::vector<size_t>& filter,
                     const size_t depth) const {
                 if (filter.empty()) {
                     throw std::invalid_argument("Must have at least one entry");
@@ -139,21 +139,20 @@ namespace oddvibe {
                     const auto split = best_split(data, filter);
 
                     if (split.is_valid()) {
-                        std::vector<size_t> part(filter);
                         const auto pivot = split.partition_idx(
-                            xs, part.begin(), part.end());
+                            xs, filter.begin(), filter.end());
 
                         const auto ndepth = depth + 1;
                         auto left = std::async(
                             std::launch::deferred,
-                            [this, &data, &part, pivot, ndepth]() {
-                                std::vector<size_t> lpart(part.begin(), pivot);
+                            [this, &data, &filter, pivot, ndepth]() {
+                                std::vector<size_t> lpart(filter.begin(), pivot);
                                 return fit(data, lpart, ndepth);
                             });
                         auto right = std::async(
                             std::launch::deferred,
-                            [this, &data, &part, pivot, ndepth]() {
-                                std::vector<size_t> rpart(pivot, part.end());
+                            [this, &data, &filter, pivot, ndepth]() {
+                                std::vector<size_t> rpart(pivot, filter.end());
                                 return fit(data, rpart, ndepth);
                             });
 
