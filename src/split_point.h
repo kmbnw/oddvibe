@@ -108,6 +108,12 @@ namespace oddvibe {
     /**
      * Create a new "best" SplitPoint.
      *
+     * The split is calculated such that the elements from the range
+     * `[first, last]` that satisfy
+     * `feature_matrix(row, split_col) <= split_val`
+     * are used as row indexes for the "left hand" side of the split, and the
+     * others are used as row indexes for the "right hand" side.
+     *
      * "Best" means that for a given feature matrix and rows to consider in
      * that matrix, a binary split done on the feature column and feature value
      * produce the lowest total error.  The lowest total error may not (and
@@ -115,15 +121,20 @@ namespace oddvibe {
      * value that it finds that fulfills the criteria.
      *
      * \param data Input feature matrix.
-     * \param filter The rows of the feature matrix to consider when finding
-     * the best split column and value.
+     * \param first ForwardIterator to the initial position of
+     * the row indexes.
+     * \param last ForwardIterator to the final position of
+     * the row indexes.
      * \return A new SplitPoint instance that contains the best-split selection.
      * If no such split could be found (due to lack of unique values, etc)
      * then the value of is_valid() from the returned SplitPoint will be false.
      */
-    template <typename FloatT>
+    template <typename FloatT, typename ForwardIterator>
     SplitPoint<FloatT>
-    best_split(const Dataset<FloatT>& data, const std::vector<size_t>& filter) {
+    best_split(
+            const Dataset<FloatT>& data,
+            const ForwardIterator first,
+            const ForwardIterator last) {
         // TODO min size guard
         size_t best_col = 0;
         FloatT best_val = std::numeric_limits<FloatT>::quiet_NaN();
@@ -133,13 +144,13 @@ namespace oddvibe {
 
         const auto ncols = data.ncol();
 
-        const auto err_fn = [&data, &filter] (
+        const auto err_fn = [&data, first, last] (
                 const size_t col, const FloatT value) {
-            return data.calc_total_err(col, value, filter.begin(), filter.end());
+            return data.calc_total_err(col, value, first, last);
         };
 
         for (size_t col = 0; col != ncols; ++col) {
-            const auto uniques = data.unique_x(col, filter.begin(), filter.end());
+            const auto uniques = data.unique_x(col, first, last);
             const auto uniq_sz = uniques.size();
             if (uniq_sz < 2) {
                 continue;

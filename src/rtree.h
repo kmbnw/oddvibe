@@ -136,7 +136,7 @@ namespace oddvibe {
                     variance<FloatT>(ys, filter.begin(), filter.end()) < 1e-6);
 
                 if (!force_leaf) {
-                    const auto split = best_split(data, filter);
+                    const auto split = best_split(data, filter.begin(), filter.end());
 
                     if (split.is_valid()) {
                         const auto pivot = split.partition_idx(
