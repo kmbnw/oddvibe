@@ -42,11 +42,11 @@ namespace oddvibe {
 
             ~RTree<FloatT>() = default;
 
-            template <typename MatrixT>
-            FloatVec predict(const MatrixT& xs) const {
+            std::vector<FloatT> predict(const FloatMatrix<FloatT>& xs) const {
                 const auto nrows = xs.nrow();
-                FloatVec yhats(nrows, std::numeric_limits<FloatT>::quiet_NaN());
-                SizeVec filter(nrows);
+                const auto nan_val = std::numeric_limits<FloatT>::quiet_NaN();
+                std::vector<FloatT> yhats(nrows, nan_val);
+                std::vector<size_t> filter(nrows);
                 std::iota(filter.begin(), filter.end(), 0);
                 predict(xs, filter, yhats);
 
@@ -83,9 +83,10 @@ namespace oddvibe {
 
             }
 
-            template <typename MatrixT>
-            void
-            predict(const MatrixT& xs, SizeVec& filter, FloatVec& yhat) const {
+            void predict(
+                    const FloatMatrix<FloatT>& xs,
+                    std::vector<size_t>& filter,
+                    std::vector<FloatT>& yhat) const {
                 if (m_is_leaf) {
                     for (const auto & row : filter) {
                         yhat[row] = m_yhat;
@@ -115,16 +116,15 @@ namespace oddvibe {
 
             ~Trainer() = default;
 
-            template <typename MatrixT>
             std::unique_ptr<RTree<FloatT>> fit(
-                    const Dataset<MatrixT, FloatT>& data,
+                    const Dataset<FloatT>& data,
                     const SizeVec& filter,
                     const size_t depth) const {
                 if (filter.empty()) {
                     throw std::invalid_argument("Must have at least one entry");
                 }
 
-                const MatrixT& xs = data.xs();
+                const FloatMatrix<FloatT>& xs = data.xs();
                 const std::vector<FloatT>& ys = data.ys();
                 const auto yhat = mean<FloatT>(ys, filter.begin(), filter.end());
                 if (std::isnan(yhat)) {

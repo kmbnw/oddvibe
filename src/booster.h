@@ -34,17 +34,16 @@ namespace oddvibe {
             Booster &operator=(const Booster &other) = delete;
 
 
-            template <typename MatrixT, typename FloatT>
-            FloatVec fit(
-                    const Dataset<MatrixT, FloatT>& data,
-                    const size_t nrounds) const {
-                const MatrixT& xs = data.xs();
+            template <typename FloatT>
+            std::vector<float>
+            fit(const Dataset<FloatT>& data, const size_t nrounds) const {
+                const FloatMatrix<FloatT>& xs = data.xs();
                 const std::vector<FloatT>& ys = data.ys();
                 const auto nrows = data.nrow();
 
                 // set up initial uniform distribution over all instances
                 SamplingDist pmf(nrows);
-                SizeVec counts(nrows, 0);
+                std::vector<size_t> counts(nrows, 0);
                 EmpiricalSampler sampler(m_seed);
 
                 const typename RTree<FloatT>::Trainer trainer(6);

@@ -76,7 +76,7 @@ NumericVector FindOutlierWeights(
     oddvibe::Booster booster(seed);
 
     // move construct a Dataset
-    const oddvibe::Dataset< DoubleMatrix, double > data(
+    const oddvibe::Dataset<double> data(
         DoubleMatrix(xs.ncol(), Rcpp::as<DoubleVector>(xs)),
         Rcpp::as<DoubleVector>(ys));
 

@@ -76,10 +76,10 @@ namespace oddvibe {
              * \sa split_col()
              * \sa split_val()
              */
-            template <typename MatrixT, typename BidirectionalIterator>
+            template <typename FloatT, typename BidirectionalIterator>
             BidirectionalIterator
             partition_idx(
-                const MatrixT& mat,
+                const FloatMatrix<FloatT>& mat,
                 BidirectionalIterator first,
                 BidirectionalIterator last)
             const {
@@ -112,11 +112,9 @@ namespace oddvibe {
      * If no such split could be found (due to lack of unique values, etc)
      * then the value of is_valid() from the returned SplitPoint will be false.
      */
-    template <typename MatrixT, typename FloatT>
+    template <typename FloatT>
     SplitPoint
-    best_split(
-            const Dataset<MatrixT, FloatT>& data,
-            const std::vector<size_t>& filter) {
+    best_split(const Dataset<FloatT>& data, const std::vector<size_t>& filter) {
         // TODO min size guard
         size_t best_col = 0;
         float best_val = floatNaN;
