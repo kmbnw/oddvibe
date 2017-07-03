@@ -43,7 +43,7 @@ namespace oddvibe {
              *
              * \param split_col The zero-based index of the feature column
              * to split on.
-             * \param The value of the feature to split on.
+             * \param split_val The value of the feature to split on.
              */
             SplitPoint<FloatT>(const size_t split_col, const FloatT split_val) :
                 m_split_col(split_col),
