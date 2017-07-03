@@ -21,11 +21,30 @@
 #define KMBNW_ODVB_ECDF_SAMPLER_H
 
 namespace oddvibe {
+    /**
+     * Generate samples of row indexes from a given distribution.
+     */
     class EmpiricalSampler {
         public:
-            // pmf == probability mass function
+            /**
+             * Create a new instance with the specified random seed.
+             *
+             * \param seed Random seed to initialize with.
+             */
             EmpiricalSampler(const size_t seed);
 
+            /**
+             * Generate empirical samples with replacement from a given
+             * distribution.
+             *
+             * A sample is conceptually a row index into a feature matrix.
+             *
+             * \param nrows The number of samples to generate.
+             * \param pmf The empirical distribution to generate row indexes
+             * from.
+             * \return A vector of randomly sampled row indexes, each within the
+             * range of `[0, pmf.size())`.
+             */
             std::vector<size_t>
             gen_samples(const size_t nrows, const SamplingDist& pmf);
 

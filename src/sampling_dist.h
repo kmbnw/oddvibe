@@ -32,12 +32,6 @@ namespace oddvibe {
             SamplingDist(const size_t nrows);
 
             /**
-             * Create a new instance with the given distribution.
-             * \param The distribution to initialize this instance with.
-             */
-            SamplingDist(const std::vector<float>& pmf);
-
-            /**
              * Update the underlying distribution of this instance using
              * the loss vector from a round of boosting.
              * \loss The loss for each row of input data.  This must be the

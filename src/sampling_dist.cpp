@@ -27,18 +27,6 @@ namespace oddvibe {
         m_pmf = std::vector<float>(nrows, 1.0 / nrows);
     }
 
-    SamplingDist::SamplingDist(const std::vector<float>& pmf) :
-        m_size(pmf.size()) {
-
-        if (m_size < 1) {
-            throw std::invalid_argument("pmf.size() must be >= 1");
-        }
-
-        m_pmf = pmf;
-
-        // TODO check for sum to 1
-    }
-
     void SamplingDist::reset() {
         std::fill(m_pmf.begin(), m_pmf.end(), 1.0 / m_pmf.size());
     }
