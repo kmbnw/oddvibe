@@ -151,7 +151,7 @@ namespace oddvibe {
 
         const Booster booster(seed);
 
-        const auto counts = booster.fit(data, nrounds);
+        const auto counts = booster.fit_counts(data, nrounds);
 
         for (size_t j = 0; j != nrows; ++j) {
             std::cout << std::setw(4) << std::left << j;

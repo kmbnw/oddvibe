@@ -28,21 +28,30 @@ namespace oddvibe {
      */
     class Booster {
         public:
+            /**
+             * Create a new instance with the specified random seed.
+             *
+             * \param seed Random seed to initialize with.
+             */
             Booster(const size_t &seed) : m_seed(seed) {}
 
             Booster(const Booster &other) = delete;
             Booster &operator=(const Booster &other) = delete;
 
             /**
-             * Fit data using boosted RTrees
+             * Find possible outliers using boosted RTrees
              *
              * \param data Dataset of feature matrix and response vector to fit.
              * \param nrounds Number of rounds of boosting (often called
              * number of trees).
+             * \return A vector of normalized counts, one for each row of the
+             * input data.  Each element represents the number of times that
+             * row of data was chosen during boosting, normalized by `nrounds`.
              */
             template <typename FloatT>
-            std::vector<float>
-            fit(const Dataset<FloatT>& data, const size_t nrounds) const {
+            std::vector<float> fit_counts(
+                    const Dataset<FloatT>& data,
+                    const size_t nrounds) const {
                 const FloatMatrix<FloatT>& xs = data.xs();
                 const std::vector<FloatT>& ys = data.ys();
                 const auto nrows = data.nrow();

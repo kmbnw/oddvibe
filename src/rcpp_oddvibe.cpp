@@ -80,7 +80,7 @@ NumericVector FindOutlierWeights(
         DoubleMatrix(xs.ncol(), Rcpp::as<DoubleVector>(xs)),
         Rcpp::as<DoubleVector>(ys));
 
-    const auto result = booster.fit(data, nrounds);
+    const auto result = booster.fit_counts(data, nrounds);
 
     return Rcpp::wrap(result);
 }

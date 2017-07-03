@@ -46,7 +46,8 @@ namespace oddvibe {
              * Predict for an input feature matrix.
              *
              * \param xs The feature matrix to generate predictions for.
-             * \return A vector of predictions, one for each row of xs.
+             * \return A vector of predictions, one for each row of the input
+             * matrix.
              */
             std::vector<FloatT> predict(const FloatMatrix<FloatT>& xs) const {
                 const auto nrows = xs.nrow();
