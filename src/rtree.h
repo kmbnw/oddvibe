@@ -44,7 +44,7 @@ namespace oddvibe {
 
             std::vector<FloatT> predict(const FloatMatrix<FloatT>& xs) const {
                 const auto nrows = xs.nrow();
-                const auto nan_val = std::numeric_limits<FloatT>::quiet_NaN();
+                constexpr auto nan_val = std::numeric_limits<FloatT>::quiet_NaN();
                 std::vector<FloatT> yhats(nrows, nan_val);
                 std::vector<size_t> filter(nrows);
                 std::iota(filter.begin(), filter.end(), 0);
@@ -56,7 +56,7 @@ namespace oddvibe {
         private:
             FloatT m_yhat = std::numeric_limits<FloatT>::quiet_NaN();
             bool m_is_leaf = true;
-            SplitPoint m_split;
+            SplitPoint<FloatT> m_split;
 
             std::unique_ptr<RTree<FloatT>> m_left;
             std::unique_ptr<RTree<FloatT>> m_right;
@@ -65,7 +65,7 @@ namespace oddvibe {
 
             RTree<FloatT>(
                     const FloatT yhat,
-                    const SplitPoint& split,
+                    const SplitPoint<FloatT>& split,
                     std::unique_ptr<RTree<FloatT>> left,
                     std::unique_ptr<RTree<FloatT>> right) :
                 m_yhat(yhat),
@@ -94,8 +94,8 @@ namespace oddvibe {
                 } else {
                     const auto pivot = m_split.partition_idx(
                         xs, filter.begin(), filter.end());
-                    SizeVec lsplit(filter.begin(), pivot);
-                    SizeVec rsplit(pivot, filter.end());
+                    std::vector<size_t> lsplit(filter.begin(), pivot);
+                    std::vector<size_t> rsplit(pivot, filter.end());
 
                     m_left->predict(xs, lsplit, yhat);
                     m_right->predict(xs, rsplit, yhat);
@@ -118,7 +118,7 @@ namespace oddvibe {
 
             std::unique_ptr<RTree<FloatT>> fit(
                     const Dataset<FloatT>& data,
-                    const SizeVec& filter,
+                    const std::vector<size_t>& filter,
                     const size_t depth) const {
                 if (filter.empty()) {
                     throw std::invalid_argument("Must have at least one entry");
@@ -139,7 +139,7 @@ namespace oddvibe {
                     const auto split = best_split(data, filter);
 
                     if (split.is_valid()) {
-                        SizeVec part(filter);
+                        std::vector<size_t> part(filter);
                         const auto pivot = split.partition_idx(
                             xs, part.begin(), part.end());
 
@@ -147,13 +147,13 @@ namespace oddvibe {
                         auto left = std::async(
                             std::launch::deferred,
                             [this, &data, &part, pivot, ndepth]() {
-                                SizeVec lpart(part.begin(), pivot);
+                                std::vector<size_t> lpart(part.begin(), pivot);
                                 return fit(data, lpart, ndepth);
                             });
                         auto right = std::async(
                             std::launch::deferred,
                             [this, &data, &part, pivot, ndepth]() {
-                                SizeVec rpart(pivot, part.end());
+                                std::vector<size_t> rpart(pivot, part.end());
                                 return fit(data, rpart, ndepth);
                             });
 

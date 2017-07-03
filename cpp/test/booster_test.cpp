@@ -147,7 +147,7 @@ namespace oddvibe {
 
         const Dataset<float> data(
             FloatMatrix<float>(nfeatures, xs),
-            FloatVec(ys));
+            std::vector<float>(ys));
 
         const Booster booster(seed);
 

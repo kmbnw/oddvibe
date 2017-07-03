@@ -26,10 +26,10 @@ namespace oddvibe {
        m_rand_engine(std::mt19937(seed)) {
     }
 
-    SizeVec
+    std::vector<size_t>
     EmpiricalSampler::gen_samples(const size_t nrows, const SamplingDist& pmf) {
         std::discrete_distribution<size_t> dist(pmf.empirical_dist());
-        SizeVec seq(nrows, 0);
+        std::vector<size_t> seq(nrows, 0);
         std::generate(
             seq.begin(),
             seq.end(),

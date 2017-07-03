@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-#include "defs_x.h"
 
 #ifndef KMBNW_ODVB_FLOAT_MATRIX_H
 #define KMBNW_ODVB_FLOAT_MATRIX_H

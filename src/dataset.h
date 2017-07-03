@@ -141,6 +141,7 @@ namespace oddvibe {
                     }
                 }
 
+                constexpr double doubleMax = std::numeric_limits<double>::max();
                 if (count_l == 0 || count_r == 0) {
                     return doubleMax;
                 }

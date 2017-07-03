@@ -15,7 +15,6 @@
  */
 #include <vector>
 #include <random>
-#include "defs_x.h"
 #include "sampling_dist.h"
 
 #ifndef KMBNW_ODVB_ECDF_SAMPLER_H
@@ -27,7 +26,8 @@ namespace oddvibe {
             // pmf == probability mass function
             EmpiricalSampler(const size_t seed);
 
-            SizeVec gen_samples(const size_t nrows, const SamplingDist& pmf);
+            std::vector<size_t>
+            gen_samples(const size_t nrows, const SamplingDist& pmf);
 
         private:
             std::mt19937 m_rand_engine;

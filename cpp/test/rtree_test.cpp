@@ -50,12 +50,12 @@ namespace oddvibe {
         };
         const size_t nfeatures = 2;
 
-        SizeVec seq(ys.size());
+        std::vector<size_t> seq(ys.size());
         std::iota(seq.begin(), seq.end(), 0);
 
         const Dataset<float> data(
             FloatMatrix<float>(nfeatures, xs),
-            FloatVec(ys));
+            std::vector<float>(ys));
 
         const auto split = best_split(data, seq);
 
@@ -79,12 +79,12 @@ namespace oddvibe {
         };
         const size_t nfeatures = 2;
 
-        SizeVec seq(ys.size());
+        std::vector<size_t> seq(ys.size());
         std::iota(seq.begin(), seq.end(), 0);
 
         const Dataset<float> data(
             FloatMatrix<float>(nfeatures, xs),
-            FloatVec(ys));
+            std::vector<float>(ys));
         const auto split = best_split(data, seq);
         const auto col = split.split_col();
         const auto value = split.split_val();
@@ -112,12 +112,12 @@ namespace oddvibe {
         };
         const size_t nfeatures = 2;
 
-        SizeVec seq(ys.size());
+        std::vector<size_t> seq(ys.size());
         std::iota(seq.begin(), seq.end(), 0);
 
         const Dataset<float> data(
             FloatMatrix<float>(nfeatures, xs),
-            FloatVec(ys));
+            std::vector<float>(ys));
         const auto split = best_split(data, seq);
         const auto col = split.split_col();
         const auto value = split.split_val();
@@ -166,12 +166,12 @@ namespace oddvibe {
 
         const size_t nfeatures = 3;
 
-        SizeVec seq(ys.size());
+        std::vector<size_t> seq(ys.size());
         std::iota(seq.begin(), seq.end(), 0);
 
         const Dataset<float> data(
             FloatMatrix<float>(nfeatures, xs),
-            FloatVec(ys));
+            std::vector<float>(ys));
         const auto split = best_split(data, seq);
         const auto col = split.split_col();
         const auto value = split.split_val();

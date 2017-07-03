@@ -62,7 +62,7 @@ namespace oddvibe {
             const std::vector<FloatT>& seq,
             const IteratorT first,
             const IteratorT last) {
-        const auto nan_val = std::numeric_limits<FloatT>::quiet_NaN();
+        constexpr auto nan_val = std::numeric_limits<FloatT>::quiet_NaN();
         if (first == last) {
             return nan_val;
         }

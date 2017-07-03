@@ -23,7 +23,6 @@
 #include <utility>
 #include <future>
 #include <unordered_set>
-#include "defs_x.h"
 #include "math_x.h"
 #include "dataset.h"
 
@@ -31,33 +30,43 @@ namespace oddvibe {
     /**
      * Regression tree split point.
      */
+    template <typename FloatT>
     class SplitPoint {
         public:
-            SplitPoint() = default;
+            SplitPoint<FloatT>() = default;
 
-            SplitPoint(const size_t split_col, const float split_val);
+            SplitPoint<FloatT>(const size_t split_col, const FloatT split_val) :
+                m_split_col(split_col),
+                m_split_val(split_val) { }
 
-            SplitPoint(SplitPoint&& other) = default;
-            SplitPoint(const SplitPoint& other) = default;
-            SplitPoint& operator=(const SplitPoint& other) = default;
-            SplitPoint& operator=(SplitPoint&& other) = default;
-            ~SplitPoint() = default;
+            SplitPoint<FloatT>(SplitPoint<FloatT>&& other) = default;
+            SplitPoint<FloatT>(const SplitPoint<FloatT>& other) = default;
+            SplitPoint<FloatT>& operator=(
+                const SplitPoint<FloatT>& other) = default;
+            SplitPoint<FloatT>& operator=(SplitPoint<FloatT>&& other) = default;
+            ~SplitPoint<FloatT>() = default;
 
             /**
              * \return The value at which this split point occurred.
              */
-            float split_val() const;
+            FloatT split_val() const {
+                return m_split_val;
+            }
 
             /**
              * \return The zero based feature column at which this split point
              * occurred.
              */
-            size_t split_col() const;
+            size_t split_col() const {
+                return m_split_col;
+            }
 
             /**
              * \return True if this instance has a non-NaN split_val().
              */
-            bool is_valid() const;
+            bool is_valid() const {
+                return !std::isnan(m_split_val);
+            }
 
             /**
              * Partition the input sequence according to this instance.
@@ -76,7 +85,7 @@ namespace oddvibe {
              * \sa split_col()
              * \sa split_val()
              */
-            template <typename FloatT, typename BidirectionalIterator>
+            template <typename BidirectionalIterator>
             BidirectionalIterator
             partition_idx(
                 const FloatMatrix<FloatT>& mat,
@@ -93,7 +102,7 @@ namespace oddvibe {
 
         private:
             size_t m_split_col = 0;
-            float m_split_val = floatNaN;
+            FloatT m_split_val = std::numeric_limits<FloatT>::quiet_NaN();
     };
 
     /**
@@ -113,19 +122,19 @@ namespace oddvibe {
      * then the value of is_valid() from the returned SplitPoint will be false.
      */
     template <typename FloatT>
-    SplitPoint
+    SplitPoint<FloatT>
     best_split(const Dataset<FloatT>& data, const std::vector<size_t>& filter) {
         // TODO min size guard
         size_t best_col = 0;
-        float best_val = floatNaN;
-        double best_err = doubleMax;
+        FloatT best_val = std::numeric_limits<FloatT>::quiet_NaN();
+        double best_err = std::numeric_limits<double>::max();
 
         std::vector< std::future<double> > futures;
 
         const auto ncols = data.ncol();
 
         const auto err_fn = [&data, &filter] (
-                const size_t col, const float value) {
+                const size_t col, const FloatT value) {
             return data.calc_total_err(col, value, filter.begin(), filter.end());
         };
 
@@ -142,7 +151,7 @@ namespace oddvibe {
                 uniques.begin(),
                 uniques.end(),
                 std::back_inserter(futures),
-                [&err_fn, col](const float value) {
+                [&err_fn, col](const FloatT value) {
                     return std::async(std::launch::deferred, err_fn, col, value);
                 });
 
@@ -158,7 +167,7 @@ namespace oddvibe {
                 }
             }
         }
-        return SplitPoint(best_col, best_val);
+        return SplitPoint<FloatT>(best_col, best_val);
     }
 }
 #endif //KMBNW_ODVB_SPLITPOINT_H
