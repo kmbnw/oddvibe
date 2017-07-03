@@ -15,15 +15,27 @@
  */
 
 #include <algorithm>
+#include <stdexcept>
 #include "sampling_dist.h"
 #include "math_x.h"
 
 namespace oddvibe {
-    SamplingDist::SamplingDist(const size_t nrows) {
+    SamplingDist::SamplingDist(const size_t nrows) : m_size(nrows) {
+        if (nrows < 1) {
+            throw std::invalid_argument("nrows must be >= 1");
+        }
         m_pmf = std::vector<float>(nrows, 1.0 / nrows);
     }
 
-    SamplingDist::SamplingDist(const std::vector<float>& pmf) : m_pmf(pmf) {
+    SamplingDist::SamplingDist(const std::vector<float>& pmf) :
+        m_size(pmf.size()) {
+
+        if (m_size < 1) {
+            throw std::invalid_argument("pmf.size() must be >= 1");
+        }
+
+        m_pmf = pmf;
+
         // TODO check for sum to 1
     }
 
@@ -32,6 +44,10 @@ namespace oddvibe {
     }
 
     void SamplingDist::adjust_for_loss(const std::vector<double>& loss) {
+        if (loss.size() != m_size) {
+            throw std::invalid_argument(
+                "Loss vector must be same size as distribution");
+        }
         const double max_loss = *std::max_element(loss.begin(), loss.end());
 
         double epsilon = 0.0;

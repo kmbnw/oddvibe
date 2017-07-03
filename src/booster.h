@@ -33,6 +33,13 @@ namespace oddvibe {
             Booster(const Booster &other) = delete;
             Booster &operator=(const Booster &other) = delete;
 
+            /**
+             * Fit data using boosted RTrees
+             *
+             * \param data Dataset of feature matrix and response vector to fit.
+             * \param nrounds Number of rounds of boosting (often called
+             * number of trees).
+             */
             template <typename FloatT>
             std::vector<float>
             fit(const Dataset<FloatT>& data, const size_t nrounds) const {
