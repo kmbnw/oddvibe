@@ -19,10 +19,14 @@
 #ifndef KMBNW_ODVB_DEFSX_H
 #define KMBNW_ODVB_DEFSX_H
 
+/**
+ * Docs for ODdVIBe
+ */
 namespace oddvibe {
     using FloatVec = std::vector<float>;
     using DoubleVec = std::vector<double>;
     using BoolVec = std::vector<bool>;
+
     using SizeVec = std::vector<size_t>;
 
     using SizeIter = std::vector<size_t>::iterator;

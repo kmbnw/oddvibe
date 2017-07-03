@@ -90,7 +90,8 @@ namespace oddvibe {
                         yhat[row] = m_yhat;
                     }
                 } else {
-                    const auto pivot = m_split.partition_idx(xs, filter);
+                    const auto pivot = m_split.partition_idx(
+                        xs, filter.begin(), filter.end());
                     SizeVec lsplit(filter.begin(), pivot);
                     SizeVec rsplit(pivot, filter.end());
 
@@ -137,7 +138,8 @@ namespace oddvibe {
 
                     if (split.is_valid()) {
                         SizeVec part(filter);
-                        const auto pivot = split.partition_idx(xs, part);
+                        const auto pivot = split.partition_idx(
+                            xs, part.begin(), part.end());
 
                         const auto ndepth = depth + 1;
                         auto left = std::async(

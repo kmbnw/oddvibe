@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 #ifndef KMBNW_ODVB_SPLITPOINT_H
 #define KMBNW_ODVB_SPLITPOINT_H
 
@@ -27,6 +28,9 @@
 #include "dataset.h"
 
 namespace oddvibe {
+    /**
+     * Regression tree split point.
+     */
     class SplitPoint {
         public:
             SplitPoint() = default;
@@ -39,19 +43,49 @@ namespace oddvibe {
             SplitPoint& operator=(SplitPoint&& other) = default;
             ~SplitPoint() = default;
 
+            /**
+             * \return The value at which this split point occurred.
+             */
             float split_val() const;
 
+            /**
+             * \return The zero based feature column at which this split point
+             * occurred.
+             */
             size_t split_col() const;
 
+            /**
+             * \return True if this instance has a non-NaN split_val().
+             */
             bool is_valid() const;
 
-
-            template <typename MatrixT, typename IndexSeqT>
-            typename IndexSeqT::iterator
-            partition_idx(const MatrixT& mat, IndexSeqT& filter) const {
+            /**
+             * Partition the input sequence according to this instance.
+             *
+             * Rearranges the elements from the range `[first, rlast]` in such a
+             * way that all the elements for which
+             *     mat(row, split_col()) <= split_val()
+             * returns true precede all those for which it returns false.  The
+             * iterator returned points to the first element of the second group.
+             * \param mat Numeric matrix of feature data
+             * \param first Bidirectional iterator to the initial position of
+             * the row indexes.
+             * \param first Bidirectional iterator to the final position of
+             * the row indexes.
+             * \return Iterator as described in the main description.
+             * \sa split_col()
+             * \sa split_val()
+             */
+            template <typename MatrixT, typename BidirectionalIterator>
+            BidirectionalIterator
+            partition_idx(
+                const MatrixT& mat,
+                BidirectionalIterator first,
+                BidirectionalIterator last)
+            const {
                 return std::partition(
-                    filter.begin(),
-                    filter.end(),
+                    first,
+                    last,
                     [this, &mat](const size_t row){
                         return mat(row, this->m_split_col) <= this->m_split_val;
                     });
@@ -62,9 +96,27 @@ namespace oddvibe {
             float m_split_val = floatNaN;
     };
 
+    /**
+     * Create a new "best" SplitPoint.
+     *
+     * "Best" means that for a given feature matrix and rows to consider in
+     * that matrix, a binary split done on the feature column and feature value
+     * produce the lowest total error.  The lowest total error may not (and
+     * probably is not) unique; this function chooses the first such column and
+     * value that it finds that fulfills the criteria.
+     *
+     * \param data Input feature matrix.
+     * \param filter The rows of the feature matrix to consider when finding
+     * the best split column and value.
+     * \return A new SplitPoint instance that contains the best-split selection.
+     * If no such split could be found (due to lack of unique values, etc)
+     * then the value of is_valid() from the returned SplitPoint will be false.
+     */
     template <typename MatrixT, typename VectorT>
     SplitPoint
-    best_split(const Dataset<MatrixT, VectorT>& data, const SizeVec& filter) {
+    best_split(
+            const Dataset<MatrixT, VectorT>& data,
+            const std::vector<size_t>& filter) {
         // TODO min size guard
         size_t best_col = 0;
         float best_val = floatNaN;
