@@ -22,14 +22,9 @@
 #define KMBNW_ODVB_BOOSTER_H
 
 namespace oddvibe {
-    void update_counts(const SizeVec& indexes, SizeVec& counts) {
-        for (const auto & idx : indexes) {
-            ++counts[idx];
-        }
-    }
-
     /**
-     * Provides boosting capabilities to other models.
+     * Provides boosting capabilities to RTree models.
+     * \sa RTree
      */
     class Booster {
         public:
@@ -57,7 +52,10 @@ namespace oddvibe {
 
                 for (size_t k = 0; k != nrounds; ++k) {
                     auto active = sampler.gen_samples(nrows, pmf);
-                    update_counts(active, counts);
+
+                    for (const auto & idx : active) {
+                        ++counts[idx];
+                    }
 
                     const auto tree = trainer.fit<MatrixT, VectorT>(
                         data, active, 0);
