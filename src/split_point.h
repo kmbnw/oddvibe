@@ -62,15 +62,15 @@ namespace oddvibe {
             /**
              * Partition the input sequence according to this instance.
              *
-             * Rearranges the elements from the range `[first, rlast]` in such a
+             * Rearranges the elements from the range `[first, last]` in such a
              * way that all the elements for which
-             *     mat(row, split_col()) <= split_val()
+             *     `mat(row, split_col()) <= split_val()`
              * returns true precede all those for which it returns false.  The
              * iterator returned points to the first element of the second group.
              * \param mat Numeric matrix of feature data
-             * \param first Bidirectional iterator to the initial position of
+             * \param first BidirectionalIterator to the initial position of
              * the row indexes.
-             * \param first Bidirectional iterator to the final position of
+             * \param last BidirectionalIterator to the final position of
              * the row indexes.
              * \return Iterator as described in the main description.
              * \sa split_col()
@@ -128,7 +128,7 @@ namespace oddvibe {
 
         const auto err_fn = [&data, &filter] (
                 const size_t col, const float value) {
-            return data.calc_total_err(col, value, filter);
+            return data.calc_total_err(col, value, filter.begin(), filter.end());
         };
 
         for (size_t col = 0; col != ncols; ++col) {

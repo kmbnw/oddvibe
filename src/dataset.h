@@ -20,9 +20,23 @@
 #include <utility>
 
 namespace oddvibe {
+    /**
+     * Collect feature matrix data and its corresponding response vector.
+     *
+     * When training we require both input features and the response values;
+     * this class exists to simplify use of them inside of models.
+     */
     template <typename MatrixT, typename VectorT>
     class Dataset {
         public:
+            /**
+             * Construct a new Dataset.
+             *
+             * Enforces the precondition that `xs.nrow() == ys.size()`.
+             *
+             * \param xs Feature matrix
+             * \param ys Response vector.
+             */
             explicit Dataset<MatrixT, VectorT>(MatrixT& xs, VectorT& ys) {
                 if (xs.nrow() != ys.size()) {
                     throw std::logic_error("X and Y row counts do not match");
@@ -31,6 +45,14 @@ namespace oddvibe {
                 m_ys = ys;
             }
 
+            /**
+             * Move-construct a new Dataset.
+             *
+             * Enforces the precondition that `xs.nrow() == ys.size()`.
+             *
+             * \param xs Feature matrix
+             * \param ys Response vector.
+             */
             explicit Dataset<MatrixT, VectorT>(MatrixT&& xs, VectorT&& ys) {
                 if (xs.nrow() != ys.size()) {
                     throw std::logic_error("X and Y row counts do not match");
@@ -45,9 +67,6 @@ namespace oddvibe {
             Dataset<MatrixT, VectorT>& operator=(Dataset<MatrixT, VectorT>&& other) = default;
             ~Dataset<MatrixT, VectorT>() = default;
 
-            const MatrixT& xs() const { return m_xs; }
-            const VectorT& ys() const { return m_ys; }
-
             FloatVec
             unique_x(const size_t col, const SizeVec& indices) const {
                 std::unordered_set<float> uniques;
@@ -58,11 +77,30 @@ namespace oddvibe {
                 return FloatVec(uniques.begin(), uniques.end());
             }
 
-             // total squared error for left and right side of split_val
+            /**
+             * Calculate total squared error for a split point.
+             *
+             * The error is calculated such that the elements from the range
+             * `[first, last]` that satisfy
+             * `feature_matrix(row, split_col) <= split_val`
+             * are used as row indexes for the "left hand" error, and the others
+             * are used as row indexes for the "right hand" error.
+             *
+             * \param split_col The zero-based feature column to split on.
+             * \param split_val The value of the feature to split on.
+             * \param first ForwardIterator to the initial position of
+             * the row indexes.
+             * \param last ForwardIterator to the final position of
+             * the row indexes.
+             * \return Total squared error when splitting on the input split
+             * point.
+             */
+            template <typename ForwardIterator>
             double calc_total_err(
                     const size_t split_col,
                     const float split_val,
-                    const SizeVec& filter) const {
+                    const ForwardIterator first,
+                    const ForwardIterator last) const {
                 float yhat_l  = 0, yhat_r  = 0;
                 size_t count_l = 0, count_r = 0;
 
@@ -71,12 +109,12 @@ namespace oddvibe {
                     return m_xs(row, split_col) <= split_val;
                 };
 
-                for (const auto & row : filter) {
+                for (auto row = first; row != last; row = std::next(row)) {
                     // rolling mean
-                    if (is_left(row)) {
-                        yhat_l = rolling_mean(yhat_l, m_ys[row], count_l);
+                    if (is_left(*row)) {
+                        yhat_l = rolling_mean(yhat_l, m_ys[*row], count_l);
                     } else {
-                        yhat_r = rolling_mean(yhat_r, m_ys[row], count_r);
+                        yhat_r = rolling_mean(yhat_r, m_ys[*row], count_r);
                     }
                 }
 
@@ -90,18 +128,37 @@ namespace oddvibe {
                     return init + pow((m_ys[row] - yhat), 2.0);
                 };
 
-                const double err = std::accumulate(
-                    filter.begin(), filter.end(), 0, acc_err);
+                const double err = std::accumulate(first, last, 0, acc_err);
 
                 return (std::isnan(err) ? doubleMax : err);
             }
 
+            /**
+             * \return Number of columns in the feature matrix
+             */
             size_t ncol() const {
                 return m_xs.ncol();
             }
 
+            /**
+             * \return Number of rows in the feature matrix
+             */
             size_t nrow() const {
                 return m_xs.nrow();
+            }
+
+            /**
+             * \return Feature matrix.
+             */
+            const MatrixT& xs() const {
+                return m_xs;
+            }
+
+            /**
+             * \return Response vector.
+             */
+            const VectorT& ys() const {
+                return m_ys;
             }
 
         private:
