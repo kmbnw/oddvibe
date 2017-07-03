@@ -39,9 +39,11 @@ namespace oddvibe {
             Booster &operator=(const Booster &other) = delete;
 
 
-            template <typename MatrixT, typename VectorT>
+            template <typename MatrixT, typename VectorT, typename FloatT>
             FloatVec
-            fit(const Dataset<MatrixT, VectorT>& data, const size_t nrounds) const {
+            fit(
+                    const Dataset<MatrixT, VectorT, FloatT>& data,
+                    const size_t nrounds) const {
                 const MatrixT& xs = data.xs();
                 const VectorT& ys = data.ys();
                 const auto nrows = data.nrow();

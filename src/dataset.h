@@ -26,7 +26,7 @@ namespace oddvibe {
      * When training we require both input features and the response values;
      * this class exists to simplify use of them inside of models.
      */
-    template <typename MatrixT, typename VectorT>
+    template <typename MatrixT, typename VectorT, typename FloatT>
     class Dataset {
         public:
             /**
@@ -37,7 +37,7 @@ namespace oddvibe {
              * \param xs Feature matrix
              * \param ys Response vector.
              */
-            explicit Dataset<MatrixT, VectorT>(MatrixT& xs, VectorT& ys) {
+            explicit Dataset<MatrixT, VectorT, FloatT>(MatrixT& xs, VectorT& ys) {
                 if (xs.nrow() != ys.size()) {
                     throw std::logic_error("X and Y row counts do not match");
                 }
@@ -53,7 +53,7 @@ namespace oddvibe {
              * \param xs Feature matrix
              * \param ys Response vector.
              */
-            explicit Dataset<MatrixT, VectorT>(MatrixT&& xs, VectorT&& ys) {
+            explicit Dataset<MatrixT, VectorT, FloatT>(MatrixT&& xs, VectorT&& ys) {
                 if (xs.nrow() != ys.size()) {
                     throw std::logic_error("X and Y row counts do not match");
                 }
@@ -61,20 +61,28 @@ namespace oddvibe {
                 m_ys = std::move(ys);
             }
 
-            Dataset<MatrixT, VectorT>(Dataset<MatrixT, VectorT>&& other) = default;
-            Dataset<MatrixT, VectorT>(const Dataset<MatrixT, VectorT>& other) = default;
-            Dataset<MatrixT, VectorT>& operator=(const Dataset<MatrixT, VectorT>& other) = default;
-            Dataset<MatrixT, VectorT>& operator=(Dataset<MatrixT, VectorT>&& other) = default;
-            ~Dataset<MatrixT, VectorT>() = default;
+            Dataset<MatrixT, VectorT, FloatT>(
+                Dataset<MatrixT, VectorT, FloatT>&& other) = default;
+            Dataset<MatrixT, VectorT, FloatT>(
+                const Dataset<MatrixT, VectorT, FloatT>& other) = default;
+            Dataset<MatrixT, VectorT, FloatT>& operator=(
+                const Dataset<MatrixT, VectorT, FloatT>& other) = default;
+            Dataset<MatrixT, VectorT, FloatT>& operator=(
+                Dataset<MatrixT, VectorT, FloatT>&& other) = default;
+            ~Dataset<MatrixT, VectorT, FloatT>() = default;
 
-            FloatVec
-            unique_x(const size_t col, const SizeVec& indices) const {
-                std::unordered_set<float> uniques;
+            template <typename InputIterator>
+            std::vector<FloatT>
+            unique_x(
+                const size_t col,
+                const InputIterator first,
+                const InputIterator last) const {
+                std::unordered_set<FloatT> uniques;
 
-                for (const auto & row : indices) {
-                    uniques.insert(m_xs(row, col));
+                for (auto row = first; row != last; row = std::next(row)) {
+                    uniques.insert(m_xs(*row, col));
                 }
-                return FloatVec(uniques.begin(), uniques.end());
+                return std::vector<FloatT>(uniques.begin(), uniques.end());
             }
 
             /**

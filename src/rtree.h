@@ -113,9 +113,9 @@ namespace oddvibe {
 
             ~Trainer() = default;
 
-            template <typename MatrixT, typename VectorT>
+            template <typename MatrixT, typename VectorT, typename FloatT>
             std::unique_ptr<RTree> fit(
-                    const Dataset<MatrixT, VectorT>& data,
+                    const Dataset<MatrixT, VectorT, FloatT>& data,
                     const SizeVec& filter,
                     const size_t depth) const {
                 if (filter.empty()) {

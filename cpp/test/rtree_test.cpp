@@ -53,7 +53,7 @@ namespace oddvibe {
         SizeVec seq(ys.size());
         std::iota(seq.begin(), seq.end(), 0);
 
-        const Dataset<FloatMatrix<float>, FloatVec> data(
+        const Dataset<FloatMatrix<float>, FloatVec, float> data(
             FloatMatrix<float>(nfeatures, xs),
             FloatVec(ys));
 
@@ -82,7 +82,7 @@ namespace oddvibe {
         SizeVec seq(ys.size());
         std::iota(seq.begin(), seq.end(), 0);
 
-        const Dataset<FloatMatrix<float>, FloatVec> data(
+        const Dataset<FloatMatrix<float>, FloatVec, float> data(
             FloatMatrix<float>(nfeatures, xs),
             FloatVec(ys));
         const auto split = best_split(data, seq);
@@ -115,7 +115,7 @@ namespace oddvibe {
         SizeVec seq(ys.size());
         std::iota(seq.begin(), seq.end(), 0);
 
-        const Dataset<FloatMatrix<float>, FloatVec> data(
+        const Dataset<FloatMatrix<float>, FloatVec, float> data(
             FloatMatrix<float>(nfeatures, xs),
             FloatVec(ys));
         const auto split = best_split(data, seq);
@@ -169,7 +169,7 @@ namespace oddvibe {
         SizeVec seq(ys.size());
         std::iota(seq.begin(), seq.end(), 0);
 
-        const Dataset<FloatMatrix<float>, FloatVec> data(
+        const Dataset<FloatMatrix<float>, FloatVec, float> data(
             FloatMatrix<float>(nfeatures, xs),
             FloatVec(ys));
         const auto split = best_split(data, seq);
