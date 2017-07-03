@@ -24,6 +24,8 @@
 #include <future>
 #include "split_point.h"
 
+/*! \file */
+
 namespace oddvibe {
 
     /**

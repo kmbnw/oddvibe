@@ -26,6 +26,8 @@
 #include "math_x.h"
 #include "dataset.h"
 
+/*! \file */
+
 namespace oddvibe {
     /**
      * Regression tree split point.

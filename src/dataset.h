@@ -20,6 +20,8 @@
 #include <utility>
 #include "float_matrix.h"
 
+/*! \file */
+
 namespace oddvibe {
     /**
      * Collect feature matrix data and its corresponding response vector.

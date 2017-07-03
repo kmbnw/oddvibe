@@ -18,6 +18,8 @@
 #ifndef KMBNW_ODVB_FLOAT_MATRIX_H
 #define KMBNW_ODVB_FLOAT_MATRIX_H
 
+/*! \file */
+
 namespace oddvibe {
     // follow R's NumericVector API where necessary to facilitate easier use
     template <typename FloatT>

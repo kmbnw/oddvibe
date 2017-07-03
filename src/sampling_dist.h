@@ -19,6 +19,8 @@
 #ifndef KMBNW_ODVB_SAMPLING_DIST_H
 #define KMBNW_ODVB_SAMPLING_DIST_H
 
+/*! \file */
+
 namespace oddvibe {
     /**
      * Empirical distribution used to sample N rows of data during boosting.

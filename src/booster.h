@@ -21,6 +21,8 @@
 #ifndef KMBNW_ODVB_BOOSTER_H
 #define KMBNW_ODVB_BOOSTER_H
 
+/*! \file */
+
 namespace oddvibe {
     /**
      * Provides boosting capabilities to RTree models.
@@ -77,7 +79,7 @@ namespace oddvibe {
                     pmf.adjust_for_loss(loss);
                 }
 
-                return normalize_counts(counts, nrounds);
+                return divide_vector(counts, nrounds);
             }
 
       private:

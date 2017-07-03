@@ -20,6 +20,8 @@
 #ifndef KMBNW_ODVB_ECDF_SAMPLER_H
 #define KMBNW_ODVB_ECDF_SAMPLER_H
 
+/*! \file */
+
 namespace oddvibe {
     /**
      * Generate samples of row indexes from a given distribution.

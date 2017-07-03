@@ -28,21 +28,24 @@ namespace oddvibe {
     }
 
     std::vector<float>
-    normalize_counts(const std::vector<size_t>& counts, const size_t nrounds) {
-        const auto f_nrounds = (1.0f * nrounds) + 1;
-        std::vector<float> norm_counts(counts.size(), 0);
+    divide_vector(const std::vector<size_t>& seq, const size_t divisor) {
+        if (divisor == 0) {
+            throw std::invalid_argument("Divisor cannot be zero");
+        }
+        const auto f_divisor = (1.0f * divisor) + 1;
+        std::vector<float> norm_seq(seq.size(), 0);
 
         std::transform(
-            counts.begin(),
-            counts.end(),
-            norm_counts.begin(),
-            [f_nrounds](const size_t count) {
-                const auto norm_count = (1.0 * count) / f_nrounds;
+            seq.begin(),
+            seq.end(),
+            norm_seq.begin(),
+            [f_divisor](const size_t count) {
+                const auto norm_count = (1.0 * count) / f_divisor;
                 if (std::isnan(norm_count)) {
-                    throw std::logic_error("NaN for normalized count");
+                    throw std::logic_error("NaN for divided values");
                 }
                 return norm_count;
             });
-        return norm_counts;
+        return norm_seq;
     }
 }
