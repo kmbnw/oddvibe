@@ -106,6 +106,11 @@ namespace oddvibe {
     template <typename FloatT>
     class RTree<FloatT>::Trainer {
         public:
+            /**
+             * Create a new RTree Trainer with a given max depth
+             *
+             * \param max_depth The max depth/height of the fitted tree.
+             */
             Trainer(const size_t max_depth) : m_max_depth(max_depth) {}
 
             Trainer(Trainer&& other) = delete;
@@ -116,6 +121,34 @@ namespace oddvibe {
 
             ~Trainer() = default;
 
+            /**
+             * Fit an RTree to data.
+             *
+             * Fitting the model is done by considering all possible
+             * (feature, value) pairs as split points for each level of the
+             * RTree.  This function calls itself recursively on the left and
+             * right branches of the RTree whenever it finds a valid SplitPoint
+             * (i.e. when there is nonzero variance in the response values,
+             * when there is more than one unique element for at least one
+             * feature, and when depth has not exceeded the max depth of this
+             * Trainer).
+             *
+             * The split at each recursion level is calculated such that the
+             * elements from the range `[first, last]` are used as row indices
+             * into the Dataset xs() and ys() values (that is, it filters the
+             * rows).  On each left/right branch chosen, the row indexes are
+             * further filtered based on the chosen SplitPoint.
+             *
+             * \param first BidirectionalIterator to the initial position of
+             * the row indexes.
+             * \param last BidirectionalIterator to the final position of
+             * the row indexes.
+             * \param depth The tree height at which the resulting RTree node
+             * resides (used to limit tree height).  Each left/right call of
+             * fit() will have its depth incremented by one.
+             * \return A pointer to the RTree (node) at this level; the very
+             * first call of fit() will return a pointer to the root of the tree.
+             */
             template <typename BidirectionalIterator>
             std::unique_ptr<RTree<FloatT>> fit(
                     const Dataset<FloatT>& data,

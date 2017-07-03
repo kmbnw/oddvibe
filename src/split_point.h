@@ -120,7 +120,7 @@ namespace oddvibe {
      * probably is not) unique; this function chooses the first such column and
      * value that it finds that fulfills the criteria.
      *
-     * \param data Input feature matrix.
+     * \param data Input feature matrix and response vector.
      * \param first ForwardIterator to the initial position of
      * the row indexes.
      * \param last ForwardIterator to the final position of
