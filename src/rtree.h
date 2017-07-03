@@ -116,44 +116,43 @@ namespace oddvibe {
 
             ~Trainer() = default;
 
+            template <typename BidirectionalIterator>
             std::unique_ptr<RTree<FloatT>> fit(
                     const Dataset<FloatT>& data,
-                    std::vector<size_t>& filter,
+                    const BidirectionalIterator first,
+                    const BidirectionalIterator last,
                     const size_t depth) const {
-                if (filter.empty()) {
+                if (first == last) {
                     throw std::invalid_argument("Must have at least one entry");
                 }
 
                 const FloatMatrix<FloatT>& xs = data.xs();
                 const std::vector<FloatT>& ys = data.ys();
-                const auto yhat = mean<FloatT>(ys, filter.begin(), filter.end());
+                const auto yhat = mean<FloatT>(ys, first, last);
                 if (std::isnan(yhat)) {
                     throw std::logic_error("Prediction is NaN");
                 }
 
                 bool force_leaf = (
                     depth >= m_max_depth ||
-                    variance<FloatT>(ys, filter.begin(), filter.end()) < 1e-6);
+                    variance<FloatT>(ys, first, last) < 1e-6);
 
                 if (!force_leaf) {
-                    const auto split = best_split(data, filter.begin(), filter.end());
+                    const auto split = best_split(data, first, last);
 
                     if (split.is_valid()) {
-                        const auto pivot = split.partition_idx(
-                            xs, filter.begin(), filter.end());
+                        const auto pivot = split.partition_idx(xs, first, last);
 
                         const auto ndepth = depth + 1;
                         auto left = std::async(
                             std::launch::deferred,
-                            [this, &data, &filter, pivot, ndepth]() {
-                                std::vector<size_t> lpart(filter.begin(), pivot);
-                                return fit(data, lpart, ndepth);
+                            [this, &data, first, last, pivot, ndepth]() {
+                                return fit(data, first, pivot, ndepth);
                             });
                         auto right = std::async(
                             std::launch::deferred,
-                            [this, &data, &filter, pivot, ndepth]() {
-                                std::vector<size_t> rpart(pivot, filter.end());
-                                return fit(data, rpart, ndepth);
+                            [this, &data, first, last, pivot, ndepth]() {
+                                return fit(data, pivot, last, ndepth);
                             });
 
                         // stuck on C++ 11 b/c the Debian Rcpp build forces it?

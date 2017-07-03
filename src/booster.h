@@ -54,7 +54,8 @@ namespace oddvibe {
                         ++counts[idx];
                     }
 
-                    const auto tree = trainer.fit(data, active, 0);
+                    const auto tree = trainer.fit(
+                        data, active.begin(), active.end(), 0);
                     const auto loss = loss_seq(ys, tree->predict(xs));
 
                     pmf.adjust_for_loss(loss);
