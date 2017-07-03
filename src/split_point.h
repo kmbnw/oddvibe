@@ -33,8 +33,18 @@ namespace oddvibe {
     template <typename FloatT>
     class SplitPoint {
         public:
+            /**
+             * Create a new SplitPoint whose value of is_valid() is false.
+             */
             SplitPoint<FloatT>() = default;
 
+            /**
+             * Create a new SplitPoint.
+             *
+             * \param split_col The zero-based index of the feature column
+             * to split on.
+             * \param The value of the feature to split on.
+             */
             SplitPoint<FloatT>(const size_t split_col, const FloatT split_val) :
                 m_split_col(split_col),
                 m_split_val(split_val) { }
