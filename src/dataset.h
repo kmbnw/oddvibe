@@ -71,6 +71,20 @@ namespace oddvibe {
                 Dataset<MatrixT, VectorT, FloatT>&& other) = default;
             ~Dataset<MatrixT, VectorT, FloatT>() = default;
 
+            /**
+             * Find all unique values for a given feature column.
+             *
+             * The row indexes considered for finding unique values are taken
+             * from the input range `[first, last]`.
+             *
+             * \param col The zero-based feature column to get unique values for.
+             * \param first InputIterator to the initial position of
+             * the row indexes.
+             * \param last InputIterator to the final position of
+             * the row indexes.
+             * \return Vector of unique values for the given feature column
+             * (in no particular order).
+             */
             template <typename InputIterator>
             std::vector<FloatT>
             unique_x(
