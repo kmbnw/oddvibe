@@ -49,6 +49,14 @@ namespace oddvibe {
         return total;
     }
 
+    /**
+     * Mean-squared error.
+     */
+    template <typename FloatT>
+    double mse_err(const FloatT predicted, const FloatT observed) {
+        return pow(predicted - observed, 2.0);
+    }
+
     template <typename FloatT, typename IteratorT>
     FloatT variance(
             const std::vector<FloatT>& seq,
@@ -64,16 +72,16 @@ namespace oddvibe {
         const auto avg_x = mean<FloatT>(seq, first, last);
 
         for (auto row = first; row != last; row = std::next(row)) {
-            total += pow(seq[*row] - avg_x, 2);
+            total += mse_err(seq[*row], avg_x);
             ++count;
         }
 
         return (count < 1 ? nan_val : total / count);
     }
 
-    template <typename VectorTLeft, typename VectorTRight>
+    template <typename FloatT>
     std::vector<double>
-    loss_seq(const VectorTLeft& ys, const VectorTRight& yhats) {
+    loss_seq(const std::vector<FloatT>& ys, const std::vector<FloatT>& yhats) {
         if (ys.size() != yhats.size()) {
             throw std::logic_error("Observed and predicted must be same size");
         }
@@ -83,9 +91,7 @@ namespace oddvibe {
             yhats.end(),
             ys.begin(),
             loss.begin(),
-            [](const double predicted, const double observed) {
-                return pow(predicted - observed, 2);
-            });
+            mse_err<FloatT>);
         return loss;
     }
 

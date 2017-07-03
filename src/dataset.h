@@ -146,9 +146,9 @@ namespace oddvibe {
                 }
 
                 const auto acc_err = [&is_left, yhat_l, yhat_r, this](
-                        const double init, const size_t row) {
-                    const double yhat = is_left(row) ? yhat_l : yhat_r;
-                    return init + pow((m_ys[row] - yhat), 2.0);
+                        const FloatT init, const size_t row) {
+                    const FloatT yhat = is_left(row) ? yhat_l : yhat_r;
+                    return init + mse_err(m_ys[row], yhat);
                 };
 
                 const double err = std::accumulate(first, last, 0, acc_err);
