@@ -35,7 +35,8 @@ namespace oddvibe {
         const double max_loss = *std::max_element(loss.begin(), loss.end());
 
         double epsilon = 0.0;
-        for (size_t k = 0; k != loss.size(); ++k) {
+        const auto sz = loss.size();
+        for (size_t k = 0; k != sz; ++k) {
             epsilon += m_pmf[k] * loss[k];
         }
 

@@ -42,13 +42,19 @@ namespace oddvibe {
 
             ~RTree<FloatT>() = default;
 
+            /**
+             * Predict for an input feature matrix.
+             *
+             * \param xs The feature matrix to generate predictions for.
+             * \return A vector of predictions, one for each row of xs.
+             */
             std::vector<FloatT> predict(const FloatMatrix<FloatT>& xs) const {
                 const auto nrows = xs.nrow();
                 constexpr auto nan_val = std::numeric_limits<FloatT>::quiet_NaN();
                 std::vector<FloatT> yhats(nrows, nan_val);
                 std::vector<size_t> filter(nrows);
                 std::iota(filter.begin(), filter.end(), 0);
-                predict(xs, filter, yhats);
+                predict(xs, filter.begin(), filter.end(), yhats);
 
                 return yhats;
             }
@@ -61,8 +67,20 @@ namespace oddvibe {
             std::unique_ptr<RTree<FloatT>> m_left;
             std::unique_ptr<RTree<FloatT>> m_right;
 
+            /**
+             * Create an RTree leaf node.
+             *
+             * \param yhat The predictive value at this leaf.
+             */
             RTree<FloatT>(const FloatT yhat) : m_yhat(yhat) { };
 
+            /**
+             * Create an RTree interior node.
+             *
+             * \param yhat The predictive value at this interior node.
+             * \param left The left branch of this RTree.
+             * \param right The right branch of this RTree.
+             */
             RTree<FloatT>(
                     const FloatT yhat,
                     const SplitPoint<FloatT>& split,
@@ -83,22 +101,37 @@ namespace oddvibe {
 
             }
 
+            /**
+             * Recursively predict for a filtered input feature matrix.
+             *
+             * The elements from the range `[first, last]` are used to filter
+             * the input data; they are row indices into the Dataset xs() and
+             * ys() values that will be used for prediction at each level of
+             * the tree.  On each left/right branch of an interior node, the row
+             * indexes are further filtered based on the node's SplitPoint.
+             *
+             * \param xs The feature matrix to generate predictions for.
+             * \param first BidirectionalIterator to the initial position of
+             * the row indexes.
+             * \param last BidirectionalIterator to the final position of
+             * the row indexes.
+             * \param An accumulator vector of predictions, one for each row of
+             * xs.  This will be filled in by the successive recursive calls.
+             */
+            template <typename BidirectionalIterator>
             void predict(
                     const FloatMatrix<FloatT>& xs,
-                    std::vector<size_t>& filter,
+                    BidirectionalIterator first,
+                    BidirectionalIterator last,
                     std::vector<FloatT>& yhat) const {
                 if (m_is_leaf) {
-                    for (const auto & row : filter) {
-                        yhat[row] = m_yhat;
+                    for (auto row = first; row != last; row = std::next(row)) {
+                        yhat[*row] = m_yhat;
                     }
                 } else {
-                    const auto pivot = m_split.partition_idx(
-                        xs, filter.begin(), filter.end());
-                    std::vector<size_t> lsplit(filter.begin(), pivot);
-                    std::vector<size_t> rsplit(pivot, filter.end());
-
-                    m_left->predict(xs, lsplit, yhat);
-                    m_right->predict(xs, rsplit, yhat);
+                    const auto pivot = m_split.partition_idx(xs, first, last);
+                    m_left->predict(xs, first, pivot, yhat);
+                    m_right->predict(xs, pivot, last, yhat);
                 }
             }
     };
@@ -122,7 +155,7 @@ namespace oddvibe {
             ~Trainer() = default;
 
             /**
-             * Fit an RTree to data.
+             * Fit an RTree to filtered data.
              *
              * Fitting the model is done by considering all possible
              * (feature, value) pairs as split points for each level of the
@@ -133,11 +166,11 @@ namespace oddvibe {
              * feature, and when depth has not exceeded the max depth of this
              * Trainer).
              *
-             * The split at each recursion level is calculated such that the
-             * elements from the range `[first, last]` are used as row indices
-             * into the Dataset xs() and ys() values (that is, it filters the
-             * rows).  On each left/right branch chosen, the row indexes are
-             * further filtered based on the chosen SplitPoint.
+             * The elements from the range `[first, last]` are used to filter
+             * the input data; they are row indices into the Dataset xs() and
+             * ys() values that will be used for fitting.  On each left/right
+             * interior node, the row indexes are further filtered based on the
+             * chosen SplitPoint.
              *
              * \param first BidirectionalIterator to the initial position of
              * the row indexes.
