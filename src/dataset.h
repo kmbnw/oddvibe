@@ -16,9 +16,11 @@
 #ifndef KMBNW_ODVB_DATASET_H
 #define KMBNW_ODVB_DATASET_H
 
-#include <cstddef>
-#include <utility>
+#include <unordered_set>
+#include <limits>
+#include <algorithm>
 #include "float_matrix.h"
+#include "math_x.h"
 
 /*! \file */
 

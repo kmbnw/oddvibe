@@ -1,7 +1,7 @@
 Package: oddvibe
 Title: Outlier Detection via Iterated Boosting
 Version: 0.0.0.9000
-Authors@R: person("Krysta", "Bouzek", email = "nwkrysta@gmail.com", role = c("aut", "cre"))
+Authors@R: person("Krysta", "Bouzek", email = "nwkrystab@gmail.com", role = c("aut", "cre"))
 Description: Outlier Detection via Iterated Boosting.  Find outliers using boosting's feature of focusing on "hard to fit" observations.
 Depends: R (>= 3.4.0)
 License: Apache License (== 2.0)

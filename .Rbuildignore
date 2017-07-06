@@ -4,3 +4,4 @@
 ^README\.txt$
 ^doxygen\.cfg$
 ^cpp$
+^py$
