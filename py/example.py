@@ -21,6 +21,7 @@ if __name__ == '__main__':
     xs_two = np.random.normal(4000.3, 90.0, (nrows * nfeatures) - x_threshold)
     xs = np.concatenate([xs_one, xs_two])
 
+    # need to use numpy matrices for the current Cython classes
     mat = xs.reshape((nrows, nfeatures))
 
     ys = intercept + beta_one * mat[:, 0] + beta_two * mat[:, 1]

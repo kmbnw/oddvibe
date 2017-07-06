@@ -14,3 +14,5 @@ Shared library output will be in lib/libboddvibe.so.  I templated some things to
 To run the C++ tests:
 cd cpp
 make clean tests
+
+To use with numpy arrays, look at py/example.py.
