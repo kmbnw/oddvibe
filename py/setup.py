@@ -7,7 +7,7 @@ from glob import glob
 
 extensions = [
     Extension(
-        name='oddvibe.cython',
+        name='oddvibe',
         sources=list(
             set(glob('*.pyx') + glob('../src/*.cpp')) -
             set(['../src/rcpp_oddvibe.cpp', '../src/RcppExports.cpp'])),
